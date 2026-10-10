@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Four Elements – Mock v0.12</title>
+<title>Four Elements – Mock v0.13</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&family=UnifrakturCook:wght@700&family=VT323&display=swap">
 <style>
@@ -238,6 +238,11 @@ button.kd:not(.sel):not(.gone):hover{transform:translateY(-4px)}
 #app .pick.one{grid-template-columns:1fr}
 #app .pick button:disabled{opacity:.4;cursor:default}
 #app .sm2{padding:8px;font-size:13px}
+#app .dkrow{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;margin:6px 0;border:2px solid var(--bd);border-radius:6px;background:var(--card)}
+#app .stp{display:flex;align-items:center;gap:12px}
+#app .stp b{font:700 24px Cinzel,Georgia,serif;min-width:30px;text-align:center}
+#app .stp button{width:40px;height:40px;font:700 22px Cinzel,Georgia,serif;line-height:1;background:var(--ink);color:var(--page);border:2px solid var(--gold);border-radius:6px}
+#app .stp button:disabled{opacity:.3;cursor:default}
 #app .hrow .ic{display:inline-block;width:28px;height:28px;margin:0 3px;vertical-align:-6px}
 </style></head><body><div id="app"></div><div id="tip"></div><button id="mute">Sound: on</button>
 <script>
@@ -665,30 +670,30 @@ function tradePick(id){
 function nextMatch(){S.m++;if(S.m>3)S.ph='end';else newMatch();render()}
 
 /* ===== v0.12: ONLINE DUEL ===== */
-const NET={kind:'peer',role:null,c:null,peer:null,bc:null,live:false,lost:false,el:null,oel:null};
+const NET={kind:'peer',role:null,c:null,peer:null,bc:null,live:false,lost:false,dk:null,odk:null};
 const SEAL={};
 const CODEA='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',mkCode=()=>Array.from({length:5},()=>CODEA[rnd(CODEA.length)]).join('');
 let peerP=null;
 const loadPeer=()=>peerP||(peerP=new Promise((res,rej)=>{if(window.Peer)return res();const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js';s.onload=res;s.onerror=()=>{peerP=null;rej(new Error('load'))};document.head.appendChild(s)}));
 function netSend(m){try{if(NET.kind=='tab'){NET.bc&&NET.bc.postMessage({to:NET.role=='host'?'guest':'host',m})}else if(NET.c&&NET.c.open)NET.c.send(m)}catch(e){}}
-function netClose(){try{NET.c&&NET.c.close()}catch(e){}try{NET.peer&&NET.peer.destroy()}catch(e){}try{NET.bc&&NET.bc.close()}catch(e){}NET.c=NET.peer=NET.bc=null;NET.live=false;NET.lost=false;NET.role=null;NET.oel=null;for(const k in SEAL)delete SEAL[k];CANON='p'}
+function netClose(){try{NET.c&&NET.c.close()}catch(e){}try{NET.peer&&NET.peer.destroy()}catch(e){}try{NET.bc&&NET.bc.close()}catch(e){}NET.c=NET.peer=NET.bc=null;NET.live=false;NET.lost=false;NET.role=null;NET.odk=null;for(const k in SEAL)delete SEAL[k];CANON='p'}
 function lbErr(m){const L=S.lb;if(!L)return;netClose();L.err=m;L.status='';render()}
-function onConnected(){NET.live=true;NET.lost=false;netSend({t:'hello',el:NET.el});if(NET.oel&&S.ph=='lobby')startDuel()}
+function onConnected(){NET.live=true;NET.lost=false;netSend({t:'hello',dk:NET.dk});if(NET.odk&&S.ph=='lobby')startDuel()}
 function onNetClose(){if(!NET.live)return;NET.live=false;NET.lost=true;if(S.ph=='lobby'){netClose();S.lb.status='';S.lb.err='Your friend left before the duel started.'}render()}
 function wirePeerConn(c){c.on('data',onNetMsg);c.on('close',onNetClose);c.on('error',onNetClose)}
 function netHost(){
-  const L=S.lb;L.err='';L.status='hosting';L.code=mkCode();NET.role='host';NET.el=L.el;render();
+  const L=S.lb;L.err='';L.status='hosting';L.code=mkCode();NET.role='host';NET.dk=[...L.dk];render();
   if(NET.kind=='tab'){NET.bc=new BroadcastChannel('fe4-'+L.code);NET.bc.onmessage=ev=>{const d=ev.data;if(d&&d.to=='host')onNetMsg(d.m)};return}
   loadPeer().then(()=>{
     const p=NET.peer=new Peer('fe4-'+L.code);
     p.on('connection',c=>{if(NET.c){c.on('open',()=>{try{c.send({t:'full'})}catch(e){}setTimeout(()=>c.close(),300)});return}NET.c=c;wirePeerConn(c);c.on('open',onConnected)});
-    p.on('error',e=>{if(NET.live)return;if(e.type=='unavailable-id'&&S.ph=='lobby'){const el=NET.el;netClose();netHost()}else lbErr('Could not set up the room ('+e.type+'). Try again.')});
+    p.on('error',e=>{if(NET.live)return;if(e.type=='unavailable-id'&&S.ph=='lobby'){netClose();netHost()}else lbErr('Could not set up the room ('+e.type+'). Try again.')});
   }).catch(()=>lbErr('Could not load the connection library. Check your internet connection and try again.'));
 }
 function netJoin(){
   const L=S.lb,code=(L.code||'').toUpperCase();L.err='';
   if(code.length!=5){L.err='Enter the 5-character room code.';render();return}
-  L.status='joining';NET.role='guest';NET.el=L.el;render();
+  L.status='joining';NET.role='guest';NET.dk=[...L.dk];render();
   const giveUp=ms=>setTimeout(()=>{if(!NET.live&&S.ph=='lobby'&&S.lb.status=='joining')lbErr('Could not connect. Check the code and try again.')},ms);
   if(NET.kind=='tab'){NET.bc=new BroadcastChannel('fe4-'+code);NET.bc.onmessage=ev=>{const d=ev.data;if(d&&d.to=='guest')onNetMsg(d.m)};NET.bc.postMessage({to:'host',m:{t:'join'}});giveUp(2500);return}
   loadPeer().then(()=>{
@@ -702,7 +707,7 @@ function onNetMsg(m){
   if(m.t=='join'){if(NET.role=='host'&&!NET.live){netSend({t:'joined'});onConnected()}else if(NET.role=='host')netSend({t:'full'});return}
   if(m.t=='joined'){if(NET.role=='guest'&&!NET.live)onConnected();return}
   if(m.t=='full'){if(S.ph=='lobby'&&!NET.live)lbErr('That room already has two players.');return}
-  if(m.t=='hello'){if(!E.includes(m.el))return;NET.oel=m.el;if(!m.re)netSend({t:'hello',el:NET.el,re:1});if(S.ph=='lobby'&&NET.live)startDuel();return}
+  if(m.t=='hello'){if(!okDk(m.dk))return;NET.odk=m.dk;if(!m.re)netSend({t:'hello',dk:NET.dk,re:1});if(S.ph=='lobby'&&NET.live)startDuel();return}
   if(m.t=='seal'){if(NET.role=='host'&&S.duel&&typeof m.k=='string')sealPut(m.k,'g',m.d);return}
   if(m.t=='rev'){if(NET.role=='guest'&&S.duel&&typeof m.k=='string')applyRev(m.k,m.g,m.h);return}
   if(m.t=='again'){if(S.duel){S.orq=1;if(S.rq)beginDuel();else render()}return}
@@ -727,9 +732,26 @@ function submitMoves(mv){
   S.myMv=mv.map(m=>({sd:'p',k:m.k,at:m.at,id:m.id,to:m.to}));S.sp=null;S.ph='wait';
   sealSend('m:'+S.r,{mv:S.myMv});render();
 }
-function startDuel(){CANON=NET.role=='host'?'p':'o';S={ph:'play',duel:1,el:NET.el,foe:NET.oel};beginDuel()}
+/* ===== custom duel decks: every deck has the same 16 type/power slots; the player chooses the element of each ===== */
+const TPL={atk:[1,2,3,4],def:[1,2,3,4],pow:[2,3,4,5],mod:[1,2,3,4]};
+const DKN=16,DKP=TY.reduce((a,t)=>a+TPL[t].reduce((x,y)=>x+y,0),0)+neus().reduce((a,c)=>a+c.p,0);
+const okDk=d=>Array.isArray(d)&&d.length==4&&d.every(n=>Number.isInteger(n)&&n>=0&&n<=DKN)&&d.reduce((a,b)=>a+b,0)==DKN;
+const dkStr=d=>E.map((e,i)=>d[i]?`${IC[e]} ${d[i]}`:'').filter(Boolean).join('  ');
+function customDeck(dk){
+  const left={};TY.forEach(t=>left[t]=[...TPL[t]]);
+  const out=E.map(()=>[]),need=[...dk];
+  const spread=l=>{const s=[...l].sort((a,b)=>b-a),o=[];while(s.length){o.push(s.shift());if(s.length)o.push(s.pop())}return o};
+  E.forEach((e,i)=>{const t=SIG[e];spread(left[t]).slice(0,need[i]).forEach(p=>{out[i].push([t,p]);left[t].splice(left[t].indexOf(p),1);need[i]--})});
+  const rest=TY.flatMap(t=>left[t].map(p=>[t,p])).sort((a,b)=>b[1]-a[1]||TY.indexOf(a[0])-TY.indexOf(b[0]));
+  const act=E.map((_,i)=>i).filter(i=>need[i]>0).sort((a,b)=>need[b]-need[a]||a-b);
+  for(let pass=0;rest.length;pass++)(pass%2?[...act].reverse():act).forEach(i=>{if(need[i]>0&&rest.length){out[i].push(rest.shift());need[i]--}});
+  const deck=[];
+  out.forEach((cs,i)=>{let k=0;cs.sort((a,b)=>a[1]-b[1]).forEach(([t,p])=>{const c=mk(E[i],t,p);if(t=='mod')c.mv=MV[(i+k++)%7];deck.push(c)})});
+  return [...deck,...neus()];
+}
+function startDuel(){CANON=NET.role=='host'?'p':'o';S={ph:'play',duel:1,dk:NET.dk,foe:NET.odk};beginDuel()}
 function beginDuel(){
-  Object.assign(S,{deck:mono(S.el),allrows:[],carry:[],ocn:0,T:{p:[],o:[]},view:[],tid:0,played:[],r:0,rw:0,rl:0,mp:0,open:{},rq:0,orq:0,expect:null,fresh:0,err:'',win:false,dr:false});
+  Object.assign(S,{deck:customDeck(S.dk),allrows:[],carry:[],ocn:0,T:{p:[],o:[]},view:[],tid:0,played:[],r:0,rw:0,rl:0,mp:0,open:{},rq:0,orq:0,expect:null,fresh:0,err:'',win:false,dr:false});
   for(const k in SEAL)delete SEAL[k];
   S.pile=[...S.deck].sort(()=>Math.random()-.5);S.hand=S.pile.splice(0,4);
   newRound();S.ph='play';render();
@@ -739,22 +761,23 @@ function endDuel(){
   for(let r=0;r<3;r++){const t=tally(S.view.slice(r*3,r*3+3)),res=roundRes(t);if(res=='w')S.rw++;if(res=='l')S.rl++;S.mp+=t.pt-t.ot}
   S.win=S.rw>S.rl||(S.rw==S.rl&&S.mp>0);S.dr=S.rw==S.rl&&S.mp==0;S.ph='duelend';render();setTimeout(()=>sfx(S.win?'win':'lose'),150);
 }
-const duelHead=()=>`<div class="bar"><span>Duel · vs ${fname(S.foe)}</span><span>${S.ph=='duelend'?`Rounds ${S.rw}–${S.rl} · `:''}${NET.lost?'disconnected':'connected'}</span></div>${NET.lost&&S.ph!='duelend'?'<p class="l"><b>Connection lost.</b> The duel cannot continue.</p><button class="btn alt" data-a="dleave">Leave duel</button>':''}`;
+const duelHead=()=>`<div class="bar"><span>Duel · vs ${dkStr(S.foe)}</span><span>${S.ph=='duelend'?`Rounds ${S.rw}–${S.rl} · `:''}${NET.lost?'disconnected':'connected'}</span></div>${NET.lost&&S.ph!='duelend'?'<p class="l"><b>Connection lost.</b> The duel cannot continue.</p><button class="btn alt" data-a="dleave">Leave duel</button>':''}`;
 function duelClick(a,v){
   const L=S.lb;
   if(a=='dhome'||a=='dleave'){netClose();S={ph:'home'};render();return true}
   if(a=='solo'){netClose();S={ph:'pick'};render();return true}
-  if(a=='duelmenu'){netClose();S={ph:'lobby',lb:{el:null,code:'',status:'',err:''}};render();return true}
-  if(a=='delp'){if(L){L.el=v;render()}return true}
+  if(a=='duelmenu'){netClose();S={ph:'lobby',lb:{dk:[4,4,4,4],code:'',status:'',err:''}};render();return true}
+  if(a=='dpre'&&L){L.dk=v=='even'?[4,4,4,4]:E.map(e=>e==v?DKN:0);render();return true}
+  if(a=='dstep'&&L){const i=E.indexOf(v.slice(0,-1)),dl=v.endsWith('+')?1:-1,tot=L.dk.reduce((a,b)=>a+b,0);if(i>=0&&L.dk[i]+dl>=0&&tot+dl<=DKN)L.dk[i]+=dl;render();return true}
   if(a=='dkind'){NET.kind=NET.kind=='peer'?'tab':'peer';render();return true}
-  if(a=='dhost'){if(L&&L.el)netHost();return true}
-  if(a=='djoin'){if(L&&L.el)netJoin();return true}
+  if(a=='dhost'){if(L&&okDk(L.dk))netHost();return true}
+  if(a=='djoin'){if(L&&okDk(L.dk))netJoin();return true}
   if(a=='dcancel'){netClose();if(L){L.status='';L.code='';L.err=''}render();return true}
   if(a=='dcopy'){try{navigator.clipboard.writeText(location.href.split('?')[0].split('#')[0]+'?join='+L.code)}catch(e){}L.copied=1;render();return true}
   if(a=='dagain'){S.rq=1;netSend({t:'again'});if(S.orq)beginDuel();else render();return true}
   return false;
 }
-function initFromUrl(){try{const j=new URLSearchParams(location.search).get('join');if(j)S={ph:'lobby',lb:{el:null,code:j.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5),status:'',err:''}}}catch(e){}}
+function initFromUrl(){try{const j=new URLSearchParams(location.search).get('join');if(j)S={ph:'lobby',lb:{dk:[4,4,4,4],code:j.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5),status:'',err:''}}}catch(e){}}
 
 function render(){S.fr=null;S.allc=0;
   const s=S;
@@ -764,14 +787,16 @@ function render(){S.fr=null;S.allc=0;
     <button data-a="duelmenu"><span class="hrow">${IC.fire}${IC.air}</span><br>Online duel<small>One trial against a friend, live</small></button></div>`;return;
   }
   if(s.ph=='lobby'){
-    const L=s.lb,busy=L.status!='',inv=L.code&&NET.kind=='peer'?location.href.split('?')[0].split('#')[0]+'?join='+L.code:'';
+    const L=s.lb,busy=L.status!='',tot=L.dk.reduce((x,y)=>x+y,0),ready=tot==16,inv=L.code&&NET.kind=='peer'?location.href.split('?')[0].split('#')[0]+'?join='+L.code:'';
     $.innerHTML=`<h1>Online Duel</h1><div class="orn">❦</div>
-    <p class="rl">One trial against a friend, live. The deck is the same as in the solo run: 16 cards of your element plus 4 neutral cards. There are no coins and no trading. Both of you need the page open at the same time.</p>
-    <h2>Your element</h2><div class="pick">${E.map(e=>`<button data-a="delp" data-v="${e}" class="${L.el==e?'on':''}" ${busy?'disabled':''} style="border-color:var(--${e})"><span class="big">${IC[e]}</span>${cap(e)}</button>`).join('')}</div>
+    <p class="rl">One trial against a friend, live. Both decks hold the same 16 card slots by type and power (deck power ${DKP}, neutral cards included), so neither side starts stronger. You choose which element each of the 16 belongs to. Four neutral cards are always added. No coins, no trading. Both of you need the page open at the same time.</p>
+    <h2>Your deck</h2><div class="pick dirs" style="grid-template-columns:repeat(5,1fr)"><button data-a="dpre" data-v="even" class="${L.dk.every(n=>n==4)?'on':''}" ${busy?'disabled':''}>Even</button>${E.map((e,i)=>`<button data-a="dpre" data-v="${e}" class="${L.dk[i]==16?'on':''}" ${busy?'disabled':''}>${IC[e]}</button>`).join('')}</div>
+    ${E.map((e,i)=>`<div class="dkrow"><span>${IC[e]} ${cap(e)}</span><span class="stp"><button data-a="dstep" data-v="${e}-" ${busy||L.dk[i]<=0?'disabled':''}>−</button><b>${L.dk[i]}</b><button data-a="dstep" data-v="${e}+" ${busy||tot>=16?'disabled':''}>+</button></span></div>`).join('')}
+    <p class="m">${tot} of 16 element cards${ready?'':` · choose ${16-tot} more`} · 4 neutral · deck power ${DKP}</p>
     <h2>Connect</h2>
     ${L.status=='hosting'?`<p class="m">Give this code to your friend, then wait here.</p><div class="rcode">${L.code}</div>${inv?`<button class="btn alt" data-a="dcopy">${L.copied?'Invite link copied':'Copy invite link'}</button>`:''}<p class="m">Waiting for your friend to join…</p>`
     :L.status=='joining'?`<p class="m">Connecting…</p>`
-    :`<button class="btn" data-a="dhost" ${L.el?'':'disabled'}>Host a game</button><input class="jc" id="jcode" maxlength="5" placeholder="CODE" value="${L.code||''}" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="btn alt" data-a="djoin" ${L.el?'':'disabled'}>Join with this code</button>${L.el?'':'<p class="m">Choose your element first.</p>'}<button class="btn alt sm2" data-a="dkind">Connection: ${NET.kind=='peer'?'Internet':'Two tabs on this device (testing)'}</button>`}
+    :`<button class="btn" data-a="dhost" ${ready?'':'disabled'}>Host a game</button><input class="jc" id="jcode" maxlength="5" placeholder="CODE" value="${L.code||''}" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="btn alt" data-a="djoin" ${ready?'':'disabled'}>Join with this code</button><button class="btn alt sm2" data-a="dkind">Connection: ${NET.kind=='peer'?'Internet':'Two tabs on this device (testing)'}</button>`}
     ${L.err?`<p class="l">${L.err}</p>`:''}
     <button class="btn alt" data-a="${busy?'dcancel':'dhome'}">${busy?'Cancel':'← Back'}</button>`;return;
   }
