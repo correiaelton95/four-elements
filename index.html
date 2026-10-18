@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Converge – Mock v0.18</title>
+<title>Converge – v0.22</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&family=UnifrakturCook:wght@700&family=VT323&display=swap">
 <style>
@@ -309,6 +309,24 @@ button.kd:not(.sel):not(.gone):hover{transform:translateY(-4px)}
 #app .ev .ic.anime{width:18px;height:18px}
 #app .tk2.gone .ic.anime{filter:grayscale(1)}
 #app h1.title{margin:10px 0 12px}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}@keyframes pu{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}@keyframes sp{to{transform:rotate(360deg)}}@keyframes br{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.02)}}@keyframes cp{0%,100%{transform:rotate(0) skewY(0)}50%{transform:rotate(4deg) skewY(3deg)}}@keyframes gw{0%,100%{opacity:.5}50%{opacity:1}}@keyframes tw{0%,100%{opacity:.25}50%{opacity:1}}@keyframes tilt{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(1.6deg)}}@keyframes gp{0%,100%{opacity:.55}50%{opacity:1}}@keyframes cf{0%{transform:translateY(-20px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translateY(70px) rotate(200deg);opacity:0}}@keyframes qin{from{opacity:0}to{opacity:1}}@keyframes qg{0%,100%{filter:drop-shadow(0 0 2px #e3b73e)}50%{filter:drop-shadow(0 0 9px #e3b73e)}}
+#cut.anim .fl{animation:fl 3.4s ease-in-out infinite}#cut.anim .pu{transform-box:fill-box;transform-origin:center;animation:pu 2.2s ease-in-out infinite}#cut.anim .sp2{animation:sp 16s linear infinite}#cut.anim .sp{animation:sp 70s linear infinite}#cut.anim .br{animation:br 3.8s ease-in-out infinite}#cut.anim .cp{transform-box:fill-box;transform-origin:0% 15%;animation:cp 2.8s ease-in-out infinite}#cut.anim .gw{animation:gw 2s ease-in-out infinite}#cut.anim .tw{animation:tw 2.6s ease-in-out infinite}#cut.anim .tilt{animation:tilt 5s ease-in-out infinite}#cut.anim .gp{animation:gp 3.4s ease-in-out infinite}#cut.anim .cf{transform-box:fill-box;transform-origin:center;animation:cf 4s linear infinite}
+#cut.anim .te{transform:translateX(41px)}#cut.anim .dt,#cut.anim .qm,#cut.anim .dk{opacity:0}#cut.anim .sc.in .te{animation:teS 1.3s ease-in-out .8s forwards}#cut.anim .sc.in .dt{animation:qin .5s ease-out forwards}#cut.anim .sc.in .qm{transform-box:fill-box;transform-origin:center;animation:qpop .9s cubic-bezier(.2,1.4,.4,1) 3.7s forwards,qg2 2.4s ease-in-out 4.8s infinite}#cut.anim .sc.in .dk{animation:dkf 2s ease-in 3.2s forwards}@keyframes teS{to{transform:translateX(0)}}@keyframes qpop{from{opacity:0;transform:scale(2.6) rotate(-12deg)}to{opacity:1;transform:scale(1) rotate(0)}}@keyframes qg2{0%,100%{filter:drop-shadow(0 0 3px #e3b73e)}50%{filter:drop-shadow(0 0 14px #ffd86a)}}@keyframes dkf{to{opacity:.38}}
+#cut.anim .q{opacity:0}#cut.anim .sc.in .q{animation:qin 2.4s ease-out .8s forwards,qg 2.6s ease-in-out 3.2s infinite}
+#cut .cpn{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3px 12px;background:rgba(243,230,198,.94);border:2px solid #1d130b;border-radius:4px;box-shadow:inset 0 0 0 3px rgba(243,230,198,.94),inset 0 0 0 4px #7a5c3a;color:#1d130b;font:italic 11.5px/1.25 'IM Fell English',Georgia,serif}#cut .cpn span{display:block}#cut .cpn span+span{margin-top:3px}
+#cut.anim .s1,#cut.anim .s2{opacity:0}#cut.anim .sc.in .s1{animation:sIn 1.3s ease-out .3s forwards}#cut.anim .sc.in .s2{animation:sIn 1.3s ease-out 1.8s forwards}@keyframes sIn{from{opacity:0;filter:blur(3px)}to{opacity:1;filter:blur(0)}}
+
+#cut svg{width:100%;height:auto;display:block;filter:drop-shadow(2px 5px 6px rgba(40,20,0,.4))}
+#cut .cap{font:700 15px Cinzel,serif;fill:#1d130b}#cut .big{font:700 48px Cinzel,serif;fill:#1d130b}#cut .bt{font:700 38px Cinzel,serif;fill:#f3e6c6}
+.snm{font:700 30px Cinzel,serif;fill:#1d130b}.sgl{font:700 15px 'Noto Serif',serif;fill:#1d130b}.sbn{font:700 13px Cinzel,serif;letter-spacing:.16em;fill:#1d130b}
+svg.ksv{display:block;width:100%;height:100%;filter:drop-shadow(2px 4px 4px rgba(40,20,0,.4))}
+#app .kd.pc{background:none;box-shadow:none;border-radius:0;overflow:visible}
+.kd.pc::before{display:none}
+#app .kd.pc.sel{box-shadow:none;transform:translateY(-9px) scale(1.04);filter:drop-shadow(0 0 5px var(--gold)) drop-shadow(0 0 12px var(--gold))}
+#app .kd.mini.pc{box-shadow:none;border-radius:0}
+#app .tk2,#app .tok{border:0;background:none;box-shadow:none}
+#app .tk2 .ic.anime,#app .tok .ic.anime{width:100%;height:100%;filter:none}
+#app .tk2.pt{outline:2px dashed var(--gold);outline-offset:1px}
 </style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <linearGradient id="g-f1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a34"/><stop offset="1" stop-color="#c91f17"/></linearGradient>
 <linearGradient id="g-f2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb52e"/><stop offset="1" stop-color="#fff0a0"/></linearGradient>
@@ -391,7 +409,7 @@ function evalRound(P,O){
 /* tokens: placed by the player on their played cards */
 const rk=(r,sd)=>sd=='p'?{w:2,d:1,l:0}[r]:{l:2,d:1,w:0}[r];
 function tokenList(cs){return eff(cs).flatMap(c=>{const r=[];if(c.e!='neu')r.push(c.mv=='transmute'?'wild':c.e);if(c.mv=='spark')r.push('wild');return r})}
-const NE={p:'o',o:'p'},BURN=['fire','earth','air','water'],BEATS={water:'fire',fire:'earth',earth:'air',air:'water'},SYN={earth:'water',water:'earth',air:'fire',fire:'air'};
+const NE={p:'o',o:'p'},BURN=['fire','earth','air','water','neu'],BEATS={water:'fire',fire:'earth',earth:'air',air:'water'},SYN={earth:'water',water:'earth',air:'fire',fire:'air'};
 let BASE=null;const MAXT=4;
 let CANON='p';const gid=(s,row,k)=>1e6+k*1e5+((s=='p')==(CANON=='p')?0:1)*1e4+row*10;
 const forbid=()=>false;
@@ -442,7 +460,7 @@ function settle(rows0,T0,mv){
   const shield=(s,i,td)=>{
     let w=!td&&T[s].find(t=>t.e=='water'&&t.row==i&&!t.u);
     if(w){w.u=1;return true}
-    const j=[...new Set(T[s].filter(t=>t.e=='water').map(t=>t.row))].find(r=>cn(s,'water',r)>=4&&!T[s].some(t=>t.e=='water'&&t.row==r&&t.tu));
+    const j=cn(s,'water',i)>=4&&!T[s].some(t=>t.e=='water'&&t.row==i&&t.tu)?i:null;
     if(j==null)return false;T[s].find(t=>t.e=='water'&&t.row==j).tu=1;return true};
   mv.filter(m=>m.k=='am'||m.k=='ag').forEach(m=>{
     const g=m.k=='ag',e=g?NE[m.sd]:m.sd,t=T[e].find(x=>x.id==m.id),n=cn(m.sd,'air',m.at);
@@ -450,7 +468,7 @@ function settle(rows0,T0,mv){
     if(g?(n<2||!T[m.sd].some(x=>x.e=='air'&&x.row==m.at&&x.f)):(t.e!='air'||!t.arm||t.f||t.mvd))return;
     if(g){
       if(anc(e,t.row)){ev[t.row].push('⚓ blocks '+IC.air);return}
-      if(shield(e,t.row,1)){ev[t.row].push(`${IC.water} blocks ${IC.air} Gust of ${who(m.sd)}`);return}}
+      }
     ev[t.row].push(`${IC.air} ${who(m.sd)} moved ${IC[t.e]}${g?' away':''}`);t.row=m.to;t.mvd=1;ev[m.to].push(`${IC[t.e]} of ${who(e)} moved here`);
   });
   const bn={};['p','o'].forEach(s=>bn[s]=rows0.map((_,i)=>T[s].filter(t=>t.e=='fire'&&t.row==i&&t.f).length));
@@ -479,7 +497,7 @@ const cand=(g,s,T,rows)=>{const e=NE[s],b={sd:s,k:g.k,at:g.at},mt=(t,es)=>rows.m
   return (air.length==1?air:own).flatMap(t=>mt(t,s))};
 function resolveTok(rows,pl,fixed,T0,q){
   T0=T0||BASE||S.T;
-  const T=addFresh(rows,T0,pl),mv=[...(fixed||[])],sc=(rs,s)=>rs.reduce((a,r)=>a+rk(r.r,s)*10+(s=='p'?r.x-r.y:r.y-r.x),0);
+  const T=addFresh(rows,T0,pl),mv=[...(fixed||[])],sc=mscore;
   ['p','o'].forEach(s=>{if(fixed&&(s=='p'||S.duel))return;
     specs(T,s).forEach(g=>{if(q&&(g.k=='am'||g.k=='burn'||g.k=='wn'))return;
       const bl=g.k=='am',Tv=bl?{p:T.p.filter(t=>s=='p'||!t.f),o:T.o.filter(t=>s=='o'||!t.f)}:T,mv0=bl?mv.filter(m=>m.k!='am'||m.sd==s):mv;
@@ -490,12 +508,8 @@ function resolveTok(rows,pl,fixed,T0,q){
 }
 const grp=(fn,V)=>(V||S.view).map((r,i)=>(i%3==0?`<h2>Round ${rom(i/3+1)}${(i/3|0)<S.r?badge(i):''}</h2>`:'')+fn(r,i)).join('');
 const tokAll=P=>[0,1,2].flatMap(r=>tokenList(P.slice(r*3,r*3+3)));
-function aiPlace(rows,toks,sd,opp=[]){
-  const score=rs=>{let s=pb(rs.T,sd);
-    for(let r=0;r*3<rs.length;r++){const seg=rs.slice(r*3,r*3+3),t=tally(seg),res=roundRes(t);
-      seg.forEach(q=>{const m=sd=='p'?q.x-q.y:q.y-q.x;s+=rk(q.r,sd)*4+Math.max(-4,Math.min(4,m))*.5});
-      s+=rk(res,sd)*10+Math.max(-6,Math.min(6,sd=='p'?t.pt-t.ot:t.ot-t.pt))*.2}
-    return s};
+function aiPlace(rows,toks,sd,opp=[],fin){const thr=fin?.01:1.2;
+  const score=rs=>pb(rs.T,sd)*.3+mscore(rs,sd);
   const full=(pl,i)=>(BASE||S.T)[sd].filter(t=>t.row==i).length+pl.filter(t=>t.row==i).length>=MAXT;
   const ev=pl=>score(resolveTok(rows,{p:sd=='p'?pl:opp,o:sd=='o'?pl:opp},0,0,1));
   const tryAll=(ti,base)=>{let best=null,bs=-1e9;
@@ -503,11 +517,18 @@ function aiPlace(rows,toks,sd,opp=[]){
       const m={e,row:i,ti,id:-1-ti},v=ev([...base,m]);if(v>bs){bs=v;best=m}}));
     return best?{m:best,v:bs}:null};
   const pl=[];let now=ev(pl);
-  toks.forEach((_,ti)=>{const b=tryAll(ti,pl);if(b&&b.v>now){pl.push(b.m);now=b.v}});
+  const bun=()=>{let best=null,bv=now;const OWN=(BASE||S.T)[sd],tryS=set=>{const v=ev(set);if(v>bv+.3){bv=v;best=set}};
+    rows.forEach((_,i)=>{const on=OWN.filter(t=>t.row==i),have=new Set(on.map(t=>t.e)),need=E.filter(e=>!have.has(e)),used=new Set(),set=[];let ok=need.length>0&&on.length+need.length<=MAXT;
+      if(ok)for(const e of need){let k=toks.findIndex((t,j)=>t==e&&!used.has(j));if(k<0)k=toks.findIndex((t,j)=>t=='wild'&&!used.has(j));if(k<0){ok=false;break}used.add(k);set.push({e,row:i,ti:k,id:-1-k})}
+      if(ok)tryS(set);
+      if(on.length+2<=MAXT)E.forEach(e=>{const ks=toks.map((t,j)=>t==e?j:-1).filter(j=>j>=0);if(ks.length>=2)tryS(ks.slice(0,2).map(k=>({e,row:i,ti:k,id:-1-k})))})});
+    return best};
+  const bs0=bun();if(bs0){pl.push(...bs0);now=ev(pl)}
+  toks.forEach((_,ti)=>{const b=tryAll(ti,pl);if(b&&b.v>now+thr){pl.push(b.m);now=b.v}});
   for(let pass=0;pass<2;pass++){let ch=false;
     for(let k=0;k<pl.length;k++){const t=pl[k],rest=pl.filter((_,j)=>j!=k),b=tryAll(t.ti,rest);
       if(b&&b.v>now+1e-6&&(b.m.row!=t.row||b.m.e!=t.e)){pl[k]=b.m;now=b.v;ch=true}}
-    toks.forEach((_,ti)=>{if(pl.some(x=>x.ti==ti))return;const b=tryAll(ti,pl);if(b&&b.v>now){pl.push(b.m);now=b.v;ch=true}});
+    toks.forEach((_,ti)=>{if(pl.some(x=>x.ti==ti))return;const b=tryAll(ti,pl);if(b&&b.v>now+thr){pl.push(b.m);now=b.v;ch=true}});
     if(!ch)break}
   return pl;
 }
@@ -518,17 +539,27 @@ function npcChoose(){
   const hand=S.ohand,lv=S.lv;
   if(lv==0||hand.length==1)return hand[rnd(hand.length)];
   hand.forEach(c=>c.dir=S.k<2?1:-1);
-  if(Math.random()<[0,.35,.25,.05][lv])return hand[rnd(hand.length)];
+  if(Math.random()<[0,.3,.1,0][lv])return hand[rnd(hand.length)];
   let pool=lv>=3?S.deck.filter(c=>!S.played.includes(c)):[...S.played,...PRIOR];
   if(!pool.length)pool=PRIOR;
   const N=[0,3,5,14][lv],samples=Array.from({length:N},()=>pool[rnd(pool.length)]),lam=lv==3?.2:.3;
+  /* slot-by-slot state of this round, from the foe's side */
+  const nw=S.rows.filter(r=>r.r=='l').length,nl=S.rows.filter(r=>r.r=='w').length,decided=lv>=2&&S.k>=1&&(nw>=2||nl>=2||(S.k==2&&(nw==2||nl==2)));
+  if(decided&&S.k==2){
+    /* the round is settled: spend the cheapest card, keep strong ones for later rounds (its token is still useful) */
+    return [...hand].sort((a,b)=>(worth(a)-(a.e!='neu'?1:0))-(worth(b)-(b.e!='neu'?1:0)))[0];
+  }
   const val=c=>{
     let tot=0;
     samples.forEach(o=>{
       if(lv==1){const a=base(c),b=base(o);tot+=a>b?1:a==b?.5:0;return}
-      evalRound([...S.pcs,o],[...S.ocs,c]).forEach(r=>{tot+=rk(r.r,'o')*3+Math.max(-3,Math.min(3,r.y-r.x))*.3});
+      const rows=evalRound([...S.pcs,o],[...S.ocs,c]);
+      rows.forEach(r=>{tot+=rk(r.r,'o')*1.5+Math.max(-3,Math.min(3,r.y-r.x))*.25});
+      /* winning round I or II also earns a neutral token, so rounds are worth a bit more early */
+      tot+=rk(roundRes(tally(rows)),'o')*(S.k==2?10:3)*(S.r<2?1.15:1);
     });
-    return tot/N-lam*worth(c)+(lv>=2&&c.e!='neu'?.8:0)+(lv>=2&&c.mv?({kindle:.5,spark:.7,anchor:.3,transmute:.3}[c.mv]||0):0);
+    const dec=S.k==2&&nw==1&&nl==1;
+    return tot/N-lam*worth(c)*(dec?.4:1)+(lv>=2&&c.e!='neu'?.8:0)+(lv>=2&&c.mv?({kindle:.5,spark:.7,anchor:.3,transmute:.3}[c.mv]||0):0)+(lv>=3&&c.e!='neu'&&!S.ocs.some(x=>x.e==c.e)?.3:0);
   };
   let best=hand[0],bs=-1e9;hand.forEach(c=>{const v=val(c);if(v>bs){bs=v;best=c}});
   return best;
@@ -536,10 +567,10 @@ function npcChoose(){
 function npcPlace(rows,toks,lv){
   if(!toks.length)return [];
   if(lv==0)return toks.map((e,ti)=>{e=e=='wild'?E[rnd(4)]:e;const ok=rows.map((_,i)=>i).filter(i=>!forbid(rows,'o',e,i)&&S.T.o.filter(t=>t.row==i).length<MAXT);return ok.length?{e,row:ok[rnd(ok.length)],ti,id:-1-ti}:null}).filter(Boolean);
-  if(lv==1||(lv==2&&Math.random()<.25))return aiPlace(rows,toks,'o');
+  const fin=S.r==2;if(lv==1)return aiPlace(rows,toks,'o',[],fin);
   const pt=[...S.rtok];
-  let pp=aiPlace(rows,pt,'p'),po=aiPlace(rows,toks,'o',pp);
-  if(lv>=3)for(let k=0;k<2;k++){pp=aiPlace(rows,pt,'p',po);po=aiPlace(rows,toks,'o',pp)}
+  let pp=aiPlace(rows,pt,'p',[],fin),po=aiPlace(rows,toks,'o',pp,fin);
+  if(lv>=3)for(let k=0;k<2;k++){pp=aiPlace(rows,pt,'p',po,fin);po=aiPlace(rows,toks,'o',pp,fin)}
   return po;
 }
 function autoFx(rows,P,O){
@@ -548,6 +579,9 @@ function autoFx(rows,P,O){
 }
 const tally=rows=>{let w=0,l=0,pt=0,ot=0;rows.forEach(r=>{if(r.r=='w')w++;if(r.r=='l')l++;pt+=r.x;ot+=r.y});return {w,l,pt,ot}};
 const roundRes=t=>t.w>t.l?'w':t.w<t.l?'l':t.pt>t.ot?'w':t.pt<t.ot?'l':'d';
+function mscore(rs,sd){let s=0;for(let r=0;r*3<rs.length;r++){const seg=rs.slice(r*3,r*3+3),t=tally(seg),res=roundRes(t),d=sd=='p'?t.pt-t.ot:t.ot-t.pt;
+  seg.forEach(q=>{s+=rk(q.r,sd)*.8+Math.max(-3,Math.min(3,sd=='p'?q.x-q.y:q.y-q.x))*.08});
+  s+=rk(res,sd)*10+(res=='w'?Math.min(d,3)*.35:Math.max(d,-6)*.15)}return s}
 function tradeOrder(N,k=4){
   N=Math.min(N,k);const o=Array(N).fill('W');let w=N,l=0,turn='L';
   while(o.length<2*k){
@@ -556,17 +590,22 @@ function tradeOrder(N,k=4){
   }
   return o;
 }
-function growT(T,n){['p','o'].forEach(s=>{for(let i=0;i<n;i++){const c=T[s].filter(t=>t.row==i);if(c.filter(t=>t.e=='earth').length>=2&&c.length<MAXT)T[s].push({e:'earth',row:i,id:gid(s,i,1)+c.length*.01,g:1,nw:1,kind:'grow'})}})}
+function growT(T,n){const out=[];['p','o'].forEach(s=>{for(let i=0;i<n;i++){const c=T[s].filter(t=>t.row==i),ne=c.filter(t=>t.e=='earth').length;if(ne>=2&&c.length<MAXT){T[s].push({e:'earth',row:i,id:gid(s,i,1)+c.length*.01,g:1,nw:1,kind:'grow'});if(ne+1>=4&&!c.some(t=>t.e=='earth'&&t.bu))out.push({s,row:i})}}});return out}
+const repaint=()=>{S.view=paint(S.allrows,{p:S.T.p.map(t=>({...t})),o:S.T.o.map(t=>({...t}))})};
+const nextRound=()=>{S.r++;newRound();S.ph='play';render()};
+function bloomApply(s,from,to){if(to<0)return;const w=S.T[s].find(t=>t.e=='earth'&&t.row==from&&!t.bu);if(!w||S.T[s].filter(t=>t.row==to).length>=MAXT)return;w.bu=1;S.T[s].push({e:'earth',row:to,id:gid(s,from,2),nw:1,x:1,kind:'grow'})}
+function bloomAuto(s,from){let best=-1,bs=1e9;S.view.forEach((r,i)=>{if(S.T[s].filter(t=>t.row==i).length>=MAXT)return;const m=s=='p'?r.x-r.y:r.y-r.x,k=m==0?0:m==-1?1:m==-2?2:m<-2?4:5+m;if(k<bs){bs=k;best=i}});return best}
 function autoMatch(da,db){
   const pa=[...da].sort(()=>Math.random()-.5),pb=[...db].sort(()=>Math.random()-.5),P=pa.slice(0,9),O=pb.slice(0,9);
   let raw=[],rows=[],car={p:[],o:[]},uq=1000;BASE={p:[],o:[]};
   for(let r=0;r<3;r++){
     raw.push(...evalRound(P.slice(r*3,r*3+3),O.slice(r*3,r*3+3)));
     const tp=[...car.p,...tokenList(P.slice(r*3,r*3+3))],to=[...car.o,...tokenList(O.slice(r*3,r*3+3))];
-    const pp=aiPlace(raw,tp,'p'),po=aiPlace(raw,to,'o',pp);
+    
+    const pp=aiPlace(raw,tp,'p',[],r==2),po=aiPlace(raw,to,'o',pp,r==2);
     car.p=tp.filter((_,i)=>!pp.some(t=>t.ti==i));car.o=to.filter((_,i)=>!po.some(t=>t.ti==i));
     pp.forEach(t=>t.id=uq++);po.forEach(t=>t.id=uq++);
-    rows=resolveTok(raw,{p:pp,o:po});BASE=rows.T;if(r<2)growT(BASE,raw.length);
+    rows=resolveTok(raw,{p:pp,o:po});BASE=rows.T;if(r<2)growT(BASE,raw.length);if(r<2){const qa=roundRes(tally(raw.slice(r*3,r*3+3))),qb=roundRes(tally(rows.slice(r*3,r*3+3)));if(qa!=qb&&qb=='w')car.p.push('neu');else if(qa!=qb&&qb=='l')car.o.push('neu')}
   }
   BASE=null;
   let ra=0,rb=0,mp=0;
@@ -589,6 +628,156 @@ fire:`<path d="M32 3C35 13 51 20 51 38C51 52 43 61 32 61C21 61 13 52 13 40C13 32
 water:`<path d="M32 4C32 4 14 27 14 40C14 51 22 60 32 60C42 60 50 51 50 40C50 27 32 4 32 4Z" fill="url(#g-w)" stroke="#0b2552" stroke-width="2.6" stroke-linejoin="round"/><path d="M18 43q4-4 7 0t7 0t7 0t7 0" stroke="#cfeeff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".7"/><path d="M22 37C22 45 26 51 31 53" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" opacity=".85"/><circle cx="25" cy="30" r="2.4" fill="#fff" opacity=".9"/><circle cx="52" cy="14" r="2" fill="#9be7ff"/><circle cx="12" cy="14" r="1.5" fill="#9be7ff"/>`,
 earth:`<path d="M32 14C28 6 20 4 14 8C18 14 26 16 32 14Z" fill="#8fc24a" stroke="#1f2e0c" stroke-width="2.2" stroke-linejoin="round"/><path d="M32 14C36 4 46 2 52 6C48 13 40 16 32 14Z" fill="#a8d95c" stroke="#1f2e0c" stroke-width="2.2" stroke-linejoin="round"/><path d="M16 28L32 20V60L20 54Z" fill="#4a6a22" stroke="#1f2e0c" stroke-width="2.2" stroke-linejoin="round"/><path d="M32 20L48 28L44 54L32 60Z" fill="#7fae3c" stroke="#1f2e0c" stroke-width="2.2" stroke-linejoin="round"/><path d="M16 28L32 14L48 28L32 20Z" fill="#b8dc7e" stroke="#1f2e0c" stroke-width="2.2" stroke-linejoin="round"/><path d="M38 30L40 44" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".55"/><circle cx="24" cy="38" r="1.6" fill="#b8dc7e"/>`,
 air:`<g fill="none" stroke-linecap="round" stroke-linejoin="round"><g stroke="#2a1740" stroke-width="9"><path d="M9 24H37C48 24 50 11 41 10C36 9.500 33 14 36 17"/><path d="M7 37H47C58 37 59 50 49 50C44 50 41 45 44 41"/><path d="M15 49H29C36 49 37 56 32 57"/></g><g stroke="#b9a0ec" stroke-width="5"><path d="M9 24H37C48 24 50 11 41 10C36 9.500 33 14 36 17"/><path d="M7 37H47C58 37 59 50 49 50C44 50 41 45 44 41"/><path d="M15 49H29C36 49 37 56 32 57"/></g><g stroke="#fff" stroke-width="1.600" opacity=".75"><path d="M11 22H36"/><path d="M9 35H46"/><path d="M17 47H28"/></g></g><circle cx="55" cy="22" r="2" fill="#caa9f0"/><circle cx="10" cy="56" r="1.800" fill="#caa9f0"/>`};
+const ART4=(()=>{
+const I='#1d130b',CR='#f3e6c6';
+const D={
+fire:{n:'Fire',god:'Amaterasu',cul:'Japan',art:'Ukiyo-e woodblock prints',p:'#f2dfbb',c:'#c0402a',gl:'火',a:'#fbe9c4',b:'#e58a4a'},
+water:{n:'Water',god:'Poseidon',cul:'Greece',art:'Attic vase painting',p:'#e4e0cd',c:'#1f3a6e',gl:'Ψ',a:'#2a4a86',b:'#12224a'},
+air:{n:'Air',god:'Thor',cul:'Norse',art:'Carved wood and knotwork',p:'#e3dbe0',c:'#5a4a7a',gl:'ᚦ',a:'#5d5478',b:'#262038'},
+earth:{n:'Earth',god:'Geb',cul:'Egypt',art:'Papyrus tomb painting',p:'#efe0b5',c:'#3f7a3a',gl:'☥',a:'#f0dca0',b:'#d4b060'},
+neu:{n:'Neutral',god:'The Truce',cul:'All',art:'Plain stone',p:'#e3d9c3',c:'#7d6e5a',gl:'✦',a:'#efe4c8',b:'#b8a888'}};
+const WP={fire:'M34 56H166V212H34Z',water:'M34 212V94Q34 52 100 52Q166 52 166 94V212Z',air:'M24 127a76 76 0 1 0 152 0a76 76 0 1 0 -152 0',earth:'M36 212L42 58H158L164 212Z',neu:'M24 127a76 76 0 1 0 152 0a76 76 0 1 0 -152 0'};
+const BAND={
+fire:`<path d="M0 0L8 7L16 0M0 14L8 7L16 14" stroke="${CR}" stroke-width="1.2" fill="none"/>`,
+water:`<path d="M1 12H13V2H4V8H9" stroke="${CR}" stroke-width="1.6" fill="none"/>`,
+air:`<path d="M0 7Q6 0 12 7T24 7M0 7Q6 14 12 7T24 7" stroke="${CR}" stroke-width="1.5" fill="none"/>`,
+earth:`<circle cx="6" cy="6" r="3.5" fill="${CR}"/><path d="M15 12L18 2L21 12Z" fill="${CR}"/>`,
+neu:`<circle cx="6" cy="7" r="2" fill="${CR}"/>`};
+const defs=`<filter id="rough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.2"/></filter>
+<filter id="fine" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="2" seed="9" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.8"/></filter>
+<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="3" seed="2"/><feColorMatrix values="0 0 0 0 .3 0 0 0 0 .2 0 0 0 0 .08 0 0 0 .5 -.05"/></filter>
+<pattern id="hat" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(40)"><path d="M0 0V5" stroke="${I}" stroke-width="1" opacity=".55"/></pattern>
+<radialGradient id="vg" cx=".5" cy=".45" r=".7"><stop offset=".6" stop-color="${I}" stop-opacity="0"/><stop offset="1" stop-color="${I}" stop-opacity=".28"/></radialGradient>
+<pattern id="curl" width="22" height="14" patternUnits="userSpaceOnUse"><path d="M0 11Q6 11 6 6Q6 2 10 2Q14 2 14 5Q14 8 11 8M11 11H22" stroke="${CR}" stroke-width="2" fill="none" stroke-linecap="round"/></pattern>
+<pattern id="mea" width="16" height="14" patternUnits="userSpaceOnUse"><path d="M1 12H13V2H4V8H9" stroke="${CR}" stroke-width="1.8" fill="none"/></pattern>`+Object.keys(D).map(k=>`<linearGradient id="w-${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${D[k].a}"/><stop offset="1" stop-color="${D[k].b}"/></linearGradient><clipPath id="k-${k}"><path d="${WP[k]}"/></clipPath><pattern id="p-${k}" width="${k=='air'||k=='earth'?24:16}" height="14" patternUnits="userSpaceOnUse">${BAND[k]}</pattern>`).join('');
+const P=(a,b,r)=>`${(100+Math.cos(a)*r).toFixed(1)},${(b+Math.sin(a)*r).toFixed(1)}`;
+const st=(w=2)=>`stroke="${I}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
+const rays=()=>Array.from({length:22},(_,i)=>{const a=i*Math.PI/11,w=.1;return `<polygon points="${P(a-w,118,30)} ${P(a,118,i%2?72:104)} ${P(a+w,118,30)}" fill="${i%2?'#f0c05a':'#e58a4a'}" ${st(1.2)}/>`}).join('');
+const braid=ph=>{let d='';for(let i=0;i<=120;i++){const t=i/120*Math.PI*2,r=62+5.5*Math.sin(8*t+ph);d+=(i?'L':'M')+(100+r*Math.cos(t)).toFixed(1)+' '+(127+r*Math.sin(t)).toFixed(1)}return d+'Z'};
+const ART={
+fire:()=>`${rays()}<circle cx="100" cy="118" r="30" fill="#c0402a" ${st(2.4)}/><path d="M82 108Q90 96 104 94" stroke="#f6cf9a" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M30 214L80 172L92 178L102 158L118 176L128 170L172 214Z" fill="#3c2e44" ${st(2.2)}/><path d="M102 158L94 176L100 172L106 179L112 172L118 176Z" fill="${CR}" ${st(1.5)}/>
+<path d="M34 186Q60 176 86 186T140 186T170 184V196Q140 204 110 196T50 198T34 196Z" fill="${CR}" opacity=".9" ${st(1.4)}/>
+<rect x="42" y="60" width="9" height="154" fill="#c0402a" ${st(2.2)}/><rect x="149" y="60" width="9" height="154" fill="#c0402a" ${st(2.2)}/><rect x="36" y="88" width="128" height="7" fill="#c0402a" ${st(2)}/>
+<path d="M26 58Q100 76 174 58L170 72Q100 88 30 72Z" fill="${I}"/>`,
+water:()=>`<g fill="${CR}" ${st(1.4)}><circle cx="62" cy="80" r="3"/><circle cx="70" cy="68" r="2"/><circle cx="140" cy="92" r="3.5"/><circle cx="132" cy="76" r="2"/></g>
+<rect x="96" y="92" width="8" height="78" rx="3" fill="${CR}" ${st(2)}/><path d="M72 88V118Q72 138 100 138Q128 138 128 118V88H119V117Q119 128 100 128Q81 128 81 117V88Z" fill="${CR}" ${st(2)}/>
+<path d="M100 66L109 92H91Z" fill="${CR}" ${st(2)}/><path d="M72 76L80 92H64Z" fill="${CR}" ${st(2)}/><path d="M128 76L136 92H120Z" fill="${CR}" ${st(2)}/><path d="M96 108H104M96 116H104" ${st(1.2)}/>
+<rect x="30" y="158" width="140" height="36" fill="url(#curl)"/><rect x="30" y="196" width="140" height="16" fill="${I}" opacity=".5"/><rect x="30" y="196" width="140" height="16" fill="url(#mea)"/>`,
+air:()=>`<path d="${braid(0)}" fill="none" stroke="${I}" stroke-width="8"/><path d="${braid(0)}" fill="none" stroke="#c9ccd8" stroke-width="4"/><path d="${braid(Math.PI)}" fill="none" stroke="${I}" stroke-width="8"/><path d="${braid(Math.PI)}" fill="none" stroke="#a8abc0" stroke-width="4"/>
+<path d="M118 62L96 104L110 104L92 150" fill="none" stroke="#f3d96a" stroke-width="5" ${st(0).replace('stroke="'+I+'" stroke-width="0" ','')}/><path d="M80 66L96 96L88 100L100 128" fill="none" stroke="#f3d96a" stroke-width="3" stroke-linecap="round"/>
+<rect x="95" y="118" width="10" height="56" rx="3" fill="#8a5a2e" ${st(2)}/><path d="M95 130H105M95 138H105M95 146H105M95 154H105" ${st(1)}/><rect x="72" y="86" width="56" height="36" rx="5" fill="#cfd3de" ${st(2.4)}/><path d="M72 92H128M72 116H128" ${st(1)}/><path d="M86 104Q93 96 100 104T114 104" fill="none" ${st(1.4)}/><circle cx="100" cy="180" r="4" fill="none" ${st(1.6)}/>`,
+earth:()=>`<rect x="30" y="196" width="140" height="18" fill="#3f7a3a" ${st(2)}/><path d="M34 205q8-6 16 0t16 0t16 0t16 0t16 0t16 0t16 0" fill="none" stroke="#bcd68a" stroke-width="1.6"/>
+<g ${st(1.6)} fill="none">${[0,1,2].map(i=>`<g transform="translate(${52+i*34} 0)"><ellipse cx="9" cy="184" rx="7" ry="3.5" fill="${CR}"/><circle cx="9" cy="184" r="1.6" fill="${I}"/><path d="M22 184l4-4 4 4 4-4 4 4"/></g>`).join('')}</g>
+<path d="M100 84Q60 68 32 80L36 86Q58 80 82 90L90 94Z" fill="#2f6fb0" ${st(2)}/><path d="M100 84Q140 68 168 80L164 86Q142 80 118 90L110 94Z" fill="#2f6fb0" ${st(2)}/><path d="M46 84L74 92M52 78L80 88M130 92L158 84M122 88L150 78" ${st(1.2)}/><circle cx="100" cy="86" r="9" fill="#c0402a" ${st(2.2)}/>
+<ellipse cx="100" cy="116" rx="13" ry="18" fill="none" stroke="${I}" stroke-width="11" stroke-linecap="round"/><ellipse cx="100" cy="116" rx="13" ry="18" fill="none" stroke="#e3b73e" stroke-width="7"/><rect x="94" y="132" width="12" height="52" fill="#e3b73e" ${st(2)}/><rect x="76" y="144" width="48" height="10" fill="#e3b73e" ${st(2)}/>
+<g ${st(2)}><path d="M52 190V120" stroke-width="4" stroke="#3f7a3a"/><path d="M52 120Q40 112 38 100M52 120Q52 106 52 98M52 120Q64 112 66 100" fill="none" stroke="#3f7a3a" stroke-width="3"/><path d="M148 190V120" stroke-width="4" stroke="#3f7a3a"/><path d="M148 120Q136 112 134 100M148 120Q148 106 148 98M148 120Q160 112 162 100" fill="none" stroke="#3f7a3a" stroke-width="3"/></g>`,
+neu:()=>`<path d="M100 50Q108 119 176 127Q108 135 100 204Q92 135 24 127Q92 119 100 50Z" fill="#a89c86" ${st(2.6)}/><path d="M100 50Q108 119 176 127Q108 135 100 204Z" fill="url(#hat)" opacity=".6"/><path d="M100 66Q103 112 100 127Q96 112 100 66Z" fill="#d8cdb4"/><circle cx="100" cy="127" r="5" fill="#d8cdb4" ${st(1.6)}/>`};
+const ICO=(ty,d,x)=>{const f=`fill="${d.c}" ${st(1.6)}`,s=ty=='ATTACK'?`<g transform="rotate(45 12 12)"><path d="M12 0L15.500 4V15H8.500V4Z" ${f}/><rect x="5" y="15" width="14" height="3.200" ${f}/><rect x="10" y="18" width="4" height="6" ${f}/></g>`:ty=='DEFENSE'?`<path d="M12 1L21 4.500V12C21 18 17 21.500 12 23.500C7 21.500 3 18 3 12V4.500Z" ${f}/><path d="M12 5V20" fill="none" ${st(1.2)}/>`:ty=='POWER'?`<polygon points="${Array.from({length:10},(_,i)=>{const a=-Math.PI/2+i*Math.PI/5,r=i%2?5:11.5;return (12+Math.cos(a)*r).toFixed(1)+','+(12.5+Math.sin(a)*r).toFixed(1)}).join(' ')}" ${f}/>`:`<path d="M10 1Q11 9 19 10Q11 11 10 19Q9 11 1 10Q9 9 10 1Z" ${f}/><path d="M19 15Q19.500 18.500 23 19Q19.500 19.500 19 23Q18.500 19.500 15 19Q18.500 18.500 19 15Z" ${f}/>`;return `<g transform="translate(${x} 231) scale(.85)">${s}</g>`};
+const card=(k,n,ty,lab)=>{const d=D[k],bw=k=='air'||k=='earth'||k=='neu'?'':'';return `<svg class="ksv" viewBox="0 0 200 280" role="img" aria-label="${d.n} ${ty} ${n}">
+<g filter="url(#rough)"><rect x="3" y="3" width="194" height="274" rx="7" fill="${d.p}" ${st(2.6)}/><rect x="9" y="9" width="182" height="262" rx="4" fill="none" ${st(1.3)}/><rect x="12.500" y="12.500" width="175" height="255" rx="3" fill="none" ${st(.6)}/>
+<rect x="14" y="15" width="172" height="17" fill="${d.c}" ${st(1.4)}/><rect x="14" y="15" width="172" height="17" fill="url(#p-${k})"/>
+<path d="${WP[k]}" fill="url(#w-${k})"/><g clip-path="url(#k-${k})">${ART[k]()}<path d="M200 90L200 280L0 280Z" fill="url(#hat)" opacity=".5"/></g><path d="${WP[k]}" fill="none" ${st(2.6)}/><path d="${WP[k]}" fill="none" ${st(.7)} transform="translate(1.500 -1.200)" opacity=".6"/></g>
+<g filter="url(#fine)"><circle cx="33" cy="51" r="20" fill="${d.p}" ${st(2.4)}/><circle cx="33" cy="51" r="16.5" fill="none" stroke="${d.c}" stroke-width="1.6"/><circle cx="169" cy="48" r="15" fill="${d.p}" ${st(2.2)}/><circle cx="169" cy="48" r="11.500" fill="none" stroke="${d.c}" stroke-width="1.6"/>
+<path d="M16 226H184V260H16Z" fill="${d.p}" ${st(2.2)}/><path d="M16 252H184V260H16Z" fill="${d.c}" opacity=".85"/>${ICO(ty,d,24)}${ICO(ty,d,156)}</g>
+<text x="33" y="61.500" text-anchor="middle" class="snm">${n}</text><text x="169" y="53.500" text-anchor="middle" class="sgl">${d.gl}</text><text x="100" y="246" text-anchor="middle" class="sbn">${lab||ty}</text>
+<rect x="3" y="3" width="194" height="274" rx="7" fill="url(#vg)" pointer-events="none"/><rect x="3" y="3" width="194" height="274" rx="7" filter="url(#grain)" style="mix-blend-mode:multiply" opacity=".55" pointer-events="none"/></svg>`};
+const SEC=[
+['fire','ATTACK',['Inspired by ukiyo-e woodblock prints: flat pigment, bold black outlines, mist bands','Amaterasu\u2019s rising sun, a torii gate framing Mount Fuji','Kumiko lattice band across the top','Vermilion, gold and cream; ceremonial and calm']],
+['water','DEFENSE',['Inspired by Attic vase painting: cream figures on a dark glaze, arched panel','Poseidon\u2019s trident over running-wave scrolls and a Greek key base','Greek key band across the top','Deep blue, cream and bronze; heroic and measured']],
+['air','MODIFIER',['Inspired by Viking carved wood and metalwork: roundel, braided interlace ring','Thor\u2019s Mj\u00f6lnir with forked lightning behind it','Interlace band across the top','Slate, silver, storm purple; rough-hewn and fierce']],
+['earth','POWER',['Inspired by papyrus tomb painting: flat colour, registers, ground line of glyphs','An ankh under a winged sun disc, between papyrus reeds, over the Nile','Lotus and papyrus band across the top','Ochre, malachite green and lapis; stately and symbolic']]];
+const sw=k=>{const d=D[k];return `<div style="display:flex;gap:6px;margin:6px 0">${[d.c,d.a,d.b,d.p].map(c=>`<i style="width:32px;height:20px;border-radius:3px;border:1.5px solid var(--bd);background:${c}"></i>`).join('')}</div>`};
+const Q=(a,r)=>`${(32+Math.cos(a)*r).toFixed(1)},${(32+Math.sin(a)*r).toFixed(1)}`;
+const TKE={
+fire:d=>`${Array.from({length:12},(_,i)=>{const a=i*Math.PI/6,w=.2;return `<polygon points="${Q(a-w,10)} ${Q(a,i%2?15:19)} ${Q(a+w,10)}" fill="${i%2?'#f0c05a':'#e58a4a'}" ${st(1.2)}/>`}).join('')}<circle cx="32" cy="32" r="9" fill="#c0402a" ${st(2)}/>`,
+water:d=>`<rect x="30" y="24" width="4" height="24" rx="1.5" fill="${d.c}" ${st(1.6)}/><path d="M20 18V29Q20 38 32 38Q44 38 44 29V18H40V28Q40 34 32 34Q24 34 24 28V18Z" fill="${d.c}" ${st(1.6)}/><path d="M32 11L36 23H28Z" fill="${d.c}" ${st(1.6)}/><path d="M20 12L23 20H17Z" fill="${d.c}" ${st(1.4)}/><path d="M44 12L47 20H41Z" fill="${d.c}" ${st(1.4)}/>`,
+earth:d=>`<ellipse cx="32" cy="22" rx="6" ry="8" fill="none" stroke="${I}" stroke-width="7.500"/><ellipse cx="32" cy="22" rx="6" ry="8" fill="none" stroke="#e3b73e" stroke-width="4.500"/><rect x="29" y="29" width="6" height="20" fill="#e3b73e" ${st(1.6)}/><rect x="21" y="34" width="22" height="5" fill="#e3b73e" ${st(1.6)}/>`,
+air:d=>`<polygon points="38,12 29,28 34,28 27,44 40,24 34,24" fill="#f3d96a" ${st(1.4)}/><rect x="30" y="31" width="4" height="18" rx="1" fill="#8a5a2e" ${st(1.6)}/><rect x="20" y="18" width="24" height="14" rx="2" fill="#cfd3de" ${st(2)}/><path d="M20 23H44M20 28H44" ${st(1)}/>`};
+const WILDR=`<circle cx="32" cy="32" r="29" fill="#e3d9c3" ${st(2.6)}/>${[['M32 5A27 27 0 0 1 59 32','#c0402a'],['M59 32A27 27 0 0 1 32 59','#2a4a86'],['M32 59A27 27 0 0 1 5 32','#5a4a7a'],['M5 32A27 27 0 0 1 32 5','#3f7a3a']].map(a=>`<path d="${a[0]}" fill="none" stroke="${I}" stroke-width="9"/>`).join('')}${[['M32 5A27 27 0 0 1 59 32','#c0402a'],['M59 32A27 27 0 0 1 32 59','#2a4a86'],['M32 59A27 27 0 0 1 5 32','#5a4a7a'],['M5 32A27 27 0 0 1 32 5','#3f7a3a']].map(a=>`<path d="${a[0]}" fill="none" stroke="${a[1]}" stroke-width="5.500"/>`).join('')}<circle cx="32" cy="32" r="19" fill="#e3d9c3" ${st(1.8)}/><path d="M32 14Q34 30 50 32Q34 34 32 50Q30 34 14 32Q30 30 32 14Z" fill="#a89c86" ${st(1.8)}/>`;
+const tok=(k,s,gone)=>{const d=D[k]||{};return `<svg width="${s}" height="${s}" viewBox="0 0 64 64" style="filter:drop-shadow(1px 3px 3px rgba(40,20,0,.4))${gone?';opacity:.55':''}" role="img" aria-label="${k} token"><g filter="url(#fine)">${k=='wild'?WILDR:`<circle cx="32" cy="32" r="29" fill="${d.c}" ${st(2.6)}/><circle cx="32" cy="32" r="22" fill="${d.p}" ${st(1.8)}/><path d="M32 3A29 29 0 0 1 32 61A38 38 0 0 0 32 3Z" fill="url(#hat)" opacity=".4"/>${TKE[k](d)}`}${gone?`<path d="M14 14L50 50M50 14L14 50" stroke="#9b2d1b" stroke-width="5" stroke-linecap="round"/>`:''}</g></svg>`};
+const tfig=(k,s,cap)=>`<figure style="margin:0;text-align:center">${tok(k,s)}<figcaption class="m" style="font-size:14px">${cap}</figcaption></figure>`;
+
+const neuI=`<g filter="url(#fine)"><circle cx="32" cy="32" r="29" fill="${D.neu.c}" ${st(2.6)}/><circle cx="32" cy="32" r="22" fill="${D.neu.p}" ${st(1.8)}/><path d="M32 12Q34 30 52 32Q34 34 32 52Q30 34 12 32Q30 30 32 12Z" fill="#a89c86" ${st(1.6)}/></g>`;
+return{defs,card,D,inner:k=>k=='neu'?neuI:tok(k,64).replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,''),tokSvg:k=>(k=='neu'?`<svg viewBox="0 0 64 64">${neuI}</svg>`:tok(k,64)).replace('<svg ','<svg class="ic anime '+k+'" ')}})();
+const STORY=(()=>{
+const I='#1d130b',CR='#f3e6c6',E=['fire','water','earth','air'];
+const D={fire:{n:'Fire',god:'Amaterasu',cul:'Japan',c:'#c0402a',p:'#f2dfbb'},water:{n:'Water',god:'Poseidon',cul:'Greece',c:'#1f3a6e',p:'#e4e0cd'},earth:{n:'Earth',god:'Geb',cul:'Egypt',c:'#3f7a3a',p:'#efe0b5'},air:{n:'Air',god:'Thor',cul:'the North',c:'#5a4a7a',p:'#e3dbe0'},neu:{n:'',god:'',cul:'',c:'#7d6e5a',p:'#e3d9c3'}};
+const st=(w=2)=>`stroke="${I}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
+const Q=(a,r)=>`${(32+Math.cos(a)*r).toFixed(1)},${(32+Math.sin(a)*r).toFixed(1)}`;
+const EM={
+fire:c=>Array.from({length:12},(_,i)=>{const a=i*Math.PI/6,w=.2;return `<polygon points="${Q(a-w,10)} ${Q(a,i%2?15:19)} ${Q(a+w,10)}" fill="${i%2?'#f0c05a':'#e58a4a'}" ${st(1.2)}/>`}).join('')+`<circle cx="32" cy="32" r="9" fill="#c0402a" ${st(2)}/>`,
+water:c=>`<rect x="30" y="24" width="4" height="24" rx="1.5" fill="${c}" ${st(1.6)}/><path d="M20 18V29Q20 38 32 38Q44 38 44 29V18H40V28Q40 34 32 34Q24 34 24 28V18Z" fill="${c}" ${st(1.6)}/><path d="M32 11L36 23H28Z" fill="${c}" ${st(1.6)}/><path d="M20 12L23 20H17Z" fill="${c}" ${st(1.4)}/><path d="M44 12L47 20H41Z" fill="${c}" ${st(1.4)}/>`,
+earth:c=>`<ellipse cx="32" cy="22" rx="6" ry="8" fill="none" stroke="${I}" stroke-width="7.5"/><ellipse cx="32" cy="22" rx="6" ry="8" fill="none" stroke="#e3b73e" stroke-width="4.5"/><rect x="29" y="29" width="6" height="20" fill="#e3b73e" ${st(1.6)}/><rect x="21" y="34" width="22" height="5" fill="#e3b73e" ${st(1.6)}/>`,
+air:c=>`<polygon points="38,12 29,28 34,28 27,44 40,24 34,24" fill="#f3d96a" ${st(1.4)}/><rect x="30" y="31" width="4" height="18" rx="1" fill="#8a5a2e" ${st(1.6)}/><rect x="20" y="18" width="24" height="14" rx="2" fill="#cfd3de" ${st(2)}/><path d="M20 23H44M20 28H44" ${st(1)}/>`};
+const star=(x,y,r)=>`<path transform="translate(${x} ${y}) scale(${r/32})" d="M0 -30Q2 -2 30 0Q2 2 0 30Q-2 2 -30 0Q-2 -2 0 -30Z" fill="#a89c86" ${st(2)}/>`;
+const medal=(k,x,y,r,op=1,an=0)=>`<g${an?` class="${an==2?'pu':'fl'}"`:''}><g opacity="${op}" transform="translate(${x-r} ${y-r}) scale(${r/32})"><circle cx="32" cy="32" r="29" fill="${D[k].c}" ${st(2.6)}/><circle cx="32" cy="32" r="22" fill="${D[k].p}" ${st(1.8)}/>${k=='neu'?'':EM[k](D[k].c)}</g></g>`;
+const mixc=(cs,w)=>{const t=w.reduce((a,b)=>a+b,0)||1;return '#'+[0,1,2].map(j=>Math.round(cs.reduce((s,c,i)=>s+parseInt(c.slice(1+j*2,3+j*2),16)*w[i],0)/t).toString(16).padStart(2,'0')).join('')};
+const BAND={fire:[16,`<path d="M0 0L8 7L16 0M0 14L8 7L16 14" stroke="${CR}" stroke-width="1.2" fill="none"/>`],water:[16,`<path d="M1 12H13V2H4V8H9" stroke="${CR}" stroke-width="1.6" fill="none"/>`],air:[24,`<path d="M0 7Q6 0 12 7T24 7M0 7Q6 14 12 7T24 7" stroke="${CR}" stroke-width="1.5" fill="none"/>`],earth:[24,`<circle cx="6" cy="6" r="3.5" fill="${CR}"/><path d="M15 12L18 2L21 12Z" fill="${CR}"/>`],neu:[12,`<circle cx="6" cy="7" r="2" fill="${CR}"/>`]};
+const defs=`<filter id="rough" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3"/></filter>
+<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="3" seed="2"/><feColorMatrix values="0 0 0 0 .3 0 0 0 0 .2 0 0 0 0 .08 0 0 0 .5 -.05"/></filter>
+<radialGradient id="vg" cx=".5" cy=".5" r=".72"><stop offset=".6" stop-color="${I}" stop-opacity="0"/><stop offset="1" stop-color="${I}" stop-opacity=".3"/></radialGradient>
+<linearGradient id="rim" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e0674f"/><stop offset=".33" stop-color="#6f9ad6"/><stop offset=".66" stop-color="#8fb05a"/><stop offset="1" stop-color="#a98cd0"/></linearGradient>
+<pattern id="hatc" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(40)"><path d="M0 0V5" stroke="${CR}" stroke-width="1" opacity=".5"/></pattern><clipPath id="inner"><rect x="18" y="18" width="364" height="264"/></clipPath>`+Object.entries(BAND).map(([k,[w,b]])=>`<pattern id="pb-${k}" width="${w}" height="14" patternUnits="userSpaceOnUse">${b}</pattern>`).join('');
+/* frame: blend of the four borders, weighted by deck makeup; corners crossfade from the chosen element to each corner's own element */
+const PER=1328,pt=f=>{let d=((f%1)+1)%1*PER;if(d<382)return[9+d,9];d-=382;if(d<282)return[391,9+d];d-=282;if(d<382)return[391-d,291];d-=382;return[9,291-d]};
+const frame=(dk,neu)=>{const R=`x="9" y="9" width="382" height="282" fill="none" stroke-width="18" pathLength="1000"`;let s='',sg=[];
+ if(neu)s=`<rect ${R} stroke="${D.neu.c}"/><rect ${R} stroke="url(#pb-neu)"/>`;
+ else{const tot=dk.reduce((a,b)=>a+b,0)||1,mx=dk.indexOf(Math.max(...dk));let c0=0;
+  [0,1,2,3].map(j=>(mx+j)%4).filter(i=>dk[i]>0).forEach(i=>{const k=E[i],len=dk[i]/tot*1000;sg.push({k,a:c0/1000,b:(c0+len)/1000});s+=`<rect ${R} stroke="${D[k].c}" stroke-dasharray="${len} 1000" stroke-dashoffset="${-c0}"/><rect ${R} stroke="url(#pb-${k})" stroke-dasharray="${len} 1000" stroke-dashoffset="${-c0}"/>`;c0+=len})}
+ s+=`<rect x="0" y="0" width="400" height="300" fill="none" ${st(2.6)}/><rect x="18" y="18" width="364" height="264" fill="none" ${st(1.6)}/>`;
+ if(sg.length>1)sg.forEach(g=>{const [x,y]=pt(g.a);s+=`<path d="M${x} ${y-9}L${x+9} ${y}L${x} ${y+9}L${x-9} ${y}Z" fill="#e3b73e" ${st(2)}/>`});
+ [[24,24,0],[376,24,.2877],[376,276,.5],[24,276,.7877]].forEach(([x,y,f])=>{const g=sg.find(q=>f>=q.a-1e-6&&f<q.b-1e-6)||sg[0];s+=neu?`<circle cx="${x}" cy="${y}" r="14" fill="${D.neu.p}" ${st(2.2)}/>`+star(x,y,10):medal(g.k,x,y,15)});
+ return s};
+const sky=(n,a,b)=>`<linearGradient id="s${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient><rect width="400" height="300" fill="url(#s${n})"/>`;
+const glow=(n,x,y,r,c,o)=>`<radialGradient id="g${n}"><stop offset="0" stop-color="${c}" stop-opacity="${o}"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient><circle cx="${x}" cy="${y}" r="${r}" fill="url(#g${n})"/>`;
+const rays=(x,y,r0,r1,n,col)=>`<g class="sp" style="transform-origin:${x}px ${y}px">`+Array.from({length:n},(_,i)=>{const a=i*2*Math.PI/n,w=Math.PI/n*.5,P=(t,r)=>`${(x+Math.cos(t)*r).toFixed(1)},${(y+Math.sin(t)*r).toFixed(1)}`;return `<polygon points="${P(a-w,r0)} ${P(a,i%2?r1*.75:r1)} ${P(a+w,r0)}" fill="${col}" opacity=".55" ${st(1)}/>`}).join('')+'</g>';
+const rimP=d=>`<path d="${d}" fill="none" stroke="${CR}" stroke-width="1.4" opacity=".55" transform="translate(-1.5 -1.5)"/>`;
+const champ=(x,y,s,f,crown)=>{const body='M-13 -24Q-12 -32 0 -32Q12 -32 13 -24L17 12L22 44L-22 44L-17 12Z',cape='M12 -24Q42 -16 50 24Q40 14 33 26Q29 12 17 14Z',head='M-9 -38Q-10 -50 0 -52Q10 -50 9 -38Q8 -31 0 -31Q-8 -31 -9 -38Z';
+ return `<g class="br" style="transform-origin:${x}px ${y+44*s}px"><g transform="translate(${x} ${y}) scale(${s})"><g class="cp">${rimP(cape)}<path d="${cape}" fill="${f}" ${st(2)}/><path d="${cape}" fill="url(#hatc)"/></g>${rimP(body)}${rimP(head)}<path d="${body}" fill="${f}" ${st(2)}/><path d="${head}" fill="${f}" ${st(2)}/><path d="${body}" fill="url(#hatc)"/><path d="M-6 -4L-8 40M0 0V42M7 -4L9 40" stroke="${CR}" stroke-width="1" opacity=".35" fill="none"/><path d="M-30 -56V46" ${st(2.4)}/><circle class="gw" cx="-30" cy="-60" r="5" fill="#e3b73e" ${st(1.8)}/><rect x="-14" y="14" width="28" height="4" fill="#e3b73e" opacity=".8"/>${crown?`<path d="M-9 -49L-11 -62L-5 -55L0 -66L5 -55L11 -62L9 -49Z" fill="#e3b73e" ${st(1.8)}/>`:''}</g></g>`};
+const rib=(t,y)=>`<path d="M96 ${y}H304V${y+26}H96Z" fill="#ecdfbf" ${st(2.2)}/><path d="M86 ${y+4}L96 ${y+13}L86 ${y+22}ZM314 ${y+4}L304 ${y+13}L314 ${y+22}Z" fill="#cdbd98" ${st(1.6)}/><text x="200" y="${y+19}" text-anchor="middle" class="cap">${t}</text>`;
+const spiral=(cx,cy,R,ph,col)=>{let d='';for(let i=0;i<=60;i++){const t=i/60,a=ph+t*5.2,r=R*(1-t)+6;d+=(i?'L':'M')+(cx+Math.cos(a)*r).toFixed(1)+' '+(cy+Math.sin(a)*r*.9).toFixed(1)}return `<path d="${d}" fill="none" stroke="${I}" stroke-width="6.5" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${col}" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="46 5"/>`};
+const fig=()=>{const cl='M150 272Q132 210 156 168Q150 150 172 140L228 140Q250 150 244 168Q268 210 250 272L242 262L234 274L224 262L214 274L204 262L194 274L184 262L174 274L164 262Z',hd='M182 134Q178 98 200 90Q222 98 218 134Q210 144 200 144Q190 144 182 134Z';
+ return `<g fill="#030201" stroke="url(#rim)" stroke-width="1.8" stroke-linejoin="round"><path d="${cl}"/><path d="${cl}" fill="url(#hatc)" stroke="none"/><path d="M168 150Q158 196 156 262M232 150Q242 196 244 262M200 150V262M184 160Q178 210 176 262M216 160Q222 210 224 262" fill="none" stroke-width=".9" opacity=".5"/><path d="M144 160Q140 134 172 130L174 152Z"/><path d="M256 160Q260 134 228 130L226 152Z"/><path d="${hd}"/><path d="M184 101Q200 92 216 101" fill="none" stroke="#e3b73e" stroke-width="3"/><path d="M242 164Q268 166 282 182L276 190Q260 180 240 180Z"/></g>`};
+const staffSp=()=>{const ox=284,oy=88;return `<g stroke-linejoin="round"><path d="M284 104V292" stroke="${I}" stroke-width="6" stroke-linecap="round"/><path d="M284 104V292" stroke="url(#rim)" stroke-width="2.4"/>`+glow('so',ox,oy,40,CR,.9)+`<g class="sp2" style="transform-origin:${ox}px ${oy}px">`+['#e0674f','#6f9ad6','#8fb05a','#a98cd0'].map((c,k)=>spiral(ox,oy,82,k*Math.PI/2,c)).join('')+`</g><circle cx="${ox}" cy="${oy}" r="17" fill="#0b0704" stroke="url(#rim)" stroke-width="2.4"/><path d="M284 66L289 78H279ZM284 110L279 98H289ZM256 88L268 83V93ZM312 88L300 93V83Z" fill="#0b0704" stroke="url(#rim)" stroke-width="1.6"/><circle class="gw" cx="${ox}" cy="${oy}" r="8" fill="${CR}" stroke="${I}" stroke-width="1.6"/></g>`};
+const throne=(x,y,s)=>{const back='M144 270V112Q144 76 166 60L180 36L200 14L220 36L234 60Q256 76 256 112V270Z',sp=Array.from({length:11},(_,i)=>{const a=Math.PI+i*Math.PI/10,P=(t,r)=>`${(200+Math.cos(t)*r).toFixed(1)},${(120+Math.sin(t)*r).toFixed(1)}`;return `<polygon points="${P(a-.07,84)} ${P(a,i%2?100:112)} ${P(a+.07,84)}"/>`}).join('');
+ return `<g transform="translate(${x} ${y}) scale(${s})" fill="#0b0704" stroke="url(#rim)" stroke-width="2.4" stroke-linejoin="round"><path d="M120 120A80 80 0 0 1 280 120" fill="none" stroke-width="1.4" stroke-dasharray="3 5"/><path d="${back}"/><path d="M158 266V118Q158 86 176 74L200 46L224 74Q242 86 242 118V266" fill="none" stroke-width="1.2" opacity=".7"/><g fill="none" stroke-width="1.1" opacity=".6"><path d="M172 120V266M228 120V266"/><circle cx="200" cy="64" r="7"/></g><rect x="128" y="190" width="16" height="80"/><circle cx="136" cy="186" r="9"/><rect x="108" y="270" width="184" height="10"/><rect x="90" y="280" width="220" height="12"/><path d="M110 275H290M96 286H304" stroke-width=".8" stroke-dasharray="4 4" opacity=".6"/></g><g transform="translate(${x} ${y}) scale(${s})">${fig()}${staffSp()}</g>`};
+const crack=(x,y)=>`<path d="M${x-8} ${y-24}l9 12-8 8 11 12-6 9" fill="none" ${st(2.4)}/>`;
+const ridge=(sd,base,amp,fill,op=1)=>{let d=`M-10 300L-10 ${base}`;for(let i=0;i<=22;i++){const x=i*19-10,y=base-amp*(Math.abs(Math.sin(i*sd))*.8+Math.abs(Math.sin(i*sd*2.3+1))*.4);d+=`L${x} ${y.toFixed(1)}`}return `<path d="${d}L420 300Z" fill="${fill}" opacity="${op}" ${st(1.4)}/>`};
+const mtn=()=>sky('1','#1b1830','#d39a82')+[...Array(26)].map((_,i)=>`<circle class="tw" style="animation-delay:${(i%7)*.4}s" cx="${(i*83)%360+20}" cy="${(i*47)%100+24}" r="${i%3?.8:1.4}" fill="${CR}" opacity=".8"/>`).join('')+glow('mn',300,80,60,CR,.7)+`<circle cx="300" cy="80" r="15" fill="${CR}" ${st(1.6)}/>`+ridge(1.7,172,78,'#6a5c88',.95)+`<ellipse cx="120" cy="190" rx="150" ry="9" fill="${CR}" opacity=".35"/>`+ridge(2.3,208,62,'#4a3d6c')+`<ellipse cx="290" cy="222" rx="160" ry="9" fill="${CR}" opacity=".3"/>`+ridge(3.1,244,48,'#322a4e')+`<path d="M-5 300V266Q80 250 150 262H250Q330 250 405 266V300Z" fill="#1d1710" ${st(2.2)}/>`;
+const arena=(n,sk,mood)=>{let o=`<linearGradient id="w${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cdbb94"/><stop offset="1" stop-color="#9c8962"/></linearGradient><linearGradient id="f${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9d3a2"/><stop offset="1" stop-color="#c4a266"/></linearGradient>`+sk+ridge(2.1,136,40,'#7d7396',.55)+
+ `<rect x="-5" y="116" width="410" height="82" fill="url(#w${n})" ${st(2)}/>`+Array.from({length:42},(_,i)=>`<circle cx="${10+i*9.5}" cy="${134+(i%3)*3}" r="3.3" fill="${['#3a2a1c','#c0402a','#2a4a86','#3f7a3a','#5a4a7a'][i%5]}" ${st(.8)}/>`).join('')+`<path d="M-5 150H405" ${st(1.8)}/>`+
+ Array.from({length:10},(_,i)=>{const x=i*40-2;return `<path d="M${x} 198V172Q${x+19} 150 ${x+38} 172V198Z" fill="#3a2a1c" ${st(1.8)}/>`}).join('')+
+ [80,160,240,320].map((x,i)=>`<path d="M${x-13} 112h26v58l-13 -11l-13 11Z" fill="${D[E[i]].c}" ${st(2)}/>${medal(E[i],x,132,9)}`).join('')+
+ `<rect x="-5" y="196" width="410" height="110" fill="url(#f${n})" ${st(2)}/><ellipse cx="200" cy="255" rx="175" ry="30" fill="none" ${st(1)} opacity=".5"/><ellipse cx="200" cy="255" rx="115" ry="18" fill="none" ${st(1)} opacity=".4"/><path d="M0 214H400" ${st(.8)} opacity=".4"/>`;
+ return mood?o+`<rect width="400" height="300" fill="${mood[0]}" opacity="${mood[1]}"/>`:o};
+const balance=(el,foe)=>`<g class="tilt" style="transform-origin:200px 104px"><path d="M100 104H300" ${st(4)}/><path d="M186 262H214L200 100Z" fill="#8a6a3a" ${st(2.4)}/>${[[100,el],[300,foe]].map(([x,k])=>`<path d="M${x} 104L${x-34} 190M${x} 104L${x+34} 190" ${st(1.6)}/><ellipse cx="${x}" cy="196" rx="46" ry="9" fill="#c9a24a" ${st(2.2)}/>${medal(k,x,162,36)}`).join('')}</g>`;
+const dim=(k,x,y,r)=>medal(k,x,y,r,.6,1)+`<circle cx="${x}" cy="${y}" r="${r*.9}" fill="#5b5046" opacity=".4"/>`+crack(x,y);
+const battle=(el,foe,res,t)=>{const sk=`<linearGradient id="o${t}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${D[el].c}"/><stop offset=".5" stop-color="${mixc([D[el].c,D[foe].c],[1,1])}"/><stop offset="1" stop-color="${D[foe].c}"/></linearGradient><rect width="400" height="300" fill="url(#o${t})"/>`,bg=arena('b'+t,sk,null)+glow('b'+t,200,150,190,CR,.3);
+ if(res=='d')return bg+balance(el,foe)+rib('STALEMATE',30);
+ const w=res=='w';return bg+(w?rays(125,150,56,130,16,CR)+medal(el,125,150,56,1,2)+dim(foe,290,176,36):rays(275,150,56,130,16,CR)+medal(foe,275,150,56,1,2)+dim(el,110,176,36))+rib(w?'VICTORY':'DEFEAT',30)};
+const dkOf=(el,a)=>{const o=[0,0,0,0];o[E.indexOf(el)]=a[0];E.filter(k=>k!=el).forEach((k,i)=>o[E.indexOf(k)]=a[i+1]);return o};
+const scroll=()=>`<rect x="40" y="92" width="320" height="84" rx="5" fill="#f3e6c6" ${st(2.4)}/><ellipse cx="40" cy="134" rx="9" ry="46" fill="#e2cf9c" ${st(2.2)}/><ellipse cx="360" cy="134" rx="9" ry="46" fill="#e2cf9c" ${st(2.2)}/><path d="M70 160H330" ${st(1.2)}/>`;
+const TE8=`<text x="105" y="150" textLength="190" lengthAdjust="spacingAndGlyphs" class="big">The End</text>`;
+const TE9=`<text class="te big" x="64" y="150" textLength="190" lengthAdjust="spacingAndGlyphs">The End</text>`+[266,277,288].map((x,i)=>`<circle class="dt" style="animation-delay:${2.2+i*.45}s" cx="${x}" cy="146" r="3.6" fill="#e3b73e" ${st(1.4)}/>`).join('')+`<text class="qm" x="316" y="152" text-anchor="middle" style="font:700 68px Cinzel,serif;fill:#e3b73e;stroke:#1d130b;stroke-width:2;paint-order:stroke">?</text>`;
+const endBg=v=>arena('8',sky('8','#f6c27a','#8a4a6a'),['#2a0f2a',.1])+(v?`<rect class="dk" width="400" height="300" fill="#0b0508" opacity=".3"/>`:'')+scroll()+(v?TE9:TE8)+E.map((k,j)=>medal(k,110+j*60,192,15,1,1)).join('');
+const SC=(el,i)=>{const [a,b,c]=E.filter(k=>k!=el),g=D[el];return [
+ {t:'The Chosen',tx:'Four gods stand in conflict, and each has summoned a mortal to fight for them. The call has found you.',neu:1,art:mtn()+[80,160,240,320].map((x,i)=>`<polygon points="${x-9},84 ${x+9},84 207,205 193,205" fill="${D[E[i]].c}" opacity=".35"/>`).join('')+glow('c1',200,200,90,CR,.8)+E.map((k,i)=>medal(k,80+i*80,68,24,1,1)).join('')+`<ellipse cx="200" cy="226" rx="56" ry="12" fill="#2a2018" ${st(2)}/>`+champ(200,172,1.1,I)},
+ {t:'Allegiance',tx:`${g.god} of ${g.cul} claims you. Your deck, your tokens and your banner now bear their mark.`,dk:dkOf(el,[16,0,0,0]),art:arena('2',sky('2',g.p,g.c),null)+rays(200,86,40,150,20,CR)+medal(el,200,86,36,1,2)+champ(200,170,1.05,I)+rib(g.god.toUpperCase(),20)},
+ {t:'Trial I',tx:`You win. ${D[a].god} yields, and a thread of ${D[a].cul} slips into your banner.`,dk:dkOf(el,[13,1,1,1]),art:battle(el,a,'w',3)},
+ {t:'Trial II',tx:`You fall. ${D[b].god} stands over you, but your banner takes on a little more of ${D[b].cul}.`,dk:dkOf(el,[10,2,2,2]),art:battle(el,b,'l',4)},
+ {t:'Trial III',tx:`Neither side gives way. ${D[c].god} and you part as equals, and the four peoples draw closer in your banner.`,dk:dkOf(el,[8,3,3,2]),art:battle(el,c,'d',5)},
+ {t:'The Last Champion',tx:'Before the final trial, a figure waits upon the throne, wrapped in shadow. Four streams of element-light spiral into its staff: the Convergence.',dk:dkOf(el,[6,4,3,3]),art:arena('6',sky('6','#0f0a14','#2a1620'),['#07040e',.72])+`<g class="gp">`+[[160,140,'#e0674f'],[240,140,'#6f9ad6'],[160,180,'#8fb05a'],[240,180,'#a98cd0']].map(([x,y,c],j)=>glow('t'+j,x,y,90,c,.4)).join('')+`</g>`+throne(30,-8,.85)},
+ {t:'Game Over',alt:1,tx:'If the Convergence cannot be defeated, the run ends here. The four peoples fall silent, and the contest begins anew.',dk:dkOf(el,[6,4,3,3]),art:arena('go',sky('go','#14080c','#3a1018'),['#1a0508',.58])+glow('gr',200,150,170,'#c0402a',.45)+[70,140,260,330].map((x,j)=>dim(E[j],x,30,12)).join('')+`<g transform="translate(0 -14)">${fig()}${staffSp()}</g><g transform="rotate(-82 78 198)">${champ(78,184,.7,I)}</g>`+dim(el,124,206,12)+`<text x="200" y="76" text-anchor="middle" class="bt" style="font-size:34px;letter-spacing:.14em;stroke:#1d130b;stroke-width:5;paint-order:stroke">GAME OVER</text>`},
+ {t:'Crowned',tx:'The throne falls silent. You are crowned the next champion, carrying the banner of all four peoples.',dk:[4,4,4,4],art:arena('7',sky('7','#f6e3a8','#e0a850'),null)+rays(200,150,60,190,24,CR)+champ(200,150,1.4,I,1)+[[96,100],[304,100],[84,180],[324,180]].map(([x,y],j)=>medal(E[j],x,y,26,1,1)).join('')+Array.from({length:26},(_,i)=>`<rect class="cf" x="${30+i*13.5}" y="${40+(i*37)%110}" width="6" height="9" fill="${['#c0402a','#2a4a86','#3f7a3a','#5a4a7a','#e3b73e'][i%5]}" style="animation-delay:${-(i%8)*.5}s" ${st(.8)}/>`).join('')},
+ {t:'The End',tx:'The gods lay down their quarrel, and the old banners hang side by side. Peace returns to the arena, for a time.',dk:[4,4,4,4],art:endBg()},
+ {t:'The End\u2026 ?',tx:'Yet the sky darkens beyond the arena walls. Something else has heard the call.',d2:3.9,dk:[4,4,4,4],art:endBg(1)}][i]};
+const capH=s=>{const p=(s.tx.match(/[^.!?]+[.!?]+/g)||[s.tx]).map(x=>x.trim());return `<foreignObject x="24" y="211" width="352" height="66"><div xmlns="http://www.w3.org/1999/xhtml" class="cpn"><span class="s1">${p[0]}</span><span class="s2" style="animation-delay:${s.d2||1.8}s">${p.slice(1).join(' ')}</span></div></foreignObject>`};
+const svgW=(art,fr,l,cap='')=>`<svg viewBox="0 0 400 300" role="img" aria-label="${l}"><g filter="url(#rough)"><rect width="400" height="300" fill="#ecdfbf"/><g clip-path="url(#inner)">${art}</g>${fr}</g>${cap}<rect width="400" height="300" fill="url(#vg)"/><rect width="400" height="300" filter="url(#grain)" style="mix-blend-mode:multiply" opacity=".5"/></svg>`;
+;return{defs,SC,svgW,frame,capH,battle,D}})();
+const ANIM=!matchMedia("(prefers-reduced-motion: reduce)").matches;
+document.querySelector('body>svg defs').insertAdjacentHTML('beforeend',ART4.defs+STORY.defs);
+E.forEach(e=>AI[e]=ART4.inner(e));
 const art=(e,c='')=>`<svg class="art4 ${c}" viewBox="0 0 64 64" aria-hidden="true">${AI[e]}</svg>`;
 /* how-to illustrations */
 const cd=(x,y,n,e)=>`<g transform="translate(${x} ${y})"><rect width="48" height="66" rx="6" style="fill:var(--${e});stroke:var(--gold);stroke-width:2.5"/><rect x="7" y="16" width="34" height="36" rx="12" style="fill:var(--card);stroke:var(--ink);stroke-width:1.5"/><text x="24" y="43" text-anchor="middle" style="font:700 24px Cinzel,serif;fill:var(--${e})">${n}</text><svg x="4" y="2" width="14" height="14" viewBox="0 0 64 64">${AI[e]}</svg></g>`;
@@ -606,7 +795,7 @@ const ILL=[
 `<svg class="ill" viewBox="0 0 300 110"><circle cx="150" cy="56" r="50" style="fill:none;stroke:var(--gold);stroke-width:2;stroke-dasharray:4 4"/>${cd(126,23,3,'fire')}${tkn(118,36,'fire',11)}${tkn(118,74,'water',11)}${tkn(182,36,'earth',11)}${tkn(182,74,'air',11)}${TX(52,50,'each token',13)}${TX(52,68,'counts x2',13,'win')}${TX(248,50,'other cards',13)}${TX(248,68,'get +2',13,'win')}</svg>`];
 const howto=()=>`<h2>How a trial works</h2>
 <p class="rl">Every round follows the same loop:</p>
-${[['Play cards','A trial has 3 rounds of 3 slots. In each slot, you and your foe pick a card in secret and reveal together. The higher number wins the slot. Below: round I, slot 1 is done and slot 2 is being played.'],['Place tokens','Each element card also makes one token of its element (grey neutral cards make none). Put tokens on any card you have played. Each token adds +1. Keep extras for later.'],['Review the effects','Both sides\u2019 tokens appear at once and their powers trigger: burns, shields, moves, growth. Slots can flip, so nothing is final yet.'],['Repeat','After 3 rounds, whoever won more rounds wins the trial and the pot.']].map(([t,p],i)=>`<div class="stp4"><div class="sn">${i+1}</div><div class="sb"><b>${t}</b><p>${p}</p>${ILL[i]}</div></div>`).join('')}
+${[['Play cards','A trial has 3 rounds of 3 slots. In each slot, you and your foe pick a card in secret and reveal together. The higher number wins the slot. Below: round I, slot 1 is done and slot 2 is being played.'],['Place tokens','Each element card also makes one token of its element (grey neutral cards make none). Put tokens on any card you have played. Each token adds +1. Keep extras for later. If your tokens turn the result of round I or II in your favour, you earn a neutral token (+1, no element) for the next round.'],['Review the effects','Both sides\u2019 tokens appear at once and their powers trigger: burns, shields, moves, growth. Slots can flip, so nothing is final yet.'],['Repeat','After 3 rounds, whoever won more rounds wins the trial and the pot.']].map(([t,p],i)=>`<div class="stp4"><div class="sn">${i+1}</div><div class="sb"><b>${t}</b><p>${p}</p>${ILL[i]}</div></div>`).join('')}
 <h2>Card types</h2>
 <div class="ctp"><div>${TI.atk} <b>Attack</b><br>wins ties</div><div>${TI.def} <b>Defense</b><br>a loss by 1 becomes a draw</div><div>${TI.pow} <b>Power</b><br>just a big number</div><div>${TI.mod} <b>Modifier</b><br>special effect</div></div>
 <h2>The Prism</h2>
@@ -638,7 +827,7 @@ fire:{tag:'Attack. Wins ties and burns enemy tokens.',
  syn:[sFA,sAF,PRI('fire','Transmute cards')]},
 water:{tag:'Defense. Turns near-losses into draws and shields your cards.',
  deck:['7 Defense cards (1 to 4): a loss by exactly 1 becomes a draw','3 each of Attack, Power and Modifier','Modifiers: Transmute, Swap, Disrupt','Plus 4 neutral cards (no token, bigger numbers)'],
- tok:[['Ward','1 water token',['water',['water'],['sh','fire']],'Blocks one enemy burn aimed at its slot, once.'],['Shoreline','3 water tokens',['water',['water','water','water'],['nb','+1','water']],'Gives +1 to the slots before and after it in the same round.'],['Tide','4 water tokens',['water',R4('water'),['sh','air']],'Once per card: blocks one enemy burn or Gust aimed at any of your cards.']],
+ tok:[['Ward','1 water token',['water',['water'],['sh','fire']],'Blocks one enemy burn aimed at its slot, once.'],['Shoreline','3 water tokens',['water',['water','water','water'],['nb','+1','water']],'Gives +1 to the slots before and after it in the same round.'],['Tide','4 water tokens',['water',R4('water'),['sh','fire']],'Once per card: blocks one enemy burn aimed at a token on this same card. Neighbouring cards are not covered, and Gust can still move its tokens.']],
  syn:[sWE,sEW,PRI('water','Transmute cards')]},
 earth:{tag:'Power. Big numbers and tokens that multiply and cannot be pushed.',
  deck:['7 Power cards (2 to 5): the biggest plain numbers','3 each of Attack, Defense and Modifier','Modifiers: Swap, Disrupt, Spark','Plus 4 neutral cards (no token, bigger numbers)'],
@@ -646,7 +835,7 @@ earth:{tag:'Power. Big numbers and tokens that multiply and cannot be pushed.',
  syn:[sEW,sWE,PRI('earth','Spark cards')]},
 air:{tag:'Modifiers. Shifts, swaps and tokens that slip where they hurt most.',
  deck:['7 Modifier cards with every effect: Shift, Transmute, Swap, Disrupt, Spark, Anchor, Kindle','3 each of Attack, Defense and Power','Plus 4 neutral cards (no token, bigger numbers)'],
- tok:[['Drift','1 air token',['air',['air'],['mv','air']],'Moves to another of your cards once per round, starting the round after it is placed.'],['Gust','2 air tokens',['air',['air','air'],['mv','fire','water']],'Needs a new air token this round. Moves an enemy fire, water or air token to another enemy card, free of cost. Anchor, Prism and Tide stop it.']],
+ tok:[['Drift','1 air token',['air',['air'],['mv','air']],'Moves to another of your cards once per round, starting the round after it is placed.'],['Gust','2 air tokens',['air',['air','air'],['mv','fire','water']],'Needs a new air token this round. Moves an enemy fire, water, air or neutral token to another enemy card, free of cost. Only Anchor and Prism stop it.']],
  syn:[sAF,sFA,PRI('air','Transmute and Spark cards')]}};
 const elPanel=e=>{const d=ELD[e];return `<div class="epanel" style="--c:var(--${e})"><div class="eh">${art(e,'lg')}<div><div class="en">${cap(e)}</div><p class="m">${d.tag}</p></div></div>
 <h3>Your deck</h3><ul>${d.deck.map(x=>`<li>${x}</li>`).join('')}</ul>
@@ -655,20 +844,26 @@ const elPanel=e=>{const d=ELD[e];return `<div class="epanel" style="--c:var(--${
 <button class="btn" data-a="start" data-v="${e}" style="background:var(--${e});color:#fff">Select ${cap(e)}</button></div>`};
 const pickEl=()=>`<h2 id="pickel">Choose your element</h2><div class="elg">${E.map(e=>`<button data-a="elsel" data-v="${e}" class="elt${S.sel==e?' on':''}" style="--c:var(--${e})">${art(e)}${cap(e)}<small>${SN[SIG[e]]}</small></button>`).join('')}</div>${S.sel?elPanel(S.sel):'<p class="hint" style="margin-top:10px">Tap an element to see its deck, tokens and synergies.</p>'}`;
 E.forEach(e=>{IC[e]=`<svg class="ic anime ${e}" viewBox="0 0 64 64" aria-hidden="true">${AI[e]}</svg>`});
+IC.neu=ART4.tokSvg('neu');
 const fname=f=>f=='mix'?'✠ Convergence':IC[f]+' '+cap(f);
 const $=document.getElementById('app');
 let S={ph:'home'};
 const TT={atk:'Attack: wins ties.',def:'Defense: turns a loss by exactly 1 into a draw.',pow:'Power: no special effect, just a high number.'};
 const MT={shift:c=>`Shift: adds +${ef(c)} to the ${c.dir<0?'previous slot':c.dir>0?'next slot':'previous or next slot (you choose when playing)'}.`,transmute:()=>"Transmute: this card's token can be any element.",swap:()=>'Swap: trades places with your previous card.',disrupt:c=>`Disrupt: lowers the opposing card by ${ef(c)}.`,spark:()=>'Spark: gives you a free wild token.',anchor:()=>'Anchor: your foe cannot burn or move tokens on this card.',kindle:()=>'Kindle: each token on this card gives +2.'};
 const cardTip=c=>`${c.e=='neu'?'Neutral':cap(c.e)}, power ${c.p}. ${c.t=='mod'?MT[c.mv](c):TT[c.t]} ${c.e=='neu'?'Makes no token.':'Makes 1 '+c.e+' token.'}`;
-const TK={fire:'Fire token: +1. A new one burns an enemy token of your choice on the same slot. 4 on a card: Inferno burns any enemy token.',water:'Water token: +1. Blocks one enemy burn on its slot, once. Three on a card give +1 to both neighbouring slots. 4 on a card: Tide.',earth:'Earth token: +1. Two on a card grow one extra token each round, up to 4 tokens on the card. Gust cannot move it. 4 on a card: Bloom grows a token on any card.',air:'Air token: +1. Once placed, it can move to another card once per round, starting the round after it is placed. Two on a card: Gust moves an enemy fire, water or air token (not earth) and costs no air token. Only Anchor, Prism or Tide stop it.',wild:'Wild token: choose its element when you place it.'};
+const TK={fire:'Fire token: +1. A new one burns an enemy token of your choice on the same slot. 4 on a card: Inferno burns any enemy token.',water:'Water token: +1. Blocks one enemy burn on its slot, once. Three on a card give +1 to both neighbouring slots. 4 on a card: Tide.',earth:'Earth token: +1. Two on a card grow one extra token each round, up to 4 tokens on the card. Gust cannot move it. 4 on a card: Bloom grows a token on any card.',air:'Air token: +1. Once placed, it can move to another card once per round, starting the round after it is placed. Two on a card: Gust moves an enemy fire, water, air or neutral token (not earth) and costs no air token. Only Anchor or Prism stop it.',wild:'Wild token: choose its element when you place it.',neu:'Neutral token: +1, no element and no effect. Earned when your tokens turn the outcome of round I or II in your favour. Can be burned.'};
 const tokTip=e=>(TK[e]||'')+' One of each element on a card: Prism.';
 const NM=c=>c.t=='mod'?cap(c.mv):SN[c.t];
 const face=c=>`<i class="rn">${IC[c.e]}</i><i class="art">${AI[c.e]?art(c.e,'wm'):''}<b>${base(c)}</b></i><i class="bn">${tyI(c)}<em>${NM(c)}</em></i>`;
-const card=(c,x='',at='')=>`<button data-tip="${cardTip(c)}" class="kd ${c.e}${x}" ${at}>${face(c)}</button>`;
-const mini=c=>`<div class="kd mini ${c.e}" data-tip="${cardTip(c)}">${face(c)}</div>`;
+const TYN={atk:'ATTACK',def:'DEFENSE',pow:'POWER',mod:'MODIFIER'};
+const klab=c=>c.t=='mod'?cap(c.mv).toUpperCase()+(c.mv=='shift'?(c.dir<0?' ←':c.dir>0?' →':' ↔'):''):TYN[c.t];
+const SEALRE=/<circle cx="33" cy="51" r="20"[^>]*\/><circle cx="33" cy="51" r="16.5"[^>]*\/>/,NUMRE=/<text x="33"[^>]*class="snm">[^<]*<\/text>/,TAILS='<rect x="3" y="3" width="194" height="274" rx="7" fill="url(#vg)"';
+const bigSeal=(s,c)=>{const d=ART4.D[c.e];return s.replace(SEALRE,'').replace(NUMRE,'').replace(TAILS,`<g filter="url(#fine)"><circle cx="38" cy="57" r="29" fill="${d.p}" stroke="#1d130b" stroke-width="2.6"/><circle cx="38" cy="57" r="24" fill="none" stroke="${d.c}" stroke-width="2"/></g><text x="38" y="74" text-anchor="middle" style="font:700 50px Cinzel,serif;fill:#1d130b">${base(c)}</text>`+TAILS)};
+const ksv=(c,lite)=>{const l=klab(c);let s=bigSeal(ART4.card(c.e,base(c),TYN[c.t],l),c);if(l.length>8)s=s.replace('class="sbn"','class="sbn" style="font-size:11px;letter-spacing:.04em"');if(lite)s=s.replace(/<rect[^>]*url\(#grain\)[^>]*\/>/,'').replace(/ filter="url\(#(rough|fine)\)"/g,'');return s};
+const card=(c,x='',at='')=>`<button data-tip="${cardTip(c)}" class="kd pc${x}" ${at}>${ksv(c)}</button>`;
+const mini=c=>`<div class="kd mini pc" data-tip="${cardTip(c)}">${ksv(c,1)}</div>`;
 const sk=a=>{const x=[...a];while(x.length<4)x.push('<span class="skt"></span>');return `<div class="sks">${x.join('')}</div>`};
-const WILD='✶',tokI=e=>e=='wild'?WILD:IC[e];
+const WILD=ART4.tokSvg('wild'),tokI=e=>e=='wild'?WILD:IC[e];
 const chips=(L,G)=>[...L.map(t=>`<span data-tip="${tokTip(t.e)}" class="tk2 ${t.e}${t.nw?' new':''}${t.nw&&t.kind?' '+t.kind:''}${t.mvd?' mvd':''}">${IC[t.e]}</span>`),...G.map(t=>`<span data-tip="${tokTip(t.e)}" class="tk2 ${t.e} gone">${IC[t.e]}</span>`)];
 const evH=r=>(r.fn||[]).map(x=>{const me=/(^|[^a-z])you\b/.test(x)?'p':/\bthem\b/.test(x)?'o':'',c=me&&/blocks/.test(x)?(me=='p'?'o':'p'):me;return `<div class="ev ${c}">${x}</div>`}).join('');
 const bdSide=(L,tot,who)=>{const sum=L.reduce((a,l)=>a+l.v,0),M=sum==tot?L:[...L,{t:'Other',v:tot-sum}];
@@ -696,8 +891,13 @@ const chgSum=()=>{const V=S.view,fl=V.map((r,i)=>[r,i]).filter(([r])=>r.was&&r.w
   return `<div class="chgs"><b>Changed by tokens</b>${rr.map(([k,a,b])=>`<div class="ev ${b=='w'?'p':b=='l'?'o':''}"><b>Round ${rom(k+1)}:</b> ${RN[a]} ➜ ${RN[b]}</div>`).join('')}${fl.length?fl.map(([r,i])=>`<div class="ev ${r.r=='w'?'p':r.r=='l'?'o':''}">Round ${rom((i/3|0)+1)}, slot ${i%3+1}: ${RN[r.was.r]} ➜ ${RN[r.r]} (${r.was.x}–${r.was.y} ➜ ${r.x}–${r.y})</div>`).join(''):'<div class="m">No clash changed its outcome.</div>'}${sc?`<div class="m">${sc} other clash${sc>1?'es':''} changed score only (dashed outline).</div>`:''}</div>`};
 const LEG=`<p class="m"><b>Modifier cards (✧).</b> The big number is the card's own power. The symbol shows its effect:<br>➜ Shift: adds its number to the next slot (or the previous one, your choice).<br>◐ Transmute: its token can be any element.<br>⇄ Swap: trades places with your previous card.<br>✖ Disrupt: lowers the opposing card by its number.<br>✺ Spark: gives you a free wild token.<br>⚓︎ Anchor: your foe cannot burn or move tokens on this card.<br>✹ Kindle: each token on this card gives +2.<br>Earlier slots can change as you play. ↻ marks a clash that did.</p>`;
 
+const deckDk=()=>E.map(e=>S.deck.filter(c=>c.e==e).length);
+function sceneAt(i){const s=STORY.SC(S.el,i);if(!s.neu){const d=deckDk();s.dk=d;s.neu=d.every(n=>!n)}return s}
+function battleScene(res){const D=STORY.D,f=S.foe,d=deckDk(),tx={w:`You win. ${D[f].god} yields, and a thread of ${D[f].cul} slips into your banner.`,l:`You fall. ${D[f].god} stands over you, but your banner takes on a little more of ${D[f].cul}.`,d:`Neither side gives way. ${D[f].god} and you part as equals, and the four peoples draw closer in your banner.`}[res];return{t:'Trial '+rom(S.m+1),tx,dk:d,neu:d.every(n=>!n),art:STORY.battle(S.el,f,res,'x'+S.m)}}
+function finalScenes(win,dr){if(S.m<3)return[battleScene(win?'w':dr?'d':'l')];return win?[sceneAt(7),sceneAt(8),sceneAt(9)]:[sceneAt(6)]}
+function cutThen(q,then){S.cq=q;S.cthen=then;S.ph='cut'}
 function start(el){S={ph:'pre',el,deck:mono(el),foes:[...E.filter(e=>e!==el),'mix'],m:0,wins:0,npc:{},coins:16,pawn:[],bet:2,note:''};
-  E.filter(e=>e!==el).forEach(e=>S.npc[e]=mono(e));newMatch();render()}
+  E.filter(e=>e!==el).forEach(e=>S.npc[e]=mono(e));newMatch();cutThen([sceneAt(1)],'pre');render()}
 function newRound(){S.wait=0;S.k=0;S.rows=[];S.pcs=[];S.ocs=[];S.pick=null;S.dir=1;S.res=null;S.fx=null}
 function startFx(){
   const tray=[...S.carry,...S.rtok].map(e=>({id:S.tid++,e}));S.rtok=tray.map(t=>t.e);S.carry=[];
@@ -734,17 +934,18 @@ function afterReveal(plO,otn){
   S.fxp={p:F.place,o:plO};
   F.info=`You placed ${F.place.length} of ${F.tray.length} token${F.tray.length==1?'':'s'}. They placed ${plO.length} of ${otn}.${S.carry.length?(S.r<2?` ${S.carry.length} of yours carry over.`:` ${S.carry.length} unplaced are lost.`):''}`;
   const T1=addFresh(S.allrows,S.T,S.fxp),list=specs(T1,'p').filter(g=>g.k!='am'),pre=S.pam||[];
-  if(!list.length){submitMoves(pre);return}
-  S.sp={list,i:0,ch:[...pre],tok:null,T:T1};S.ph='sp';render();
+  const pre0=settle(S.allrows,T1,[]),aut=pre0.flatMap(r=>r.fn).filter(x=>/doubled|Prism|\+1/.test(x));S.aut=aut;S.autrows=pre0;
+  if(!list.length&&!aut.length){submitMoves(pre);return}
+  S.sp={list,i:0,ch:[...pre],tok:null,T:T1};S.ph='fxauto';render();
 }
 function spNext(m){const P=S.sp;if(m)P.ch.push(m);P.tok=null;P.i++;if(P.i>=P.list.length)submitMoves(P.ch);else render()}
 function finalize(mv){
-  const prev=S.view,res=resolveTok(S.allrows,S.fxp,mv);res.forEach((r,i)=>{const p=prev[i];if(p&&(p.x!=r.x||p.y!=r.y||p.r!=r.r))r.was={x:p.x,y:p.y,r:p.r}});S.T=res.T;S.view=res;
+  const prev=S.view,res=resolveTok(S.allrows,S.fxp,mv);res.forEach((r,i)=>{const p=prev[i];if(p&&(p.x!=r.x||p.y!=r.y||p.r!=r.r))r.was={x:p.x,y:p.y,r:p.r}});S.T=res.T;S.view=res;{const a=roundRes(tally(S.allrows.slice(S.r*3,S.r*3+3))),b=roundRes(tally(res.slice(S.r*3,S.r*3+3)));S.award=S.r<2&&a!=b&&b!='d'?b:null}
   S.sp=null;S.open={};S.ph='fxres';render();
   const txt=res.flatMap(r=>r.fn).join(' ');let d=250;
   [['burned','burn'],['blocks','ward'],['grew','grow'],['Bloom','grow'],['moved','air'],['doubled','syn']].forEach(([k,n])=>{if(txt.includes(k)){setTimeout(()=>sfx(n),d);d+=280}});
 }
-function commitRound(){S.allrows.push(...S.rows);S.view=paint(S.allrows,{p:S.T.p.map(t=>({...t,nw:0,mvd:0})),o:S.T.o.map(t=>({...t,nw:0,mvd:0}))});S.rtok=tokenList(S.pcs);S.otk=tokenList(S.ocs)}
+function commitRound(){const rw0=S.r<2?roundRes(tally(S.rows)):'d';S.allrows.push(...S.rows);S.view=paint(S.allrows,{p:S.T.p.map(t=>({...t,nw:0,mvd:0})),o:S.T.o.map(t=>({...t,nw:0,mvd:0}))});S.rtok=tokenList(S.pcs);S.otk=tokenList(S.ocs);S.rnb=null}
 function newMatch(){
   const f=S.foes[S.m];
   S.foe=f;S.bg='';
@@ -799,7 +1000,7 @@ function endMatch(){S.view.forEach(r=>{delete r.was});
   for(let r=0;r<3;r++){const t=tally(S.view.slice(r*3,r*3+3)),res=roundRes(t);if(res=='w')S.rw++;if(res=='l')S.rl++;S.mp+=t.pt-t.ot}
   const win=S.rw>S.rl||(S.rw==S.rl&&S.mp>0),dr=S.rw==S.rl&&S.mp==0;
   S.coins+=win?2*S.bet:dr?S.bet:0;S.pot=0;
-  S.win=win;if(win)S.wins++;S.ph='matchend';render();setTimeout(()=>sfx(win?'win':'lose'),150);
+  S.win=win;if(win)S.wins++;cutThen(finalScenes(win,dr),'matchend');render();setTimeout(()=>sfx(win?'win':'lose'),150);
 }
 function buildTrade(){
   const mine=[...S.played].sort(()=>Math.random()-.5).slice(0,4),k=mine.length,theirs=S.opp.filter(c=>S.oused.has(c.id)).sort(()=>Math.random()-.5).slice(0,k);
@@ -827,7 +1028,7 @@ function tradePick(id){
   const x=t.pool.find(x=>x.c.id==id&&!x.by);if(!x)return;
   x.by='p';t.i++;aiPick();render();
 }
-function nextMatch(){S.m++;if(S.m>3)S.ph='end';else newMatch();render()}
+function nextMatch(){S.m++;if(S.m>3)S.ph='end';else{newMatch();if(S.m==3)cutThen([sceneAt(5)],'pre')}render()}
 
 /* ===== v0.12: ONLINE DUEL ===== */
 const NET={kind:'peer',role:null,c:null,peer:null,bc:null,live:false,lost:false,dk:null,odk:null,rev:true};
@@ -928,7 +1129,7 @@ const duelHead=()=>`<div class="bar"><span>Duel · vs ${dkStr(S.foe)}</span><spa
 function duelClick(a,v){
   const L=S.lb;
   if(a=='dhome'||a=='dleave'){netClose();S={ph:'home'};render();return true}
-  if(a=='solo'){netClose();S={ph:'pick'};render();return true}
+  if(a=='solo'){netClose();S={ph:'pick'};cutThen([STORY.SC('fire',0)],'pick');render();return true}
   if(a=='duelmenu'){netClose();S={ph:'lobby',lb:{dk:[4,4,4,4],rev:true,code:'',status:'',err:''}};render();return true}
   if(a=='drev'&&L){L.rev=!L.rev;render();return true}
   if(a=='dpre'&&L){L.dk=v=='even'?[4,4,4,4]:E.map(e=>e==v?DKN:0);render();return true}
@@ -945,6 +1146,7 @@ function initFromUrl(){try{const j=new URLSearchParams(location.search).get('joi
 
 function render(){S.fr=null;S.allc=0;
   const s=S;
+  if(s.ph=='cut'){const q=s.cq[0];$.innerHTML=`<div id="cut" class="${ANIM?'anim':''}"><div class="sc in">${STORY.svgW(q.art,STORY.frame(q.dk||[0,0,0,0],!!q.neu),q.t,STORY.capH(q))}</div><button class="btn" data-a="cutnext">Continue</button></div>`;return}
   if(s.ph=='home'){
     $.innerHTML=`<h1 class="title">Converge</h1><p class="rl">A card game of fire, water, earth and air. Play the full run against the three elements, or duel a friend live.</p>
     <div class="pick one"><button data-a="solo"><span class="hrow">${E.map(e=>art(e,'sm')).join('')}</span><br>Solo run<small>Four trials, a shop and card trading</small></button>
@@ -1003,6 +1205,10 @@ function render(){S.fr=null;S.allc=0;
     ${s.pawn.length?`<h2>Pawned cards</h2><p class="m">Buy back for 2 coins each.</p><div class="hand">${s.pawn.map(c=>card(c,' tag',`data-a="buyback" data-v="${c.id}" data-t="2 coins"`)).join('')}</div>`:''}
     <button class="btn alt" data-a="leave">Leave the shop</button>`;return;
   }
+  if(s.ph=='fxauto'){const n=s.sp.list.length;
+    $.innerHTML=`${head}<h1>Token Effects</h1><div class="chgs"><p class="m" style="margin-top:0">${s.fx.info}</p><b>Automatic effects</b>${s.aut.length?s.aut.map(x=>`<div class="ev">${x}</div>`).join(''):'<div class="m">None this round.</div>'}<p class="m">${n?`Next you choose ${n} action${n>1?'s':''} (burns, moves, growth, water bonus).`:'No actions to choose this round.'}</p><button class="btn" data-a="fxgo" style="margin-top:6px">${n?'Choose actions':'Continue'}</button></div>${grp(r=>rowH(r),s.autrows)}`;return}
+  if(s.ph=='bloom'){const g=s.bq[0];
+    $.innerHTML=`${head}<h1>${IC.earth} Bloom</h1><p class="m">Your earth card in round ${rom((g.row/3|0)+1)}, slot ${g.row%3+1} grew its 4th earth token. Tap a card to grow one more earth token there (4 tokens max per card).${s.bq.length>1?' '+s.bq.length+' blooms to place.':''}</p>${grp((r,i)=>rowH(r,s.T.p.filter(t=>t.row==i).length<MAXT?i:null,false,[],['bloompick','bloompick']))}`;return}
   if(s.ph=='fx'){
     const F=s.fx,free=freeTok(),sel=free.find(t=>t.id==F.sel);
     const chip=t=>`<button data-tip="${tokTip(t.e)}" class="tok${t.id==F.sel?' sel':''}" data-a="tsel" data-v="${t.id}">${tokI(t.e)}</button>`;
@@ -1036,7 +1242,7 @@ function render(){S.fr=null;S.allc=0;
     <button class="btn alt" data-a="sskip">${k=='burn'||k=='wn'?'Skip (the game chooses)':'Skip'}</button>${k=='burn'?'<button class="btn alt" data-a="sauto">Let the game choose all remaining burns</button>':''}`;return;
   }
   if(s.ph=='fxres'){
-    $.innerHTML=`${head}<h1>The Reveal</h1><p class="m">${s.fx.info} Nothing is final until the match ends. Tap a clash to see how its score was built. Gold outline: the clash's outcome changed. Dashed outline: only its score changed.</p>${chgSum()}${grp(r=>rowH(r))}<button class="btn" data-a="fxnext">${s.r<2?'Next round':'See the result'}</button>`;return;
+    $.innerHTML=`${head}<h1>The Reveal</h1><p class="m">${s.fx.info} Nothing is final until the match ends. Tap a clash to see how its score was built. Gold outline: the clash's outcome changed. Dashed outline: only its score changed.</p>${chgSum()}${s.award=='w'?'<p class="w"><b>Your tokens turned this round.</b> You earn a neutral token (+1) for next round.</p>':s.award=='l'?'<p class="l"><b>Their tokens turned this round.</b> Your foe earns a neutral token for next round.</p>':''}${grp(r=>rowH(r))}<button class="btn" data-a="fxnext">${s.r<2?'Next round':'See the result'}</button>`;return;
   }
   if(s.ph=='play'){
     let body;
@@ -1071,14 +1277,47 @@ function render(){S.fr=null;S.allc=0;
     <button class="btn" data-a="again">Play again</button>`;
   }
 }
-let AC=null,MUTE=false;
+let AC=null,MUTE=false,SB=null,NB=null;
 const au=()=>{try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state=='suspended')AC.resume()}catch(e){}return AC};
-const tn=(f,d,ty='square',v=.05,t0=0,f2)=>{if(MUTE)return;const c=au();if(!c)return;const t=c.currentTime+t0,o=c.createOscillator(),g=c.createGain();o.type=ty;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(c.destination);o.start(t);o.stop(t+d+.02)};
-const nz=(d,v=.06,t0=0,f0=3000,f1=300)=>{if(MUTE)return;const c=au();if(!c)return;const n=c.sampleRate*d|0,b=c.createBuffer(1,n,c.sampleRate),a=b.getChannelData(0);for(let i=0;i<n;i++)a[i]=Math.random()*2-1;const s=c.createBufferSource(),fl=c.createBiquadFilter(),g=c.createGain(),t=c.currentTime+t0;s.buffer=b;fl.type='bandpass';fl.frequency.setValueAtTime(f0,t);fl.frequency.exponentialRampToValueAtTime(f1,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(fl).connect(g).connect(c.destination);s.start(t)};
-const SFX={tick:()=>tn(660,.05,'square',.035),play:()=>{tn(150,.14,'square',.07,0,60);nz(.08,.04,0,1200,200)},place:()=>{tn(520,.05,'square',.04);tn(780,.07,'square',.04,.05)},coin:()=>{tn(988,.07,'square',.04);tn(1319,.18,'square',.04,.07)},burn:()=>nz(.35,.09,0,2500,200),ward:()=>{tn(880,.1,'triangle',.07);tn(1320,.2,'triangle',.06,.08)},grow:()=>[392,494,587].forEach((f,i)=>tn(f,.1,'triangle',.06,i*.07)),air:()=>nz(.3,.05,0,400,2500),syn:()=>{tn(1046,.08,'square',.035);tn(1568,.15,'square',.035,.08)},reveal:()=>{tn(220,.15,'sawtooth',.04);tn(330,.2,'sawtooth',.04,.1)},win:()=>[523,659,784,1046].forEach((f,i)=>tn(f,.16,'square',.05,i*.12)),lose:()=>[392,330,262,196].forEach((f,i)=>tn(f,.2,'triangle',.07,i*.14))};
-const sfx=k=>{try{SFX[k]()}catch(e){}};
-const SM={start:'coin',pick:'tick',dir:'tick',tsel:'tick',wel:'tick',trow:'place',trem:'tick',tconfirm:'reveal',go:'play',begin:'coin',bet:'tick',sell:'coin',dotrade:'coin',buyback:'coin',tp:'place',buysel:'tick',givesel:'tick',stok:'place',srow:'place',tok:'tick',fxnext:'tick',trade:'tick',nm:'tick',shop0:'tick',brk:'tick',leave:'tick',sskip:'tick',astok:'tick',arow:'place',aconf:'place',areset:'tick',adone:'tick'};
-document.getElementById('mute').onclick=function(){MUTE=!MUTE;this.textContent='Sound: '+(MUTE?'off':'on');if(!MUTE)sfx('tick')};
+const verb=c=>{const n=c.sampleRate*2.4|0,b=c.createBuffer(2,n,c.sampleRate);for(let k=0;k<2;k++){const d=b.getChannelData(k);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,2.8)}const cv=c.createConvolver();cv.buffer=b;return cv};
+const mkBus=(c,wet,dst=c.destination)=>{const b=c.createGain(),w=c.createGain(),cv=verb(c);w.gain.value=wet;b.connect(dst);b.connect(cv);cv.connect(w);w.connect(dst);return b};
+const sb=()=>{const c=au();if(!c)return null;if(!SB){const m=c.createGain();m.gain.value=.5;m.connect(c.destination);SB=mkBus(c,.35,m)}return SB};
+const nbuf=c=>NB||(NB=(()=>{const n=c.sampleRate|0,b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;return b})());
+const osc=(dst,f,d,ty,v,t0=0,f2,a=.005)=>{const c=AC,t=c.currentTime+t0,o=c.createOscillator(),g=c.createGain();o.type=ty;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+a);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(dst);o.start(t);o.stop(t+d+.05)};
+const hiss=(dst,d,v,t0,f0,f1,q=1,ty='bandpass')=>{const c=AC,t=c.currentTime+t0,s=c.createBufferSource(),fl=c.createBiquadFilter(),g=c.createGain();s.buffer=nbuf(c);s.loop=true;fl.type=ty;fl.Q.value=q;fl.frequency.setValueAtTime(f0,t);fl.frequency.exponentialRampToValueAtTime(f1,t+d);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+Math.min(.04,d/3));g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(fl).connect(g).connect(dst);s.start(t,Math.random());s.stop(t+d+.05)};
+const drum=(d,f0,f1,dec,v,t0=0)=>{osc(d,f0,dec,'sine',v,t0,f1);osc(d,f0*1.9,dec*.35,'triangle',v*.25,t0,f1*1.5);hiss(d,.07,v*.5,t0,1400,200,.8,'lowpass')};
+const bell=(d,f,dec,v,t0=0)=>[[1,1],[2.76,.45],[5.4,.2]].forEach(([m,a])=>osc(d,f*m,dec/Math.pow(m,.4),'sine',v*a,t0));
+const horn=(d,f,dec,v,t0=0)=>[-6,6].forEach(dt=>{const c=AC,t=c.currentTime+t0,o=c.createOscillator(),l=c.createBiquadFilter(),g=c.createGain();o.type='sawtooth';o.frequency.value=f;o.detune.value=dt;l.type='lowpass';l.frequency.setValueAtTime(300,t);l.frequency.linearRampToValueAtTime(1400,t+.25);l.frequency.exponentialRampToValueAtTime(400,t+dec);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+.12);g.gain.exponentialRampToValueAtTime(.0001,t+dec);o.connect(l).connect(g).connect(d);o.start(t);o.stop(t+dec+.05)});
+const gong=(d,v,t0=0)=>[[82,3],[131,2.6],[196,2],[247,1.4]].forEach(([f,dc],i)=>osc(d,f,dc,'sine',v/(i+1),t0,f*.99));
+const SFX={
+tick:d=>{hiss(d,.05,.05,0,2200,900,2);osc(d,260,.07,'sine',.05,0,170)},
+play:d=>{drum(d,150,48,.45,.5);hiss(d,.12,.12,0,3000,500)},
+place:d=>{bell(d,1568,.35,.05);osc(d,220,.1,'sine',.08,0,120)},
+coin:d=>{bell(d,1318,.5,.05);bell(d,1976,.6,.04,.07)},
+burn:d=>{hiss(d,.9,.2,0,500,2400,.6);hiss(d,.6,.08,.1,3500,800,3);osc(d,70,.8,'sawtooth',.1,0,40)},
+ward:d=>{bell(d,523,1.1,.08);bell(d,784,1.1,.06,.06);gong(d,.1)},
+grow:d=>[196,247,294,392].forEach((f,i)=>{osc(d,f,.7,'triangle',.07,i*.09);osc(d,f*2,.4,'sine',.03,i*.09)}),
+air:d=>{hiss(d,.7,.14,0,300,3000,1.2);bell(d,1760,.5,.02,.3)},
+syn:d=>[784,1175,1568].forEach((f,i)=>bell(d,f,.6,.04,i*.07)),
+reveal:d=>{horn(d,98,.9,.07);horn(d,147,.9,.05);drum(d,110,42,.6,.55)},
+win:d=>{[[262,0],[330,.22],[392,.44],[523,.66]].forEach(([f,t])=>{horn(d,f,1.1,.06,t);horn(d,f/2,1.1,.05,t)});[0,.2,.4,.6].forEach(t=>drum(d,120,50,.35,.4,t));hiss(d,1.6,.1,.7,6000,2000,.5,'highpass');gong(d,.15,.66)},
+lose:d=>{[[196,0],[185,.6],[147,1.2]].forEach(([f,t])=>horn(d,f,1.5,.07,t));drum(d,90,36,1,.7);gong(d,.2,.2)}};
+const sfx=k=>{if(MUTE)return;try{const d=sb();if(d)SFX[k](d)}catch(e){}};
+/* war drums: played whenever the player is not in a battle */
+const MU={on:0,tm:0,st:0,n:0,iv:null,g:null,bus:null,dr:[]},PAT=['B..bB.t.B..bB.tt','B.b.B.b.tttBttBB'],BATTLE=['play','fx','fxauto','bloom','sp','fxres','wait'];
+function musTick(){const c=AC;if(!c||!(MU.on||MU.fo))return;const sd=60/76/2;while(MU.tm<c.currentTime+.5){if(MU.tm<c.currentTime)MU.tm=c.currentTime+.05;const p=PAT[MU.n%4==3?1:0][MU.st],t=MU.tm-c.currentTime,d=MU.bus;
+  if(p=='B')drum(d,95,34,.9,.9,t);else if(p=='b')drum(d,85,36,.5,.38,t);else if(p=='t')drum(d,150,70,.35,.5,t);
+  MU.tm+=sd;if(++MU.st>=16){MU.st=0;MU.n++}}}
+function musicSync(){
+  const want=!MUTE&&!BATTLE.includes(S.ph),c=au();if(!c)return;
+  if(want&&!MU.on){MU.on=1;MU.fo=0;clearInterval(MU.iv);MU.dr.forEach(o=>{try{o.stop()}catch(e){}});
+    if(!MU.g){MU.g=c.createGain();MU.g.gain.value=0;MU.g.connect(c.destination);MU.bus=mkBus(c,.5,MU.g)}
+    MU.g.gain.cancelScheduledValues(c.currentTime);MU.g.gain.setTargetAtTime(.275,c.currentTime,.6);
+    MU.dr=[55,82.4,110].map((f,i)=>{const o=c.createOscillator(),l=c.createBiquadFilter(),g=c.createGain();o.type='sawtooth';o.frequency.value=f;o.detune.value=i*5;l.type='lowpass';l.frequency.value=180;g.gain.value=.05;o.connect(l).connect(g).connect(MU.bus);o.start();return o});
+    MU.tm=c.currentTime+.2;MU.st=0;MU.iv=setInterval(musTick,120)}
+  else if(!want&&MU.on){MU.on=0;MU.fo=1;const q=MU.g.gain,t=c.currentTime;q.cancelScheduledValues(t);q.setValueAtTime(q.value,t);q.linearRampToValueAtTime(0,t+2);setTimeout(()=>{if(MU.on)return;MU.fo=0;clearInterval(MU.iv);MU.dr.forEach(o=>{try{o.stop()}catch(e){}})},2100)}}
+const SM={start:'coin',pick:'tick',dir:'tick',tsel:'tick',wel:'tick',trow:'place',trem:'tick',tconfirm:'reveal',go:'play',begin:'coin',bet:'tick',sell:'coin',dotrade:'coin',buyback:'coin',tp:'place',buysel:'tick',givesel:'tick',stok:'place',srow:'place',tok:'tick',fxnext:'tick',trade:'tick',nm:'tick',shop0:'tick',brk:'tick',leave:'tick',sskip:'tick',astok:'tick',arow:'place',aconf:'place',areset:'tick',adone:'tick',cutnext:'tick'};
+document.getElementById('mute').onclick=function(){MUTE=!MUTE;this.textContent='Sound: '+(MUTE?'off':'on');if(!MUTE)sfx('tick');musicSync()};
 const tip=document.getElementById('tip');let tt=null;
 const showTip=(el,x,y)=>{tip.textContent=el.dataset.tip;tip.style.display='block';const w=tip.offsetWidth,h=tip.offsetHeight;tip.style.left=Math.max(6,Math.min(innerWidth-w-6,x-w/2))+'px';tip.style.top=(y-h-16<6?y+22:y-h-16)+'px'};
 document.addEventListener('mousemove',e=>{const el=e.target.closest&&e.target.closest('[data-tip]');if(el)showTip(el,e.clientX,e.clientY);else tip.style.display='none'});
@@ -1111,7 +1350,7 @@ $.onclick=e=>{
   else if(a=='sell')sell(+v);
   else if(a=='bust'){S.broke=true;S.ph='end';render()}
   else if(a=='tok'){commitRound();startFx()}
-  else if(a=='fxnext'){S.open={};if(S.r<2){const n0=S.T.p.length+S.T.o.length;[...S.T.p,...S.T.o].forEach(t=>{t.nw=0;t.mvd=0});growT(S.T,S.allrows.length);S.view=paint(S.allrows,{p:S.T.p.map(t=>({...t})),o:S.T.o.map(t=>({...t}))});if(S.T.p.length+S.T.o.length>n0)setTimeout(()=>sfx('grow'),200);S.r++;newRound();S.ph='play';render()}else if(S.duel)endDuel();else endMatch()}
+  else if(a=='fxnext'){S.open={};if(S.r<2){if(S.award=='w')S.carry.push('neu');else if(S.award=='l'){S.duel?S.ocn++:S.ocarry.push('neu')}[...S.T.p,...S.T.o].forEach(t=>{t.nw=0;t.mvd=0});const gb=growT(S.T,S.allrows.length);S.bq=[];gb.forEach(g=>{if(g.s=='p'&&!S.duel)S.bq.push(g);else bloomApply(g.s,g.row,bloomAuto(g.s,g.row))});repaint();if(gb.length)setTimeout(()=>sfx('grow'),200);if(S.bq.length){S.ph='bloom';render()}else nextRound()}else if(S.duel)endDuel();else endMatch()}
   else if(a=='stok'){const P=S.sp,g=P.list[P.i];if(g.k=='fire')spNext({sd:'p',k:'fire',at:g.at,id:+v});else if(g.k=='burn')spNext({sd:'p',k:'burn',at:g.at,idx:g.idx,id:+v});else{const t0=P.T.o.find(x=>x.id==+v);if(!(g.k=='ag'&&t0&&t0.e=='earth')){P.tok=+v;render()}}}
   else if(a=='sauto'){const P=S.sp;P.list=P.list.filter((q,j)=>j<P.i||(j>P.i&&q.k!='burn'));P.tok=null;if(P.i>=P.list.length)submitMoves(P.ch);else render()}
   else if(a=='srow'){const P=S.sp,g=P.list[P.i];
@@ -1123,6 +1362,8 @@ $.onclick=e=>{
   else if(a=='arow'){const A=S.sp.air;if(A.sel!=null){const t=S.sp.T.p.find(x=>x.id==A.sel),from=A.mv[t.id]!=null?A.mv[t.id]:t.row,to=+v,n=S.sp.T.p.filter(x=>(A.mv[x.id]!=null?A.mv[x.id]:x.row)==to).length;if(to!=from&&n<MAXT){if(to==t.row)delete A.mv[t.id];else A.mv[t.id]=to;A.sel=null}}render()}
   else if(a=='areset'){const A=S.sp.air;A.mv={};A.sel=null;render()}
   else if(a=='adone'){const P=S.sp;Object.entries(P.air.mv).forEach(([id,to])=>P.ch.push({sd:'p',k:'am',at:P.T.p.find(t=>t.id==+id).row,id:+id,to}));P.air=null;P.i=0;if(P.pre){S.sp=null;sendPlace(P.ch)}else if(!P.list.length)submitMoves(P.ch);else render()}
+  else if(a=='bloompick'){const g=S.bq[0],to=+v;if(g&&S.T.p.filter(t=>t.row==to).length<MAXT){S.bq.shift();bloomApply('p',g.row,to);repaint();if(S.bq.length)render();else nextRound()}}
+  else if(a=='fxgo'){if(S.sp.list.length){S.ph='sp';render()}else submitMoves(S.sp.ch)}
   else if(a=='sskip')spNext(null);
   
   else if(a=='brk'){S.open=S.open||{};S.open[+v]=!S.open[+v];render()}
@@ -1131,9 +1372,12 @@ $.onclick=e=>{
   else if(a=='tp')tradePick(+v);
   else if(a=='nm')nextMatch();
   else if(a=='end'){S.ph='end';render()}
+  else if(a=='cutnext'){S.cq.shift();if(!S.cq.length)S.ph=S.cthen;render()}
   else if(a=='again'){S={ph:'home'};render()}
 };
 $.oninput=e=>{if(S.lb&&e.target&&e.target.id=='jcode')S.lb.code=(e.target.value||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5)};
 try{window.addEventListener('beforeunload',()=>netClose())}catch(e){}
+const _rd=render;render=function(){_rd();musicSync()};
+document.addEventListener('pointerdown',()=>musicSync());
 initFromUrl();render();
 </script></body></html>
