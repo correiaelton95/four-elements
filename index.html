@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Converge – v0.22</title>
+<title>Converge – v0.28</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&family=UnifrakturCook:wght@700&family=VT323&display=swap">
 <style>
@@ -363,9 +363,14 @@ const rnd=n=>Math.floor(Math.random()*n);
 let uid=0;const mk=(e,t,p)=>({id:uid++,e,t,p});
 const pv=(t,v)=>t=='pow'?v+1:v;
 const neus=()=>[1,2,3,4].map(v=>mk('neu','pow',v+1));
-const mono=e=>{let j=E.indexOf(e);
-  return [...TY.flatMap(t=>(t==SIG[e]?[1,2,2,3,3,4,4]:[1,2,3]).map(v=>{const c=mk(e,t,pv(t,v));if(t=='mod')c.mv=MV[j++%7];return c})),...neus()]};
-const mixed=()=>[...TY.flatMap((t,ti)=>[0,1,2,3].map(vi=>{const c=mk(E[(ti+vi)%4],t,pv(t,vi+1));if(t=='mod')c.mv=MV[vi];return c})),...neus()];
+const wn=d=>d;
+const an=d=>{const c=d.find(c=>c.e=='air'&&c.t=='mod'&&c.p==4);if(c)c.p--;return d};
+const cv=d=>{d.forEach(c=>{if(c.e!='neu'&&c.t==SIG[c.e])c.p++});return d};
+const mono0=e=>{let j=E.indexOf(e);
+  return [...TY.flatMap(t=>(t==SIG[e]?(t=='pow'?[1,1,2,2,3,3,3]:[1,2,2,3,3,4,4]):[1,2,3]).map(v=>{const c=mk(e,t,pv(t,v));if(t=='mod')c.mv=e=='water'?['kindle','anchor','shift'][v-1]:MV[j++%7];return c})),...neus()]};
+const mono=e=>{const d=an(wn(mono0(e)));if(e=='water')d.filter(c=>c.t=='def').sort((a,b)=>a.p-b.p).slice(0,3).forEach(c=>c.p++);if(e=='fire')d.filter(c=>c.t=='atk').sort((a,b)=>b.p-a.p)[0].p--;return d};
+const mixed0=()=>[...TY.flatMap((t,ti)=>[0,1,2,3].map(vi=>{const c=mk(E[(ti+vi)%4],t,pv(t,vi+1));if(t=='mod')c.mv=MV[vi];return c})),...neus()];
+const mixed=()=>cv(wn(mixed0()));
 const sortC=a=>a.sort((x,y)=>E.indexOf(x.e)-E.indexOf(y.e)||TY.indexOf(x.t)-TY.indexOf(y.t)||x.p-y.p);
 const ef=c=>c.p;
 const worth=c=>c.p+(c.t=='atk'||c.t=='def'?1:0);
@@ -373,42 +378,45 @@ const strongPool=()=>[...E.flatMap(mono).filter(c=>c.e!='neu'),...neus()].filter
 function makeStock(){const a=[...E.flatMap(mono).filter(c=>c.e!='neu'),...neus()],st=strongPool(),o=[st[rnd(st.length)]];
   while(o.length<4)o.push(a.splice(rnd(a.length),1)[0]);return sortC(o)}
 function fixStock(keep){if(S.stock.some(c=>c.p>=4))return;const st=strongPool(),n=st[rnd(st.length)],w=S.stock.filter(c=>c!==keep).sort((x,y)=>x.p-y.p)[0];S.stock[S.stock.indexOf(w)]=n;sortC(S.stock)}
-const base=c=>c.p;
+const base=c=>c.t=='mod'?Math.max(1,c.p-1):c.p;
 const tyI=c=>TI[c.t]+(c.mv=='shift'?(c.dir<0?'←':c.dir>0?'→':'↔')+'+'+ef(c):c.mv=='disrupt'?'✖−'+ef(c):c.mv?MI[c.mv]:'');
 function eff(cs){const e=[...cs];cs.forEach(c=>{if(c.mv=='swap'){const i=e.indexOf(c);if(i>0)[e[i-1],e[i]]=[e[i],e[i-1]]}});return e}
-function side(e){
+function side(e,NL){
   const n=e.length,bonus=Array(n).fill(0),pen=Array(n).fill(0);
-  e.forEach((c,i)=>{if(c.t!='mod')return;
+  e.forEach((c,i)=>{if(c.t!='mod'||(NL&&NL.has(c)))return;
     if(c.mv=='shift'){const j=i+(c.dir||1);if(j>=0&&j<n)bonus[j]+=ef(c)}
     else if(c.mv=='disrupt')pen[i]+=ef(c)});
   return {bonus,pen};
 }
-function judge(a,b,x,y){
+function judge(a,b,x,y,na,nb){
+  const ta=na?'pow':a.t,tb=nb?'pow':b.t;
   let r=x>y?'w':x<y?'l':'d';const n=[];
-  if(r=='d'){if(a.t=='atk'&&b.t!='atk'){r='w';n.push(TI.atk+' wins the tie')}else if(b.t=='atk'&&a.t!='atk'){r='l';n.push(TI.atk+' wins the tie')}}
-  else if(x-y==1&&b.t=='def'){r='d';n.push(TI.def+' holds')}
-  else if(y-x==1&&a.t=='def'){r='d';n.push(TI.def+' holds')}
+  if(r=='d'){if(ta=='atk'&&tb!='atk'){r='w';n.push(TI.atk+' wins the tie')}else if(tb=='atk'&&ta!='atk'){r='l';n.push(TI.atk+' wins the tie')}}
+  else if(x-y==1&&tb=='def'){r='d';n.push(TI.def+' holds')}
+  else if(y-x==1&&ta=='def'){r='d';n.push(TI.def+' holds')}
   return {r,n};
 }
-function rejudge(row){const j=judge(row.a,row.b,row.x,row.y);row.r=j.r;row.jn=j.n}
-function evalRound(P,O){
-  const pe=eff(P),oe=eff(O),A=side(pe),B=side(oe),rows=[];
-  for(let i=0;i<P.length;i++){
+function rejudge(row){const j=judge(row.a,row.b,row.x,row.y,row.na,row.nb);row.r=j.r;row.jn=j.n}
+function evalRound(P,O){return evalEff(eff(P),eff(O))}
+function evalEff(pe,oe,NL){
+  const A=side(pe,NL),B=side(oe,NL),rows=[];
+  for(let i=0;i<pe.length;i++){
     const a=pe[i],b=oe[i],nt=[];
     const x=Math.max(0,base(a)+A.bonus[i]-B.pen[i]),y=Math.max(0,base(b)+B.bonus[i]-A.pen[i]);
     if(A.bonus[i])nt.push(`+${A.bonus[i]} you`);if(B.bonus[i])nt.push(`+${B.bonus[i]} them`);
     if(B.pen[i])nt.push(`−${B.pen[i]} you`);if(A.pen[i])nt.push(`−${A.pen[i]} them`);
-    const j=judge(a,b,x,y);
+    const na=!!(NL&&NL.has(a)),nb=!!(NL&&NL.has(b)),j=judge(a,b,x,y,na,nb);
     const bp=[{t:'Card',v:base(a)}],bo=[{t:'Card',v:base(b)}];
     if(A.bonus[i])bp.push({t:'Shift from the adjacent card',v:A.bonus[i]});if(B.pen[i])bp.push({t:'Disrupted by their card',v:-B.pen[i]});
     if(B.bonus[i])bo.push({t:'Shift from the adjacent card',v:B.bonus[i]});if(A.pen[i])bo.push({t:'Disrupted by your card',v:-A.pen[i]});
-    rows.push({a,b,x,y,r:j.r,n:nt.join(' · '),jn:j.n,fn:[],bd:{p:bp,o:bo}});
+    rows.push({a,b,na,nb,x,y,r:j.r,n:nt.join(' · '),jn:j.n,fn:[],bd:{p:bp,o:bo}});
   }
   return rows;
 }
 /* tokens: placed by the player on their played cards */
 const rk=(r,sd)=>sd=='p'?{w:2,d:1,l:0}[r]:{l:2,d:1,w:0}[r];
 function tokenList(cs){return eff(cs).flatMap(c=>{const r=[];if(c.e!='neu')r.push(c.mv=='transmute'?'wild':c.e);if(c.mv=='spark')r.push('wild');return r})}
+const OWNB=false,cardThr=(R,s,i,e,n)=>{const r=R&&R[i],c=r&&(s=='p'?r.a:r.b);return n-(OWNB&&c&&c.e==e?1:0)};
 const NE={p:'o',o:'p'},BURN=['fire','earth','air','water','neu'],BEATS={water:'fire',fire:'earth',earth:'air',air:'water'},SYN={earth:'water',water:'earth',air:'fire',fire:'air'};
 let BASE=null;const MAXT=4;
 let CANON='p';const gid=(s,row,k)=>1e6+k*1e5+((s=='p')==(CANON=='p')?0:1)*1e4+row*10;
@@ -419,34 +427,42 @@ function addFresh(rows,T0,np){
   const T={p:T0.p.map(t=>({...t})),o:T0.o.map(t=>({...t}))};
   ['p','o'].forEach(s=>np[s].forEach(t=>{const c=s=='p'?rows[t.row].a:rows[t.row].b,n=()=>T[s].filter(x=>x.row==t.row).length;
     if(n()>=MAXT)return;T[s].push({id:t.id,e:t.e,row:t.row,f:1});
-    if(SYN[c.e]==t.e&&(T[s].filter(x=>x.row==t.row&&x.e==t.e&&!x.x&&!x.g).length%2==0||t.e=='water')&&n()<MAXT)T[s].push({id:t.id+.5,e:t.e,row:t.row,f:1,kind:'syn',x:1})}));
+    if(SYN[c.e]==t.e&&(t.e=='earth'?!T[s].some(x=>x.row==t.row&&x.e=='earth'&&x.sy):T[s].filter(x=>x.row==t.row&&x.e==t.e&&!x.x&&!x.g).length%2==0)&&n()<MAXT)T[s].push({id:t.id+.5,e:t.e,row:t.row,f:1,kind:'syn',x:1,sy:1})}));
   return T;
 }
-const specs=(T,s)=>{const L=[],cn=(k,i)=>T[s].filter(t=>t.e==k&&t.row==i).length,fr=(k,i)=>T[s].some(t=>t.e==k&&t.row==i&&t.f),fl=(k,i,g)=>T[s].some(t=>t.e==k&&t.row==i&&t[g]);
+const specs=(T,s,R)=>{const L=[],cn=(k,i)=>T[s].filter(t=>t.e==k&&t.row==i).length,fr=(k,i)=>T[s].some(t=>t.e==k&&t.row==i&&t.f),fl=(k,i,g)=>T[s].some(t=>t.e==k&&t.row==i&&t[g]);
   T[s].forEach(t=>{if(t.e=='air'&&t.arm&&!t.f)L.push({k:'am',at:t.row,id:t.id})});[...new Set(T[s].map(t=>t.row))].forEach(i=>{const n=cn('air',i);
-    const af=T[s].some(t=>t.e=='air'&&t.row==i&&t.f),aa=T[s].some(t=>t.e=='air'&&t.row==i&&t.arm);if(n>=2&&af)L.push({k:'ag',at:i});
-    if(cn('fire',i)>=4&&fr('fire',i)&&!fl('fire',i,'iu'))L.push({k:'fire',at:i});
-    if(cn('earth',i)>=4&&fr('earth',i)&&!fl('earth',i,'bu'))L.push({k:'earth',at:i});
+    const af=T[s].some(t=>t.e=='air'&&t.row==i&&t.f),aa=T[s].some(t=>t.e=='air'&&t.row==i&&t.arm);if(n>=cardThr(R,s,i,'air',2)&&af)L.push({k:'ag',at:i});
+    if(cn('fire',i)>=cardThr(R,s,i,'fire',4)&&fr('fire',i)&&!fl('fire',i,'iu'))L.push({k:'fire',at:i});else if(cn('fire',i)==cardThr(R,s,i,'fire',3)&&fr('fire',i)&&!fl('fire',i,'cu')&&T[NE[s]].some(t=>(t.row/3|0)==(i/3|0)))L.push({k:'inc',at:i});
+    if(cn('earth',i)>=cardThr(R,s,i,'earth',4)&&fr('earth',i)&&!fl('earth',i,'bu'))L.push({k:'ov',at:i});else if(cn('earth',i)==cardThr(R,s,i,'earth',3)&&fr('earth',i)&&!fl('earth',i,'b3'))L.push({k:'bl',at:i});
+    if(n>=cardThr(R,s,i,'air',4)&&af&&!fl('air',i,'thu')&&T[NE[s]].some(t=>(t.row/3|0)==(i/3|0)&&!prism(T,NE[s],t.row)))L.push({k:'th',at:i});
     const nf=T[s].filter(t=>t.e=='fire'&&t.row==i&&t.f).length,ne=T[NE[s]].filter(t=>t.row==i).length;
-    for(let k=0;k<Math.min(nf,ne);k++)L.push({k:'burn',at:i,idx:k})});
+    for(let k=0;k<Math.min(nf,ne,1);k++)L.push({k:'burn',at:i,idx:k})});
   return L};
 let NID=100000;const nid=()=>NID++;
 function paint(rows0,T,ev,gone){
   const rows=rows0.map(r=>({...r,fn:[],jn:[...(r.jn||[])],bd:{p:r.bd.p.map(l=>({...l})),o:r.bd.o.map(l=>({...l}))}}));
+  for(let g=0;g*3<rows.length;g++){const sg=rows.slice(g*3,g*3+3);if(sg.length<3)continue;const NL=new Set(),tn=[];
+    sg.forEach((r,k)=>{const i=g*3+k;
+      if(T.o.filter(t=>t.e=='water'&&t.row==i).length>=cardThr(rows0,'o',i,'water',4)){NL.add(r.a);tn.push([i,'o'])}
+      if(T.p.filter(t=>t.e=='water'&&t.row==i).length>=cardThr(rows0,'p',i,'water',4)){NL.add(r.b);tn.push([i,'p'])}});
+    if(!NL.size)continue;
+    evalEff(sg.map(r=>r.a),sg.map(r=>r.b),NL).forEach((q,k)=>{const r=sg[k];r.x=q.x;r.y=q.y;r.n=q.n;r.jn=[...q.jn];r.bd=q.bd;r.na=q.na;r.nb=q.nb});
+    tn.forEach(([i,own])=>rows[i].fn.push(`${IC.water} Tide (${own=='p'?'you':'them'}) cancels the opposing card`))}
   rows.forEach((r,i)=>{
     const np=T.p.filter(t=>t.row==i),no=T.o.filter(t=>t.row==i);
-    r.x+=np.length*(r.a.mv=='kindle'?2:1)*(prism(T,'p',i)?2:1);r.y+=no.length*(r.b.mv=='kindle'?2:1)*(prism(T,'o',i)?2:1);
-    r.idx=i;[['p',np,r.a],['o',no,r.b]].forEach(([sd,L,c])=>{const k=(c.mv=='kindle'?2:1)*(prism(T,sd,i)?2:1);if(L.length)r.bd[sd].push({t:`${L.length} token${L.length>1?'s':''} at +${k} each${c.mv=='kindle'?' (Kindle)':''}${prism(T,sd,i)?' (Prism ×2)':''}`,v:L.length*k})});
+    r.x+=np.length*(r.a.mv=='kindle'&&!r.na?2:1)*(prism(T,'p',i)?2:1);r.y+=no.length*(r.b.mv=='kindle'&&!r.nb?2:1)*(prism(T,'o',i)?2:1);
+    r.idx=i;[['p',np,r.a],['o',no,r.b]].forEach(([sd,L,c])=>{const kn=c.mv=='kindle'&&!(sd=='p'?r.na:r.nb),k=(kn?2:1)*(prism(T,sd,i)?2:1);if(L.length)r.bd[sd].push({t:`${L.length} token${L.length>1?'s':''} at +${k} each${kn?' (Kindle)':''}${prism(T,sd,i)?' (Prism ×2)':''}`,v:L.length*k});{const bn=new Set(L.map(t=>t.e).filter(e=>E.includes(e))).size,bv=bn==2?1:bn==3?2:0;if(bv){r[sd=='p'?'x':'y']+=bv;r.bd[sd].push({t:`Blend: ${bn} elements on this card`,v:bv});r.fn.push(`✦ Blend ${sd=='p'?'you':'them'} +${bv}`)}}});
     r.tk={p:np,o:no,g:(gone||[]).filter(g=>g.row==i)};
   });
   rows.forEach((r,i)=>[['p','x','you'],['o','y','them']].forEach(([sd,a,nm])=>{if(!prism(T,sd,i))return;
     r.fn.push(`◈ Prism ${nm}: tokens count double`);
     rows.forEach((q,j)=>{if(j!=i&&(j/3|0)==(i/3|0)){q[a]+=2;q.fn.push(`◈ Prism +2 ${nm}`);q.bd[sd].push({t:'Prism on another card this round',v:2})}})}));
   rows.forEach((r,i)=>(CANON=='p'?[['p','x','y','you'],['o','y','x','them']]:[['o','y','x','them'],['p','x','y','you']]).forEach(([sd,a,b,nm])=>{
-    const w=T[sd].filter(t=>t.e=='water'&&t.row==i).length;if(w<3)return;
+    const w=T[sd].filter(t=>t.e=='water'&&t.row==i).length;if(w<cardThr(rows,sd,i,'water',3))return;
     const js=[i-1,i+1].filter(j=>j>=0&&j<rows.length&&(j/3|0)==(i/3|0));
     const wc=w==2?(T[sd].find(t=>t.e=='water'&&t.row==i&&t.wn!=null)||{}).wn:null;
-    (w>=3?js:js.includes(wc)?[wc]:js.sort((m,n)=>(rows[m][a]-rows[m][b])-(rows[n][a]-rows[n][b])||n-m).slice(0,1)).forEach(j=>{rows[j][a]++;rows[j].fn.push(IC.water+' +1 '+nm);rows[j].bd[sd].push({t:'Water neighbour bonus',v:1})})}));
+    (w>=cardThr(rows,sd,i,'water',3)?js:js.includes(wc)?[wc]:js.sort((m,n)=>(rows[m][a]-rows[m][b])-(rows[n][a]-rows[n][b])||n-m).slice(0,1)).forEach(j=>{rows[j][a]++;rows[j].fn.push(IC.water+' +1 '+nm);rows[j].bd[sd].push({t:'Water neighbour bonus',v:1})})}));
   rows.forEach((r,i)=>{if(ev)r.fn.push(...ev[i]);rejudge(r)});
   return rows;
 }
@@ -456,23 +472,39 @@ function settle(rows0,T0,mv){
   const who=s=>s=='p'?'you':'them',cn=(s,k,at)=>T[s].filter(t=>t.e==k&&t.row==at).length,gone=[];
   [...T.p,...T.o].forEach(t=>{t.nw=t.f?1:0;t.mvd=0;if(!t.f)t.kind=''});
   ['p','o'].forEach(s=>T[s].forEach(t=>{if(t.f&&t.kind=='syn')ev[t.row].push(`✦ ${IC[t.e]} doubled (${who(s)})`)}));
-  const anc=(s,i)=>(s=='p'?rows0[i].a:rows0[i].b).mv=='anchor'||prism(T,s,i);
+  const anc=(s,i)=>((s=='p'?rows0[i].a:rows0[i].b).mv=='anchor'&&cn(NE[s],'water',i)<cardThr(rows0,NE[s],i,'water',4))||prism(T,s,i);
   const shield=(s,i,td)=>{
     let w=!td&&T[s].find(t=>t.e=='water'&&t.row==i&&!t.u);
     if(w){w.u=1;return true}
-    const j=cn(s,'water',i)>=4&&!T[s].some(t=>t.e=='water'&&t.row==i&&t.tu)?i:null;
+    const j=cn(s,'water',i)>=cardThr(rows0,s,i,'water',4)&&!T[s].some(t=>t.e=='water'&&t.row==i&&t.tu)?i:null;
     if(j==null)return false;T[s].find(t=>t.e=='water'&&t.row==j).tu=1;return true};
   mv.filter(m=>m.k=='am'||m.k=='ag').forEach(m=>{
     const g=m.k=='ag',e=g?NE[m.sd]:m.sd,t=T[e].find(x=>x.id==m.id),n=cn(m.sd,'air',m.at);
     if(!t||t.row==m.to||forbid(rows0,e,t.e,m.to)||T[e].filter(x=>x.row==m.to).length>=MAXT||(g&&t.e=='earth'))return;
-    if(g?(n<2||!T[m.sd].some(x=>x.e=='air'&&x.row==m.at&&x.f)):(t.e!='air'||!t.arm||t.f||t.mvd))return;
+    if(g?(n<cardThr(rows0,m.sd,m.at,'air',2)||!T[m.sd].some(x=>x.e=='air'&&x.row==m.at&&x.f)):(t.e!='air'||!t.arm||t.f||t.mvd))return;
     if(g){
       if(anc(e,t.row)){ev[t.row].push('⚓ blocks '+IC.air);return}
+      if(shield(e,t.row,1)){ev[t.row].push(`${IC.water} blocks ${IC.air} of ${who(m.sd)}`);return}
       }
     ev[t.row].push(`${IC.air} ${who(m.sd)} moved ${IC[t.e]}${g?' away':''}`);t.row=m.to;t.mvd=1;ev[m.to].push(`${IC[t.e]} of ${who(e)} moved here`);
   });
-  const bn={};['p','o'].forEach(s=>bn[s]=rows0.map((_,i)=>T[s].filter(t=>t.e=='fire'&&t.row==i&&t.f).length));
-  const inf=mv.filter(m=>m.k=='fire'&&cn(m.sd,'fire',m.at)>=4&&!T[m.sd].some(t=>t.e=='fire'&&t.row==m.at&&t.iu));
+  mv.filter(m=>m.k=='th').forEach(m=>{
+    const e=NE[m.sd],r=m.row|0,g0=(m.at/3|0)*3;
+    if((r/3|0)!=(m.at/3|0)||r>=rows0.length)return;
+    const ar=T[m.sd].filter(x=>x.e=='air'&&x.row==m.at);
+    if(ar.length<cardThr(rows0,m.sd,m.at,'air',4)||!ar.some(x=>x.f)||ar.some(x=>x.thu))return;
+    const toks=T[e].filter(t=>t.row==r);if(!toks.length)return;
+    if(prism(T,e,r)){ev[r].push(`◈ Prism blocks ${IC.air} Thunder of ${who(m.sd)}`);return}
+    ar[0].thu=1;
+    const dests=[g0,g0+1,g0+2].filter(j=>j!=r&&j<rows0.length),dm=mv.find(x=>x.k=='thd'&&x.sd==e&&x.row==r),to=(dm&&dm.to)||{},cn2=j=>T[e].filter(x=>x.row==j).length;
+    if(!dm&&SCQ)SCQ.req.push({v:e,m:{sd:m.sd,at:m.at,row:r},toks:toks.map(t=>({id:t.id,e:t.e})),dests:[...dests],occ:dests.map(cn2)});
+    let lost=0;
+    toks.forEach(t=>{let d=to[t.id];if(!dests.includes(d)||cn2(d)>=MAXT){const ok=dests.filter(j=>cn2(j)<MAXT).sort((a,b)=>cn2(a)-cn2(b)||a-b);d=ok.length?ok[0]:null}
+      if(d==null){T[e].splice(T[e].indexOf(t),1);gone.push({s:e,e:t.e,row:r});lost++}else{t.row=d;t.mvd=1;ev[d].push(`${IC[t.e]} of ${who(e)} scattered here`)}});
+    ev[r].push(`${IC.air} Thunder (${who(m.sd)}): scattered ${toks.length-lost} token${toks.length-lost==1?'':'s'}${lost?`, ${lost} lost`:''}`);
+  });
+  const bn={};['p','o'].forEach(s=>bn[s]=rows0.map((_,i)=>Math.min(1,T[s].filter(t=>t.e=='fire'&&t.row==i&&t.f).length)));
+  const inf=mv.filter(m=>m.k=='fire'&&cn(m.sd,'fire',m.at)>=cardThr(rows0,m.sd,m.at,'fire',4)&&!T[m.sd].some(t=>t.e=='fire'&&t.row==m.at&&t.iu));
   const burn=(s,e,i,t0)=>{
     if(anc(e,i)){ev[i].push('⚓ blocks '+IC.fire);return}
     if(shield(e,i)){ev[i].push(`${IC.water} blocks ${IC.fire} of ${who(s)}`);return}
@@ -480,32 +512,54 @@ function settle(rows0,T0,mv){
     if(v&&T[e].includes(v)){T[e].splice(T[e].indexOf(v),1);gone.push({s:e,e:v.e,row:i});ev[i].push(`${IC.fire} ${who(s)} burned ${IC[v.e]}`)}};
   rows0.forEach((_,i)=>['p','o'].forEach(s=>{for(let k=0;k<bn[s][i];k++){const bm=mv.find(m=>m.k=='burn'&&m.sd==s&&m.at==i&&m.idx==k),bt=bm&&T[NE[s]].find(x=>x.id==bm.id&&x.row==i);burn(s,NE[s],i,bt)}}));
   inf.forEach(m=>{const e=NE[m.sd],t=T[e].find(x=>x.id==m.id);if(!t)return;
-    const f=T[m.sd].find(x=>x.e=='fire'&&x.row==m.at);if(!f||cn(m.sd,'fire',m.at)<4)return;f.iu=1;burn(m.sd,e,t.row,t)});
-  mv.filter(m=>m.k=='earth'&&cn(m.sd,'earth',m.at)>=4&&!T[m.sd].some(t=>t.e=='earth'&&t.row==m.at&&t.bu)&&!forbid(rows0,m.sd,'earth',m.to)&&T[m.sd].filter(t=>t.row==m.to).length<MAXT).forEach(m=>{
-    T[m.sd].find(t=>t.e=='earth'&&t.row==m.at).bu=1;T[m.sd].push({e:'earth',row:m.to,id:gid(m.sd,m.at,2),nw:1,x:1,kind:'grow'});ev[m.to].push(`${IC.earth} Bloom ${who(m.sd)}`)});
+    const f=T[m.sd].find(x=>x.e=='fire'&&x.row==m.at);if(!f||cn(m.sd,'fire',m.at)<cardThr(rows0,m.sd,m.at,'fire',4))return;f.iu=1;burn(m.sd,e,t.row,t)});
+  mv.filter(m=>m.k=='inc'&&cn(m.sd,'fire',m.at)==cardThr(rows0,m.sd,m.at,'fire',3)&&!T[m.sd].some(t=>t.e=='fire'&&t.row==m.at&&t.cu)&&T[m.sd].some(t=>t.e=='fire'&&t.row==m.at&&t.f)).forEach(m=>{const e=NE[m.sd],t=T[e].find(x=>x.id==m.id);if(!t||(t.row/3|0)!=(m.at/3|0))return;
+    const f=T[m.sd].find(x=>x.e=='fire'&&x.row==m.at);if(!f||cn(m.sd,'fire',m.at)!=cardThr(rows0,m.sd,m.at,'fire',3))return;f.cu=1;burn(m.sd,e,t.row,t)});
+  mv.filter(m=>(m.k=='ov'||m.k=='bl')&&(m.k=='ov'?cn(m.sd,'earth',m.at)>=cardThr(rows0,m.sd,m.at,'earth',4)&&!T[m.sd].some(t=>t.e=='earth'&&t.row==m.at&&t.bu):cn(m.sd,'earth',m.at)==cardThr(rows0,m.sd,m.at,'earth',3)&&!T[m.sd].some(t=>t.e=='earth'&&t.row==m.at&&t.b3)&&(m.to/3|0)==(m.at/3|0))&&!forbid(rows0,m.sd,'earth',m.to)&&T[m.sd].filter(t=>t.row==m.to).length<MAXT).forEach(m=>{
+    T[m.sd].find(t=>t.e=='earth'&&t.row==m.at)[m.k=='ov'?'bu':'b3']=1;T[m.sd].push({e:'earth',row:m.to,id:gid(m.sd,m.at,m.k=='ov'?2:3),nw:1,x:1,kind:'grow'});ev[m.to].push(`${IC.earth} ${m.k=='ov'?'Overgrowth':'Bloom'} ${who(m.sd)}`)});
   mv.filter(m=>m.k=='wn').forEach(m=>{const w=T[m.sd].find(t=>t.e=='water'&&t.row==m.at);if(w&&m.at%3==1&&cn(m.sd,'water',m.at)==2&&(m.to==m.at-1||m.to==m.at+1))w.wn=m.to});
   [...T.p,...T.o].forEach(t=>{t.arm=t.e=='air'&&(t.f||t.arm)?1:0;t.f=0});
   const R=paint(rows0,T,ev,gone);R.T=T;return R;
 }
 const cand=(g,s,T,rows)=>{const e=NE[s],b={sd:s,k:g.k,at:g.at},mt=(t,es)=>rows.map((_,to)=>to==t.row||forbid(rows,es,t.e,to)||T[es].filter(x=>x.row==to).length>=MAXT?null:{...b,id:t.id,to}).filter(Boolean);
-  if(g.k=='earth')return rows.map((_,to)=>T[s].filter(x=>x.row==to).length>=MAXT?null:({...b,to})).filter(Boolean);
+  if(g.k=='ov')return rows.map((_,to)=>T[s].filter(x=>x.row==to).length>=MAXT?null:({...b,to})).filter(Boolean);
+  if(g.k=='bl')return rows.map((_,to)=>(to/3|0)!=(g.at/3|0)||T[s].filter(x=>x.row==to).length>=MAXT?null:({...b,to})).filter(Boolean);
+  if(g.k=='inc')return T[e].filter(t=>(t.row/3|0)==(g.at/3|0)).map(t=>({...b,id:t.id}));
+  if(g.k=='th')return rows.map((_,r)=>r).filter(r=>(r/3|0)==(g.at/3|0)&&T[e].some(t=>t.row==r)&&!prism(T,e,r)).map(r=>({...b,row:r}));
   if(g.k=='fire')return T[e].map(t=>({...b,id:t.id}));
   if(g.k=='burn')return T[e].filter(t=>t.row==g.at).map(t=>({...b,idx:g.idx,id:t.id}));
   if(g.k=='wn')return [g.at-1,g.at+1].map(to=>({...b,to}));
   if(g.k=='ag')return T[e].filter(t=>t.e!='earth').flatMap(t=>mt(t,e));
   if(g.k=='am'){const t=T[s].find(x=>x.id==g.id);return t?mt(t,s):[]}const own=T[s].filter(t=>t.row==g.at),air=own.filter(t=>t.e=='air');
   return (air.length==1?air:own).flatMap(t=>mt(t,s))};
-function resolveTok(rows,pl,fixed,T0,q){
+function resolveTok(rows,pl,fixed,T0,q,full){
   T0=T0||BASE||S.T;
   const T=addFresh(rows,T0,pl),mv=[...(fixed||[])],sc=mscore;
-  ['p','o'].forEach(s=>{if(fixed&&(s=='p'||S.duel))return;
-    specs(T,s).forEach(g=>{if(q&&(g.k=='am'||g.k=='burn'||g.k=='wn'))return;
+  ['p','o'].forEach(s=>{if(full||fixed&&(s=='p'||S.duel))return;
+    specs(T,s,rows).forEach(g=>{if(q&&(g.k=='am'||g.k=='burn'||g.k=='wn'))return;
       const bl=g.k=='am',Tv=bl?{p:T.p.filter(t=>s=='p'||!t.f),o:T.o.filter(t=>s=='o'||!t.f)}:T,mv0=bl?mv.filter(m=>m.k!='am'||m.sd==s):mv;
       let best=null,bs=sc(settle(rows,Tv,mv0),s);
-      cand(g,s,T,rows).forEach(m=>{const v=sc(settle(rows,Tv,[...mv0,m]),s);if(v>bs){bs=v;best=m}});
+      cand(g,s,T,rows).forEach(m=>{const v=sc(settle(rows,Tv,q?[...mv0,m]:withResp(rows,Tv,mv0,m)),s);if(v>bs){bs=v;best=m}});
       if(best)mv.push(best)})});
-  return settle(rows,T,mv);
+  if(!q&&!full)addScatter(rows,T,mv,(fixed&&!S.duel)?['o']:['p','o']);
+  const R=settle(rows,T,mv);R.mv=mv;return R;
 }
+
+/* ===== v0.23: Thunder scatter helpers ===== */
+let SCQ=null;
+function scatterPick(rows,T,mv,m){
+  const v=NE[m.sd],r=m.row,g0=(m.at/3|0)*3,dests=[g0,g0+1,g0+2].filter(j=>j!=r&&j<rows.length),toks=T[v].filter(t=>t.row==r);
+  if(!toks.length||!dests.length)return null;
+  let best=null,bs=-1e9;const n=Math.pow(dests.length,toks.length);
+  for(let c=0;c<n;c++){const to={};let x=c;toks.forEach(t=>{to[t.id]=dests[x%dests.length];x=Math.floor(x/dests.length)});
+    const mm={sd:v,k:'thd',row:r,to},sv=mscore(settle(rows,T,[...mv,mm]),v);if(sv>bs){bs=sv;best=mm}}
+  return best}
+const withResp=(rows,T,mv,m)=>{const a=[...mv,m];if(m.k=='th'){const b=scatterPick(rows,T,a,m);if(b)a.push(b)}return a};
+function addScatter(rows,T,mv,vs){mv.filter(m=>m.k=='th').forEach(m=>{const v=NE[m.sd];if(!vs.includes(v)||mv.some(x=>x.k=='thd'&&x.sd==v&&x.row==m.row))return;const b=scatterPick(rows,T,mv,m);if(b)mv.push(b)})}
+function pendingScatter(mv){const T=addFresh(S.allrows,S.T,S.fxp);SCQ={req:[]};let r=[];try{settle(S.allrows,T,mv)}finally{r=SCQ.req;SCQ=null}return r}
+function scStart(q){const c=[...q.occ],to={};q.toks.forEach(t=>{let bi=-1;c.forEach((n,j)=>{if(n<MAXT&&(bi<0||n<c[bi]))bi=j});if(bi>=0){to[t.id]=q.dests[bi];c[bi]++}else to[t.id]=q.dests[0]});S.sc.cur=q;S.sc.to=to}
+function sendThd(){S.ph='wait';sealSend('s:'+S.r,{thd:S.sc.thd.map(m=>({row:m.row,to:m.to}))});render()}
+const bdest=(s,g)=>S.view.map((_,i)=>i).filter(i=>S.T[s].filter(t=>t.row==i).length<MAXT&&(g.k!=3||(i/3|0)==(g.row/3|0)));
 const grp=(fn,V)=>(V||S.view).map((r,i)=>(i%3==0?`<h2>Round ${rom(i/3+1)}${(i/3|0)<S.r?badge(i):''}</h2>`:'')+fn(r,i)).join('');
 const tokAll=P=>[0,1,2].flatMap(r=>tokenList(P.slice(r*3,r*3+3)));
 function aiPlace(rows,toks,sd,opp=[],fin){const thr=fin?.01:1.2;
@@ -590,11 +644,11 @@ function tradeOrder(N,k=4){
   }
   return o;
 }
-function growT(T,n){const out=[];['p','o'].forEach(s=>{for(let i=0;i<n;i++){const c=T[s].filter(t=>t.row==i),ne=c.filter(t=>t.e=='earth').length;if(ne>=2&&c.length<MAXT){T[s].push({e:'earth',row:i,id:gid(s,i,1)+c.length*.01,g:1,nw:1,kind:'grow'});if(ne+1>=4&&!c.some(t=>t.e=='earth'&&t.bu))out.push({s,row:i})}}});return out}
+function growT(T,n,R){const out=[];['p','o'].forEach(s=>{for(let i=0;i<n;i++){const c=T[s].filter(t=>t.row==i),ne=c.filter(t=>t.e=='earth').length;if(ne>=cardThr(R,s,i,'earth',2)&&c.length<MAXT){T[s].push({e:'earth',row:i,id:gid(s,i,1)+c.length*.01,g:1,nw:1,kind:'grow'});if(ne+1>=cardThr(R,s,i,'earth',4)){if(!c.some(t=>t.e=='earth'&&t.bu))out.push({s,row:i,k:4})}else if(ne+1==cardThr(R,s,i,'earth',3)&&!c.some(t=>t.e=='earth'&&t.b3))out.push({s,row:i,k:3})}}});return out}
 const repaint=()=>{S.view=paint(S.allrows,{p:S.T.p.map(t=>({...t})),o:S.T.o.map(t=>({...t}))})};
 const nextRound=()=>{S.r++;newRound();S.ph='play';render()};
-function bloomApply(s,from,to){if(to<0)return;const w=S.T[s].find(t=>t.e=='earth'&&t.row==from&&!t.bu);if(!w||S.T[s].filter(t=>t.row==to).length>=MAXT)return;w.bu=1;S.T[s].push({e:'earth',row:to,id:gid(s,from,2),nw:1,x:1,kind:'grow'})}
-function bloomAuto(s,from){let best=-1,bs=1e9;S.view.forEach((r,i)=>{if(S.T[s].filter(t=>t.row==i).length>=MAXT)return;const m=s=='p'?r.x-r.y:r.y-r.x,k=m==0?0:m==-1?1:m==-2?2:m<-2?4:5+m;if(k<bs){bs=k;best=i}});return best}
+function bloomApply(s,from,to,k){k=k||4;if(to<0)return;const fl=k==3?'b3':'bu',w=S.T[s].find(t=>t.e=='earth'&&t.row==from&&!t[fl]);if(!w||S.T[s].filter(t=>t.row==to).length>=MAXT||(k==3&&(to/3|0)!=(from/3|0)))return;w[fl]=1;S.T[s].push({e:'earth',row:to,id:gid(s,from,k==3?3:2),nw:1,x:1,kind:'grow'})}
+function bloomAuto(s,from,kk){let best=-1,bs=1e9;const ok=bdest(s,{k:kk||4,row:from});S.view.forEach((r,i)=>{if(!ok.includes(i))return;const m=s=='p'?r.x-r.y:r.y-r.x,k=m==0?0:m==-1?1:m==-2?2:m<-2?4:5+m;if(k<bs){bs=k;best=i}});return best}
 function autoMatch(da,db){
   const pa=[...da].sort(()=>Math.random()-.5),pb=[...db].sort(()=>Math.random()-.5),P=pa.slice(0,9),O=pb.slice(0,9);
   let raw=[],rows=[],car={p:[],o:[]},uq=1000;BASE={p:[],o:[]};
@@ -605,7 +659,7 @@ function autoMatch(da,db){
     const pp=aiPlace(raw,tp,'p',[],r==2),po=aiPlace(raw,to,'o',pp,r==2);
     car.p=tp.filter((_,i)=>!pp.some(t=>t.ti==i));car.o=to.filter((_,i)=>!po.some(t=>t.ti==i));
     pp.forEach(t=>t.id=uq++);po.forEach(t=>t.id=uq++);
-    rows=resolveTok(raw,{p:pp,o:po});BASE=rows.T;if(r<2)growT(BASE,raw.length);if(r<2){const qa=roundRes(tally(raw.slice(r*3,r*3+3))),qb=roundRes(tally(rows.slice(r*3,r*3+3)));if(qa!=qb&&qb=='w')car.p.push('neu');else if(qa!=qb&&qb=='l')car.o.push('neu')}
+    rows=resolveTok(raw,{p:pp,o:po});BASE=rows.T;if(r<2)growT(BASE,raw.length,raw);if(r<2){const qa=roundRes(tally(raw.slice(r*3,r*3+3))),qb=roundRes(tally(rows.slice(r*3,r*3+3)));if(qa!=qb&&qb=='w')car.p.push('neu');else if(qa!=qb&&qb=='l')car.o.push('neu')}
   }
   BASE=null;
   let ra=0,rb=0,mp=0;
@@ -793,11 +847,14 @@ const ILL=[
 `<svg class="ill" viewBox="0 0 300 100">${cd(12,17,3,'fire')}${tkn(80,36,'fire',11)}<path d="M94 36H126" style="stroke:var(--gold);stroke-width:3;stroke-dasharray:5 4;fill:none"/><svg x="128" y="22" width="28" height="28" viewBox="0 0 64 64">${AI.fire}</svg>${tkn(190,36,'earth',11)}<path d="M178 24L202 48M202 24L178 48" style="stroke:var(--lose);stroke-width:4;stroke-linecap:round"/>${TX(190,78,'burned!',14,'lose')}${cd(240,17,3,'earth')}</svg>`,
 `<svg class="ill" viewBox="0 0 300 100">${[0,1,2].map(i=>`<rect x="${12+i*96}" y="8" width="84" height="62" rx="8" style="fill:var(--card);stroke:var(--bd);stroke-width:2.5"/>${TX(54+i*96,26,'Round '+rom(i+1),12)}${[0,1,2].map(k=>`<rect x="${22+i*96+k*24}" y="34" width="18" height="28" rx="3" style="fill:var(--${E[(i+k)%4]});stroke:var(--gold);stroke-width:1.5"/>`).join('')}`).join('')}${TX(150,92,'Win 2 of 3 rounds to win',14,'win')}</svg>`,
 `<svg class="ill" viewBox="0 0 300 110"><circle cx="150" cy="56" r="50" style="fill:none;stroke:var(--gold);stroke-width:2;stroke-dasharray:4 4"/>${cd(126,23,3,'fire')}${tkn(118,36,'fire',11)}${tkn(118,74,'water',11)}${tkn(182,36,'earth',11)}${tkn(182,74,'air',11)}${TX(52,50,'each token',13)}${TX(52,68,'counts x2',13,'win')}${TX(248,50,'other cards',13)}${TX(248,68,'get +2',13,'win')}</svg>`];
+ILL.push(`<svg class="ill" viewBox="0 0 300 120">${[['fire','fire'],['fire','water'],['fire','water','earth']].map((tk,i)=>{const cx=50+i*100,n=tk.length;return cd(cx-24,6,3,'fire')+tk.map((e,k)=>tkn(cx+(k-(n-1)/2)*(n==3?26:28),90,e,n==3?10:11)).join('')+TX(cx,114,['tokens only','Blend +1','Blend +2'][i],12,i?'win':'mut')}).join('')}</svg>`);
 const howto=()=>`<h2>How a trial works</h2>
 <p class="rl">Every round follows the same loop:</p>
 ${[['Play cards','A trial has 3 rounds of 3 slots. In each slot, you and your foe pick a card in secret and reveal together. The higher number wins the slot. Below: round I, slot 1 is done and slot 2 is being played.'],['Place tokens','Each element card also makes one token of its element (grey neutral cards make none). Put tokens on any card you have played. Each token adds +1. Keep extras for later. If your tokens turn the result of round I or II in your favour, you earn a neutral token (+1, no element) for the next round.'],['Review the effects','Both sides\u2019 tokens appear at once and their powers trigger: burns, shields, moves, growth. Slots can flip, so nothing is final yet.'],['Repeat','After 3 rounds, whoever won more rounds wins the trial and the pot.']].map(([t,p],i)=>`<div class="stp4"><div class="sn">${i+1}</div><div class="sb"><b>${t}</b><p>${p}</p>${ILL[i]}</div></div>`).join('')}
 <h2>Card types</h2>
 <div class="ctp"><div>${TI.atk} <b>Attack</b><br>wins ties</div><div>${TI.def} <b>Defense</b><br>a loss by 1 becomes a draw</div><div>${TI.pow} <b>Power</b><br>just a big number</div><div>${TI.mod} <b>Modifier</b><br>special effect</div></div>
+<h2>Blend</h2>
+<div class="stp4"><div class="sb"><p>Put tokens of different elements on the same card. Two different elements give that card +1, three different elements give it +2. Four different elements is a Prism, which has its own bonus and gets no Blend on top. Repeats of an element and neutral tokens do not count.</p>${ILL[5]}</div></div>
 <h2>The Prism</h2>
 <div class="stp4"><div class="sb"><p>Put one fire, water, earth and air token on the same card. Every token there counts double, your foe cannot burn or move them, and your other 2 cards that round get +2. Hard to build, and it wins games.</p>${ILL[4]}</div></div>`;
 /* element data for the picker */
@@ -811,36 +868,39 @@ const abIll=(c,tk,r)=>{
   else if(r[0]=='g')o+=ghost(128,41,r[1]);
   else if(r[0]=='sh')o+=`<path d="M128 19L146 26V41C146 53 138 59 128 63C118 59 110 53 110 41V26Z" style="fill:var(--card);stroke:var(--water);stroke-width:3;stroke-linejoin:round"/><svg x="117" y="29" width="22" height="22" viewBox="0 0 64 64">${AI[r[1]]}</svg>`;
   else if(r[0]=='nb')o+=cd(112,6,r[1],r[2]).replace('<g transform="translate(112 6)">','<g transform="translate(112 6) scale(.5)">')+cd(112,42,r[1],r[2]).replace('<g transform="translate(112 42)">','<g transform="translate(112 42) scale(.5)">');
+  else if(r[0]=='pl')o+=cd(112,12,r[1],r[2]).replace('<g transform="translate(112 12)">','<g transform="translate(112 12) scale(.85)">');
   else if(r[0]=='mv')o+=cd(112,18,'',r[2]||'air').replace('<g transform="translate(112 18)">','<g transform="translate(112 18) scale(.6)">')+tkn(141,22,r[1],8);
   return `<svg class="ai" viewBox="0 0 150 78" aria-hidden="true">${o}</svg>`};
 const row=(n,tc,il,t,x)=>`<div class="ab${x||''}"><div class="abt"><b>${x?'\u25C8 ':''}${n}</b><span class="tc">${tc}</span></div><div class="abb">${abIll(...il)}<p>${t}</p></div></div>`;
 const R4=e=>[e,e,e,e];
 const sFA=['Fire on an Air card','2 fire tokens',['air',['fire','fire'],['g','fire']],'Every 2nd fire token placed on an air card earns a free bonus fire token.'];
 const sAF=['Air on a Fire card','2 air tokens',['fire',['air','air'],['g','air']],'Every 2nd air token placed on a fire card earns a free bonus air token.'];
-const sWE=['Water on an Earth card','1 water token',['earth',['water'],['g','water']],'Every water token placed on an earth card earns a free bonus water token.'];
-const sEW=['Earth on a Water card','2 earth tokens',['water',['earth','earth'],['g','earth']],'Every 2nd earth token placed on a water card earns a free bonus earth token.'];
-const PRI=(e,u)=>['Prism','1 of each element',[e,['fire','water','earth','air'],['nb','+2','gold']],'All 4 tokens count double (+2 each), your foe cannot burn or move them, and your other 2 cards that round get +2. Your deck only makes '+e+' tokens: get the rest from '+u+' (wild tokens) and from trades.',' prism'];
+const sWE=['Water on an Earth card','2 water tokens',['earth',['water','water'],['g','water']],'Every 2nd water token placed on an earth card earns a free bonus water token.'];
+const sEW=['Earth on a Water card','1 earth token',['water',['earth'],['g','earth']],'The first earth token placed on a water card earns a free bonus earth token (one bonus per card).'];
+const PRI=(e,u)=>['Prism','1 of each element',[e,['fire','water','earth','air'],['nb','+2','gold']],'All 4 tokens count double (+2 each), your foe cannot burn or move them, and your other 2 cards that round get +2. Your deck only makes '+e+' tokens: get the rest from '+(u?u+' (wild tokens) and from trades.':'trades (wild tokens come from Transmute and Spark cards).'),' prism'];
 const ELD={
 fire:{tag:'Attack. Wins ties and burns enemy tokens.',
  deck:['7 Attack cards (1 to 4): they win ties','3 each of Defense, Power and Modifier','Modifiers: Shift, Transmute, Swap','Plus 4 neutral cards (no token, bigger numbers)'],
- tok:[['Burn','1 fire token',['fire',['fire'],['x','earth']],'Each new fire token burns one enemy token on the same slot (your choice).'],['Inferno','4 fire tokens',['fire',R4('fire'),['x','earth']],'Once per card: burns any enemy token on the board.']],
+ tok:[['Burn','1 fire token',['fire',['fire'],['x','earth']],'A new fire token burns one enemy token on the same slot (your choice). A card burns at most one token per round; extra fire tokens are plain +1.'],['Incendio','3 fire tokens',['fire',['fire','fire','fire'],['x','earth']],'Once per card: burns any enemy token in the same round as this card. Needs a new fire token this round.'],['Inferno','4 fire tokens',['fire',R4('fire'),['x','earth']],'Once per card: burns any enemy token on the board. With 4 tokens, Inferno replaces Incendio.']],
  syn:[sFA,sAF,PRI('fire','Transmute cards')]},
 water:{tag:'Defense. Turns near-losses into draws and shields your cards.',
- deck:['7 Defense cards (1 to 4): a loss by exactly 1 becomes a draw','3 each of Attack, Power and Modifier','Modifiers: Transmute, Swap, Disrupt','Plus 4 neutral cards (no token, bigger numbers)'],
- tok:[['Ward','1 water token',['water',['water'],['sh','fire']],'Blocks one enemy burn aimed at its slot, once.'],['Shoreline','3 water tokens',['water',['water','water','water'],['nb','+1','water']],'Gives +1 to the slots before and after it in the same round.'],['Tide','4 water tokens',['water',R4('water'),['sh','fire']],'Once per card: blocks one enemy burn aimed at a token on this same card. Neighbouring cards are not covered, and Gust can still move its tokens.']],
- syn:[sWE,sEW,PRI('water','Transmute cards')]},
+ deck:['7 Defense cards (1 to 4): a loss by exactly 1 becomes a draw','3 each of Attack, Power and Modifier','Modifiers: Kindle, Anchor, Shift','Plus 4 neutral cards (no token, bigger numbers)'],
+ tok:[['Ward','1 water token',['water',['water'],['sh','fire']],'Blocks one enemy burn aimed at its slot, once. It does not stop Gust.'],['Shoreline','3 water tokens',['water',['water','water','water'],['nb','+1','water']],'Gives +1 to the slots before and after it in the same round.'],['Tide','4 water tokens',['water',R4('water'),['sh','air']],'Once per card: blocks one enemy burn or Gust move aimed at a token on this same card. Neighbouring cards are not covered. Tide is the only token ability that stops Gust. While the card holds 4 water tokens, the opposing card behaves like a neutral card: it keeps its number but loses its effect, type, Kindle bonus and Anchor.']],
+ syn:[sWE,sEW,PRI('water',null)]},
 earth:{tag:'Power. Big numbers and tokens that multiply and cannot be pushed.',
- deck:['7 Power cards (2 to 5): the biggest plain numbers','3 each of Attack, Defense and Modifier','Modifiers: Swap, Disrupt, Spark','Plus 4 neutral cards (no token, bigger numbers)'],
- tok:[['Roots','2 earth tokens',['earth',['earth','earth'],['g','earth']],'At the start of each round, the card grows 1 more earth token, up to 4 tokens.'],['Immovable','1 earth token',['earth',['earth'],['x','air']],'Gust cannot move earth tokens.'],['Bloom','4 earth tokens',['earth',R4('earth'),['g','earth']],'Once per card: grows an earth token on any card with room.']],
+ deck:['7 Power cards (2 to 4): the biggest plain numbers','3 each of Attack, Defense and Modifier','Modifiers: Swap, Disrupt, Spark','Plus 4 neutral cards (no token, bigger numbers)'],
+ tok:[['Roots','2 earth tokens',['earth',['earth','earth'],['g','earth']],'At the start of each round, the card grows 1 more earth token, up to 4 tokens.'],['Immovable','1 earth token',['earth',['earth'],['x','air']],'Gust cannot move earth tokens.'],['Bloom','3 earth tokens',['earth',['earth','earth','earth'],['g','earth']],'Once per card: grows an earth token on any card of the same round with room.'],['Overgrowth','4 earth tokens',['earth',R4('earth'),['g','earth']],'Once per card: grows an earth token on any card on the board with room. With 4 tokens, Overgrowth replaces Bloom.']],
  syn:[sEW,sWE,PRI('earth','Spark cards')]},
 air:{tag:'Modifiers. Shifts, swaps and tokens that slip where they hurt most.',
  deck:['7 Modifier cards with every effect: Shift, Transmute, Swap, Disrupt, Spark, Anchor, Kindle','3 each of Attack, Defense and Power','Plus 4 neutral cards (no token, bigger numbers)'],
- tok:[['Drift','1 air token',['air',['air'],['mv','air']],'Moves to another of your cards once per round, starting the round after it is placed.'],['Gust','2 air tokens',['air',['air','air'],['mv','fire','water']],'Needs a new air token this round. Moves an enemy fire, water, air or neutral token to another enemy card, free of cost. Only Anchor and Prism stop it.']],
+ tok:[['Drift','1 air token',['air',['air'],['mv','air']],'Moves to another of your cards once per round, starting the round after it is placed.'],['Gust','2 air tokens',['air',['air','air'],['mv','fire','water']],'Needs a new air token this round. Moves an enemy fire, water, air or neutral token to another enemy card, free of cost. Only Anchor, Prism and a Tide stop it.'],['Thunder','4 air tokens',['air',R4('air'),['mv','air','fire']],'Needs a new air token this round (Gust still works at 4 tokens). Once per card: pick an enemy card of this round that has tokens. All its tokens scatter to its other 2 cards of the round, and your foe chooses where each lands. A card holds 4 tokens, and those that do not fit are lost. Only a Prism stops it.']],
  syn:[sAF,sFA,PRI('air','Transmute and Spark cards')]}};
+const BL2=e=>['Blend (2 elements)','2 different tokens',[e,[e,E[(E.indexOf(e)+1)%4]],['pl','+1','gold']],'Put tokens of 2 different elements on the same card and that card gets +1. Neutral tokens do not count. Every deck can do this.'];
+const BL3=e=>['Blend (3 elements)','3 different tokens',[e,[e,E[(E.indexOf(e)+1)%4],E[(E.indexOf(e)+2)%4]],['pl','+2','gold']],'3 different elements on the same card give that card +2. With all 4 different elements it becomes a Prism instead, which has its own bonus and no Blend on top.'];
 const elPanel=e=>{const d=ELD[e];return `<div class="epanel" style="--c:var(--${e})"><div class="eh">${art(e,'lg')}<div><div class="en">${cap(e)}</div><p class="m">${d.tag}</p></div></div>
 <h3>Your deck</h3><ul>${d.deck.map(x=>`<li>${x}</li>`).join('')}</ul>
 <h3>Token abilities</h3>${d.tok.map(t=>row(...t)).join('')}
-<h3>Synergies</h3><p class="m sn2">Bonus tokens take space on the card (4 max).</p>${d.syn.map(t=>row(...t)).join('')}
+<h3>Synergies</h3><p class="m sn2">Bonus tokens take space on the card (4 max).</p>${[...d.syn.slice(0,-1),BL2(e),BL3(e),d.syn[d.syn.length-1]].map(t=>row(...t)).join('')}
 <button class="btn" data-a="start" data-v="${e}" style="background:var(--${e});color:#fff">Select ${cap(e)}</button></div>`};
 const pickEl=()=>`<h2 id="pickel">Choose your element</h2><div class="elg">${E.map(e=>`<button data-a="elsel" data-v="${e}" class="elt${S.sel==e?' on':''}" style="--c:var(--${e})">${art(e)}${cap(e)}<small>${SN[SIG[e]]}</small></button>`).join('')}</div>${S.sel?elPanel(S.sel):'<p class="hint" style="margin-top:10px">Tap an element to see its deck, tokens and synergies.</p>'}`;
 E.forEach(e=>{IC[e]=`<svg class="ic anime ${e}" viewBox="0 0 64 64" aria-hidden="true">${AI[e]}</svg>`});
@@ -850,9 +910,9 @@ const $=document.getElementById('app');
 let S={ph:'home'};
 const TT={atk:'Attack: wins ties.',def:'Defense: turns a loss by exactly 1 into a draw.',pow:'Power: no special effect, just a high number.'};
 const MT={shift:c=>`Shift: adds +${ef(c)} to the ${c.dir<0?'previous slot':c.dir>0?'next slot':'previous or next slot (you choose when playing)'}.`,transmute:()=>"Transmute: this card's token can be any element.",swap:()=>'Swap: trades places with your previous card.',disrupt:c=>`Disrupt: lowers the opposing card by ${ef(c)}.`,spark:()=>'Spark: gives you a free wild token.',anchor:()=>'Anchor: your foe cannot burn or move tokens on this card.',kindle:()=>'Kindle: each token on this card gives +2.'};
-const cardTip=c=>`${c.e=='neu'?'Neutral':cap(c.e)}, power ${c.p}. ${c.t=='mod'?MT[c.mv](c):TT[c.t]} ${c.e=='neu'?'Makes no token.':'Makes 1 '+c.e+' token.'}`;
-const TK={fire:'Fire token: +1. A new one burns an enemy token of your choice on the same slot. 4 on a card: Inferno burns any enemy token.',water:'Water token: +1. Blocks one enemy burn on its slot, once. Three on a card give +1 to both neighbouring slots. 4 on a card: Tide.',earth:'Earth token: +1. Two on a card grow one extra token each round, up to 4 tokens on the card. Gust cannot move it. 4 on a card: Bloom grows a token on any card.',air:'Air token: +1. Once placed, it can move to another card once per round, starting the round after it is placed. Two on a card: Gust moves an enemy fire, water, air or neutral token (not earth) and costs no air token. Only Anchor or Prism stop it.',wild:'Wild token: choose its element when you place it.',neu:'Neutral token: +1, no element and no effect. Earned when your tokens turn the outcome of round I or II in your favour. Can be burned.'};
-const tokTip=e=>(TK[e]||'')+' One of each element on a card: Prism.';
+const cardTip=c=>`${c.e=='neu'?'Neutral':cap(c.e)}, power ${base(c)}. ${c.t=='mod'?MT[c.mv](c):TT[c.t]} ${c.e=='neu'?'Makes no token.':'Makes 1 '+c.e+' token.'}`;
+const TK={fire:'Fire token: +1. A new one burns an enemy token of your choice on the same slot (at most one burn per card per round). 3 on a card: Incendio burns any enemy token in the same round. 4: Inferno burns any enemy token on the board.',water:'Water token: +1. Blocks one enemy burn on its slot, once (it does not stop Gust). Three on a card give +1 to both neighbouring slots. 4 on a card: Tide, which also blocks Gust and turns the opposing card neutral (number only).',earth:'Earth token: +1. Two on a card grow one extra token each round, up to 4 tokens on the card. Gust cannot move it. 3 on a card: Bloom grows a token on a card of the same round. 4: Overgrowth grows a token on any card.',air:'Air token: +1. Once placed, it can move to another card once per round, starting the round after it is placed. Two on a card: Gust moves an enemy fire, water, air or neutral token (not earth) and costs no air token. Only Anchor, Prism or a Tide stop it. 4 on a card: Thunder scatters the tokens of an enemy card of the same round (only a Prism stops it).',wild:'Wild token: choose its element when you place it.',neu:'Neutral token: +1, no element and no effect. Earned when your tokens turn the outcome of round I or II in your favour. Can be burned.'};
+const tokTip=e=>(TK[e]||'')+' Tokens of 2 or 3 different elements on one card give +1 or +2 (Blend). All 4: Prism.';
 const NM=c=>c.t=='mod'?cap(c.mv):SN[c.t];
 const face=c=>`<i class="rn">${IC[c.e]}</i><i class="art">${AI[c.e]?art(c.e,'wm'):''}<b>${base(c)}</b></i><i class="bn">${tyI(c)}<em>${NM(c)}</em></i>`;
 const TYN={atk:'ATTACK',def:'DEFENSE',pow:'POWER',mod:'MODIFIER'};
@@ -889,7 +949,7 @@ const wcl=r=>r.was?(r.was.r!=r.r?' flipd':' scd'):'';
 const chgSum=()=>{const V=S.view,fl=V.map((r,i)=>[r,i]).filter(([r])=>r.was&&r.was.r!=r.r),sc=V.filter(r=>r.was&&r.was.r==r.r).length,pv=rs=>rs.map(r=>r.was?{r:r.was.r,x:r.was.x,y:r.was.y}:r);
   const rr=[0,1,2].filter(k=>V.length>=k*3+3).map(k=>[k,roundRes(tally(pv(V.slice(k*3,k*3+3)))),roundRes(tally(V.slice(k*3,k*3+3)))]).filter(([k,a,b])=>a!=b);
   return `<div class="chgs"><b>Changed by tokens</b>${rr.map(([k,a,b])=>`<div class="ev ${b=='w'?'p':b=='l'?'o':''}"><b>Round ${rom(k+1)}:</b> ${RN[a]} ➜ ${RN[b]}</div>`).join('')}${fl.length?fl.map(([r,i])=>`<div class="ev ${r.r=='w'?'p':r.r=='l'?'o':''}">Round ${rom((i/3|0)+1)}, slot ${i%3+1}: ${RN[r.was.r]} ➜ ${RN[r.r]} (${r.was.x}–${r.was.y} ➜ ${r.x}–${r.y})</div>`).join(''):'<div class="m">No clash changed its outcome.</div>'}${sc?`<div class="m">${sc} other clash${sc>1?'es':''} changed score only (dashed outline).</div>`:''}</div>`};
-const LEG=`<p class="m"><b>Modifier cards (✧).</b> The big number is the card's own power. The symbol shows its effect:<br>➜ Shift: adds its number to the next slot (or the previous one, your choice).<br>◐ Transmute: its token can be any element.<br>⇄ Swap: trades places with your previous card.<br>✖ Disrupt: lowers the opposing card by its number.<br>✺ Spark: gives you a free wild token.<br>⚓︎ Anchor: your foe cannot burn or move tokens on this card.<br>✹ Kindle: each token on this card gives +2.<br>Earlier slots can change as you play. ↻ marks a clash that did.</p>`;
+const LEG=`<p class="m"><b>Modifier cards (✧).</b> The big number is the card's own power; the effect uses the card's printed value, which is 1 higher (never below 1). The symbol shows its effect:<br>➜ Shift: adds its number to the next slot (or the previous one, your choice).<br>◐ Transmute: its token can be any element.<br>⇄ Swap: trades places with your previous card.<br>✖ Disrupt: lowers the opposing card by its number.<br>✺ Spark: gives you a free wild token.<br>⚓︎ Anchor: your foe cannot burn or move tokens on this card.<br>✹ Kindle: each token on this card gives +2.<br>Earlier slots can change as you play. ↻ marks a clash that did.</p>`;
 
 const deckDk=()=>E.map(e=>S.deck.filter(c=>c.e==e).length);
 function sceneAt(i){const s=STORY.SC(S.el,i);if(!s.neu){const d=deckDk();s.dk=d;s.neu=d.every(n=>!n)}return s}
@@ -919,7 +979,7 @@ function remTok(id){const F=S.fx;F.place=F.place.filter(p=>p.id!=id);F.sel=id;re
 function confirmTok(){
   const F=S.fx;S.carry=freeTok().map(t=>t.e);
   /* step 1: you move your own air tokens before anything of the foe's is revealed */
-  const T0=addFresh(S.allrows,S.T,{p:F.place,o:[]}),am=specs(T0,'p').filter(g=>g.k=='am');
+  const T0=addFresh(S.allrows,S.T,{p:F.place,o:[]}),am=specs(T0,'p',S.allrows).filter(g=>g.k=='am');
   if(am.length){S.sp={list:[],i:0,ch:[],tok:null,T:T0,pre:1,air:{ids:am.map(g=>g.id),mv:{},sel:null,to:null}};S.ph='sp';render();return}
   sendPlace([]);
 }
@@ -933,17 +993,22 @@ function afterReveal(plO,otn){
   const F=S.fx;S.ocn=S.r<2?otn-plO.length:0;
   S.fxp={p:F.place,o:plO};
   F.info=`You placed ${F.place.length} of ${F.tray.length} token${F.tray.length==1?'':'s'}. They placed ${plO.length} of ${otn}.${S.carry.length?(S.r<2?` ${S.carry.length} of yours carry over.`:` ${S.carry.length} unplaced are lost.`):''}`;
-  const T1=addFresh(S.allrows,S.T,S.fxp),list=specs(T1,'p').filter(g=>g.k!='am'),pre=S.pam||[];
+  const T1=addFresh(S.allrows,S.T,S.fxp),list=specs(T1,'p',S.allrows).filter(g=>g.k!='am'),pre=S.pam||[];
   const pre0=settle(S.allrows,T1,[]),aut=pre0.flatMap(r=>r.fn).filter(x=>/doubled|Prism|\+1/.test(x));S.aut=aut;S.autrows=pre0;
   if(!list.length&&!aut.length){submitMoves(pre);return}
   S.sp={list,i:0,ch:[...pre],tok:null,T:T1};S.ph='fxauto';render();
 }
 function spNext(m){const P=S.sp;if(m)P.ch.push(m);P.tok=null;P.i++;if(P.i>=P.list.length)submitMoves(P.ch);else render()}
 function finalize(mv){
-  const prev=S.view,res=resolveTok(S.allrows,S.fxp,mv);res.forEach((r,i)=>{const p=prev[i];if(p&&(p.x!=r.x||p.y!=r.y||p.r!=r.r))r.was={x:p.x,y:p.y,r:p.r}});S.T=res.T;S.view=res;{const a=roundRes(tally(S.allrows.slice(S.r*3,S.r*3+3))),b=roundRes(tally(res.slice(S.r*3,S.r*3+3)));S.award=S.r<2&&a!=b&&b!='d'?b:null}
-  S.sp=null;S.open={};S.ph='fxres';render();
+  if(S.duel){finish(resolveTok(S.allrows,S.fxp,mv,null,0,1));return}
+  const R0=resolveTok(S.allrows,S.fxp,mv),rq=pendingScatter(R0.mv).filter(q=>q.v=='p');
+  if(rq.length){S.sc={base:R0.mv,thd:[],cur:null,to:{}};scStart(rq[0]);S.sp=null;S.ph='scatter';render();return}
+  finish(R0)}
+function finish(res){
+  const prev=S.view;res.forEach((r,i)=>{const p=prev[i];if(p&&(p.x!=r.x||p.y!=r.y||p.r!=r.r))r.was={x:p.x,y:p.y,r:p.r}});S.T=res.T;S.view=res;{const a=roundRes(tally(S.allrows.slice(S.r*3,S.r*3+3))),b=roundRes(tally(res.slice(S.r*3,S.r*3+3)));S.award=S.r<2&&a!=b&&b!='d'?b:null}
+  S.sp=null;S.sc=null;S.open={};S.ph='fxres';render();
   const txt=res.flatMap(r=>r.fn).join(' ');let d=250;
-  [['burned','burn'],['blocks','ward'],['grew','grow'],['Bloom','grow'],['moved','air'],['doubled','syn']].forEach(([k,n])=>{if(txt.includes(k)){setTimeout(()=>sfx(n),d);d+=280}});
+  [['burned','burn'],['blocks','ward'],['grew','grow'],['Bloom','grow'],['moved','air'],['scattered','air'],['doubled','syn']].forEach(([k,n])=>{if(txt.includes(k)){setTimeout(()=>sfx(n),d);d+=280}});
 }
 function commitRound(){const rw0=S.r<2?roundRes(tally(S.rows)):'d';S.allrows.push(...S.rows);S.view=paint(S.allrows,{p:S.T.p.map(t=>({...t,nw:0,mvd:0})),o:S.T.o.map(t=>({...t,nw:0,mvd:0}))});S.rtok=tokenList(S.pcs);S.otk=tokenList(S.ocs);S.rnb=null}
 function newMatch(){
@@ -1082,18 +1147,22 @@ function sealPut(k,w,d){const s=SEAL[k]=SEAL[k]||{};if(s[w]!==undefined)return;s
 const cardOut=c=>({id:c.id,e:c.e,t:c.t,p:c.p,mv:c.mv,dir:c.dir});
 const cleanCard=o=>{const t=TY.includes(o.t)?o.t:'pow',e=(E.includes(o.e)||o.e=='neu')?o.e:'neu',c={id:o.id,e,t,p:Math.max(1,Math.min(5,o.p|0)),dir:o.dir<0?-1:1};if(t=='mod')c.mv=MV.includes(o.mv)?o.mv:'shift';return c};
 const cleanPl=(a,max)=>{const out=[],per={};(Array.isArray(a)?a:[]).forEach(o=>{if(!o||out.length>=max||!E.includes(o.e))return;const row=o.row|0;if(row<0||row>=S.allrows.length)return;if(per[row]==null)per[row]=S.T.o.filter(t=>t.row==row).length;if(per[row]>=MAXT)return;per[row]++;out.push({id:+o.id,e:o.e,row})});return out};
-const cleanMv=a=>(Array.isArray(a)?a:[]).slice(0,40).filter(m=>m&&['fire','earth','am','ag','burn','wn'].includes(m.k)).map(m=>({sd:'o',k:m.k,at:m.at|0,id:m.id,to:m.to,idx:m.idx|0}));
+const cleanMv=a=>(Array.isArray(a)?a:[]).slice(0,40).filter(m=>m&&['fire','inc','bl','ov','th','am','ag','burn','wn'].includes(m.k)).map(m=>({sd:'o',k:m.k,at:m.at|0,id:m.id,to:m.to,idx:m.idx|0,row:m.row|0}))
+const cleanThd=a=>(Array.isArray(a)?a:[]).slice(0,8).filter(m=>m&&m.to&&typeof m.to=='object').map(m=>({sd:'o',k:'thd',row:m.row|0,to:Object.fromEntries(Object.entries(m.to).slice(0,8).map(([k,v])=>[k,v|0]))}));;
 function applyRev(k,mine,theirs){
   if(k!==S.expect||!mine||!theirs)return;S.expect=null;
   try{
     if(k[0]=='c'){const b=cleanCard(theirs.c||{});S.wait=0;commitSlot(S.pick,b)}
     else if(k[0]=='t'){const otn=S.ocn+S.otk.length;S.oam=cleanMv(theirs.am).filter(m=>m.k=='am');afterReveal(cleanPl(theirs.pl,otn),otn)}
-    else if(k[0]=='m'){const my=S.myMv||[],th=[...(S.oam||[]),...cleanMv(theirs.mv).filter(m=>m.k!='am')];finalize(CANON=='p'?[...my,...th]:[...th,...my])}
+    else if(k[0]=='m'){const my=S.myMv||[],th=[...(S.oam||[]),...cleanMv(theirs.mv).filter(m=>m.k!='am')],all=CANON=='p'?[...my,...th]:[...th,...my],rq=pendingScatter(all);
+      if(!rq.length)finalize(all);
+      else{S.sc={base:all,thd:[],cur:null,to:{}};const mine=rq.filter(q=>q.v=='p');if(mine.length){scStart(mine[0]);S.ph='scatter';render()}else sendThd()}}
+    else if(k[0]=='s'){const t2=cleanThd(theirs.thd),mine=S.sc.thd;finalize([...S.sc.base,...(CANON=='p'?[...mine,...t2]:[...t2,...mine])])}
   }catch(e){console.error(e);S.err='Something went wrong: '+e.message;render()}
 }
 function submitMoves(mv){
   if(!S.duel){finalize(mv);return}
-  S.myMv=mv.map(m=>({sd:'p',k:m.k,at:m.at,id:m.id,to:m.to,idx:m.idx}));S.sp=null;S.ph='wait';
+  S.myMv=mv.map(m=>({sd:'p',k:m.k,at:m.at,id:m.id,to:m.to,idx:m.idx,row:m.row}));S.sp=null;S.ph='wait';
   sealSend('m:'+S.r,{mv:S.myMv});render();
 }
 /* ===== custom duel decks: every deck has the same 16 type/power slots; the player chooses the element of each ===== */
@@ -1101,7 +1170,8 @@ const TPL={atk:[1,2,3,4],def:[1,2,3,4],pow:[2,3,4,5],mod:[1,2,3,4]};
 const DKN=16,DKP=TY.reduce((a,t)=>a+TPL[t].reduce((x,y)=>x+y,0),0)+neus().reduce((a,c)=>a+c.p,0);
 const okDk=d=>Array.isArray(d)&&d.length==4&&d.every(n=>Number.isInteger(n)&&n>=0&&n<=DKN)&&d.reduce((a,b)=>a+b,0)==DKN;
 const dkStr=d=>!d?'a hidden deck':E.map((e,i)=>d[i]?`${art(e,'xs')} ${d[i]}`:'').filter(Boolean).join('  ');
-function customDeck(dk){
+const customDeck=dk=>an(wn(customDeck0(dk)));
+function customDeck0(dk){
   const left={};TY.forEach(t=>left[t]=[...TPL[t]]);
   const out=E.map(()=>[]),need=[...dk];
   const spread=l=>{const s=[...l].sort((a,b)=>b-a),o=[];while(s.length){o.push(s.shift());if(s.length)o.push(s.pop())}return o};
@@ -1208,7 +1278,7 @@ function render(){S.fr=null;S.allc=0;
   if(s.ph=='fxauto'){const n=s.sp.list.length;
     $.innerHTML=`${head}<h1>Token Effects</h1><div class="chgs"><p class="m" style="margin-top:0">${s.fx.info}</p><b>Automatic effects</b>${s.aut.length?s.aut.map(x=>`<div class="ev">${x}</div>`).join(''):'<div class="m">None this round.</div>'}<p class="m">${n?`Next you choose ${n} action${n>1?'s':''} (burns, moves, growth, water bonus).`:'No actions to choose this round.'}</p><button class="btn" data-a="fxgo" style="margin-top:6px">${n?'Choose actions':'Continue'}</button></div>${grp(r=>rowH(r),s.autrows)}`;return}
   if(s.ph=='bloom'){const g=s.bq[0];
-    $.innerHTML=`${head}<h1>${IC.earth} Bloom</h1><p class="m">Your earth card in round ${rom((g.row/3|0)+1)}, slot ${g.row%3+1} grew its 4th earth token. Tap a card to grow one more earth token there (4 tokens max per card).${s.bq.length>1?' '+s.bq.length+' blooms to place.':''}</p>${grp((r,i)=>rowH(r,s.T.p.filter(t=>t.row==i).length<MAXT?i:null,false,[],['bloompick','bloompick']))}`;return}
+    $.innerHTML=`${head}<h1>${IC.earth} ${g.k==3?'Bloom':'Overgrowth'}</h1><p class="m">Your earth card in round ${rom((g.row/3|0)+1)}, slot ${g.row%3+1} grew its ${g.k==3?'3rd':'4th'} earth token. Tap ${g.k==3?'a card of this round':'any card'} to grow one more earth token there (4 tokens max per card).${s.bq.length>1?' '+s.bq.length+' blooms to place.':''}</p>${grp((r,i)=>rowH(r,bdest('p',g).includes(i)?i:null,false,[],['bloompick','bloompick']))}`;return}
   if(s.ph=='fx'){
     const F=s.fx,free=freeTok(),sel=free.find(t=>t.id==F.sel);
     const chip=t=>`<button data-tip="${tokTip(t.e)}" class="tok${t.id==F.sel?' sel':''}" data-a="tsel" data-v="${t.id}">${tokI(t.e)}</button>`;
@@ -1232,14 +1302,20 @@ function render(){S.fr=null;S.allc=0;
     <button class="btn" data-a="adone">${mvn?`Confirm moves (${mvn})`:'Skip moving'}</button>${mvn?'<button class="btn alt" data-a="areset">Reset moves</button>':''}`;return;
   }
   if(s.ph=='sp'){
-    const P=s.sp,g=P.list[P.i],k=g.k,T=P.T,nm={fire:'Inferno',earth:'Bloom',am:'Air',ag:'Gust',burn:'Burn',wn:'Water bonus'}[k],ic=k=='fire'||k=='burn'?'fire':k=='earth'?'earth':k=='wn'?'water':'air';
+    const P=s.sp,g=P.list[P.i],k=g.k,T=P.T,nm={fire:'Inferno',inc:'Incendio',bl:'Bloom',ov:'Overgrowth',th:'Thunder',am:'Air',ag:'Gust',burn:'Burn',wn:'Water bonus'}[k],ic=k=='fire'||k=='burn'||k=='inc'?'fire':k=='bl'||k=='ov'?'earth':k=='wn'?'water':'air';
     if(k=='am'&&P.tok==null){const a=T.p.filter(t=>t.e=='air'&&t.row==g.at);if(a.length==1)P.tok=a[0].id}
-    const msg=k=='fire'?'tap any enemy token to burn it':k=='burn'?`fire token ${g.idx+1}: tap the enemy token on this slot that it burns`:k=='wn'?'two water tokens: tap the neighbouring slot that gets +1':k=='earth'?'tap the card that grows a token':P.tok==null?(k=='am'?'tap one of your tokens on this card to move':'tap the enemy token to move'):'now tap the card it moves to';
-    const tks=i=>k=='earth'||k=='wn'?[]:k=='am'?(i==g.at?T.p.filter(t=>t.row==i):[]):k=='burn'?(i==g.at?T.o.filter(t=>t.row==i&&!P.ch.some(c=>c.k=='burn'&&c.at==i&&c.id==t.id)):[]):k=='ag'?T.o.filter(t=>t.row==i&&t.e!='earth'):T.o.filter(t=>t.row==i);
-    const clk=i=>k=='earth'||P.tok!=null||(k=='wn'&&Math.abs(i-g.at)==1&&(i/3|0)==(g.at/3|0));
+    const msg=k=='fire'?'tap any enemy token to burn it':k=='burn'?`fire token ${g.idx+1}: tap the enemy token on this slot that it burns`:k=='wn'?'two water tokens: tap the neighbouring slot that gets +1':k=='ov'?'tap any card that grows a token':k=='bl'?'tap a card of this round that grows a token':k=='inc'?'tap an enemy token of this round to burn it':k=='th'?'tap an enemy card of this round: its tokens scatter to its other cards and your foe chooses where':P.tok==null?(k=='am'?'tap one of your tokens on this card to move':'tap the enemy token to move'):'now tap the card it moves to';
+    const tks=i=>k=='bl'||k=='ov'||k=='th'||k=='wn'?[]:k=='inc'?((i/3|0)==(g.at/3|0)?T.o.filter(t=>t.row==i):[]):k=='am'?(i==g.at?T.p.filter(t=>t.row==i):[]):k=='burn'?(i==g.at?T.o.filter(t=>t.row==i&&!P.ch.some(c=>c.k=='burn'&&c.at==i&&c.id==t.id)):[]):k=='ag'?T.o.filter(t=>t.row==i&&t.e!='earth'):T.o.filter(t=>t.row==i);
+    const clk=i=>(k=='ov'&&T.p.filter(t=>t.row==i).length<MAXT)||(k=='bl'&&(i/3|0)==(g.at/3|0)&&T.p.filter(t=>t.row==i).length<MAXT)||(k=='th'&&(i/3|0)==(g.at/3|0)&&T.o.some(t=>t.row==i)&&!prism(T,'o',i))||P.tok!=null||(k=='wn'&&Math.abs(i-g.at)==1&&(i/3|0)==(g.at/3|0));
     $.innerHTML=`${head}<h1>${IC[ic]} ${nm}</h1><p class="m">Slot ${g.at%3+1} of round ${rom((g.at/3|0)+1)}: ${msg}.</p>
     ${grp((r,i)=>rowH(r,clk(i)?i:null,false,tks(i),['srow','stok'],k=='am'?'p':'o'))}
     <button class="btn alt" data-a="sskip">${k=='burn'||k=='wn'?'Skip (the game chooses)':'Skip'}</button>${k=='burn'?'<button class="btn alt" data-a="sauto">Let the game choose all remaining burns</button>':''}`;return;
+  }
+  if(s.ph=='scatter'){const Q=s.sc,q=Q.cur,loc=j=>`round ${rom((j/3|0)+1)}, slot ${j%3+1}`,cnt=q.dests.map((d,j)=>q.occ[j]+q.toks.filter(t=>Q.to[t.id]==d).length);
+    $.innerHTML=`${head}<h1>${IC.air} Thunder</h1><p class="m">Your foe's Thunder strikes your card in ${loc(q.m.row)}. Its ${q.toks.length} token${q.toks.length>1?'s':''} scatter to the other cards of this round, and you choose where each one lands. A card holds at most 4 tokens, and tokens that do not fit are lost.</p>
+    ${q.toks.map(t=>`<div class="dkrow" style="flex-direction:column;align-items:stretch;gap:6px"><span>${IC[t.e]} ${t.e=='neu'?'Neutral':cap(t.e)} token</span><div class="pick dirs" style="grid-template-columns:1fr 1fr;margin-top:0">${q.dests.map(d=>`<button data-a="scset" data-v="${t.id}:${d}" class="${Q.to[t.id]==d?'on':''}">${loc(d)}</button>`).join('')}</div></div>`).join('')}
+    <p class="m">${q.dests.map((d,j)=>`${loc(d)}: ${cnt[j]} of 4${cnt[j]>MAXT?' (overflow is lost)':''}`).join(' · ')}</p>
+    <button class="btn" data-a="scdone">Confirm</button>${grp(r=>rowH(r))}`;return;
   }
   if(s.ph=='fxres'){
     $.innerHTML=`${head}<h1>The Reveal</h1><p class="m">${s.fx.info} Nothing is final until the match ends. Tap a clash to see how its score was built. Gold outline: the clash's outcome changed. Dashed outline: only its score changed.</p>${chgSum()}${s.award=='w'?'<p class="w"><b>Your tokens turned this round.</b> You earn a neutral token (+1) for next round.</p>':s.award=='l'?'<p class="l"><b>Their tokens turned this round.</b> Your foe earns a neutral token for next round.</p>':''}${grp(r=>rowH(r))}<button class="btn" data-a="fxnext">${s.r<2?'Next round':'See the result'}</button>`;return;
@@ -1304,7 +1380,7 @@ win:d=>{[[262,0],[330,.22],[392,.44],[523,.66]].forEach(([f,t])=>{horn(d,f,1.1,.
 lose:d=>{[[196,0],[185,.6],[147,1.2]].forEach(([f,t])=>horn(d,f,1.5,.07,t));drum(d,90,36,1,.7);gong(d,.2,.2)}};
 const sfx=k=>{if(MUTE)return;try{const d=sb();if(d)SFX[k](d)}catch(e){}};
 /* war drums: played whenever the player is not in a battle */
-const MU={on:0,tm:0,st:0,n:0,iv:null,g:null,bus:null,dr:[]},PAT=['B..bB.t.B..bB.tt','B.b.B.b.tttBttBB'],BATTLE=['play','fx','fxauto','bloom','sp','fxres','wait'];
+const MU={on:0,tm:0,st:0,n:0,iv:null,g:null,bus:null,dr:[]},PAT=['B..bB.t.B..bB.tt','B.b.B.b.tttBttBB'],BATTLE=['play','fx','fxauto','bloom','sp','scatter','fxres','wait'];
 function musTick(){const c=AC;if(!c||!(MU.on||MU.fo))return;const sd=60/76/2;while(MU.tm<c.currentTime+.5){if(MU.tm<c.currentTime)MU.tm=c.currentTime+.05;const p=PAT[MU.n%4==3?1:0][MU.st],t=MU.tm-c.currentTime,d=MU.bus;
   if(p=='B')drum(d,95,34,.9,.9,t);else if(p=='b')drum(d,85,36,.5,.38,t);else if(p=='t')drum(d,150,70,.35,.5,t);
   MU.tm+=sd;if(++MU.st>=16){MU.st=0;MU.n++}}}
@@ -1316,7 +1392,7 @@ function musicSync(){
     MU.dr=[55,82.4,110].map((f,i)=>{const o=c.createOscillator(),l=c.createBiquadFilter(),g=c.createGain();o.type='sawtooth';o.frequency.value=f;o.detune.value=i*5;l.type='lowpass';l.frequency.value=180;g.gain.value=.05;o.connect(l).connect(g).connect(MU.bus);o.start();return o});
     MU.tm=c.currentTime+.2;MU.st=0;MU.iv=setInterval(musTick,120)}
   else if(!want&&MU.on){MU.on=0;MU.fo=1;const q=MU.g.gain,t=c.currentTime;q.cancelScheduledValues(t);q.setValueAtTime(q.value,t);q.linearRampToValueAtTime(0,t+2);setTimeout(()=>{if(MU.on)return;MU.fo=0;clearInterval(MU.iv);MU.dr.forEach(o=>{try{o.stop()}catch(e){}})},2100)}}
-const SM={start:'coin',pick:'tick',dir:'tick',tsel:'tick',wel:'tick',trow:'place',trem:'tick',tconfirm:'reveal',go:'play',begin:'coin',bet:'tick',sell:'coin',dotrade:'coin',buyback:'coin',tp:'place',buysel:'tick',givesel:'tick',stok:'place',srow:'place',tok:'tick',fxnext:'tick',trade:'tick',nm:'tick',shop0:'tick',brk:'tick',leave:'tick',sskip:'tick',astok:'tick',arow:'place',aconf:'place',areset:'tick',adone:'tick',cutnext:'tick'};
+const SM={start:'coin',pick:'tick',dir:'tick',tsel:'tick',wel:'tick',trow:'place',trem:'tick',tconfirm:'reveal',go:'play',begin:'coin',bet:'tick',sell:'coin',dotrade:'coin',buyback:'coin',tp:'place',buysel:'tick',givesel:'tick',stok:'place',srow:'place',tok:'tick',fxnext:'tick',trade:'tick',nm:'tick',shop0:'tick',brk:'tick',leave:'tick',sskip:'tick',astok:'tick',arow:'place',aconf:'place',areset:'tick',adone:'tick',cutnext:'tick',scset:'tick',scdone:'reveal'};
 document.getElementById('mute').onclick=function(){MUTE=!MUTE;this.textContent='Sound: '+(MUTE?'off':'on');if(!MUTE)sfx('tick');musicSync()};
 const tip=document.getElementById('tip');let tt=null;
 const showTip=(el,x,y)=>{tip.textContent=el.dataset.tip;tip.style.display='block';const w=tip.offsetWidth,h=tip.offsetHeight;tip.style.left=Math.max(6,Math.min(innerWidth-w-6,x-w/2))+'px';tip.style.top=(y-h-16<6?y+22:y-h-16)+'px'};
@@ -1350,11 +1426,12 @@ $.onclick=e=>{
   else if(a=='sell')sell(+v);
   else if(a=='bust'){S.broke=true;S.ph='end';render()}
   else if(a=='tok'){commitRound();startFx()}
-  else if(a=='fxnext'){S.open={};if(S.r<2){if(S.award=='w')S.carry.push('neu');else if(S.award=='l'){S.duel?S.ocn++:S.ocarry.push('neu')}[...S.T.p,...S.T.o].forEach(t=>{t.nw=0;t.mvd=0});const gb=growT(S.T,S.allrows.length);S.bq=[];gb.forEach(g=>{if(g.s=='p'&&!S.duel)S.bq.push(g);else bloomApply(g.s,g.row,bloomAuto(g.s,g.row))});repaint();if(gb.length)setTimeout(()=>sfx('grow'),200);if(S.bq.length){S.ph='bloom';render()}else nextRound()}else if(S.duel)endDuel();else endMatch()}
-  else if(a=='stok'){const P=S.sp,g=P.list[P.i];if(g.k=='fire')spNext({sd:'p',k:'fire',at:g.at,id:+v});else if(g.k=='burn')spNext({sd:'p',k:'burn',at:g.at,idx:g.idx,id:+v});else{const t0=P.T.o.find(x=>x.id==+v);if(!(g.k=='ag'&&t0&&t0.e=='earth')){P.tok=+v;render()}}}
+  else if(a=='fxnext'){S.open={};if(S.r<2){if(S.award=='w')S.carry.push('neu');else if(S.award=='l'){S.duel?S.ocn++:S.ocarry.push('neu')}[...S.T.p,...S.T.o].forEach(t=>{t.nw=0;t.mvd=0});const gb=growT(S.T,S.allrows.length,S.allrows);S.bq=[];gb.forEach(g=>{if(g.s=='p'&&!S.duel){if(bdest('p',g).length)S.bq.push(g)}else bloomApply(g.s,g.row,bloomAuto(g.s,g.row,g.k),g.k)});repaint();if(gb.length)setTimeout(()=>sfx('grow'),200);if(S.bq.length){S.ph='bloom';render()}else nextRound()}else if(S.duel)endDuel();else endMatch()}
+  else if(a=='stok'){const P=S.sp,g=P.list[P.i];if(g.k=='fire'||g.k=='inc')spNext({sd:'p',k:g.k,at:g.at,id:+v});else if(g.k=='burn')spNext({sd:'p',k:'burn',at:g.at,idx:g.idx,id:+v});else{const t0=P.T.o.find(x=>x.id==+v);if(!(g.k=='ag'&&t0&&t0.e=='earth')){P.tok=+v;render()}}}
   else if(a=='sauto'){const P=S.sp;P.list=P.list.filter((q,j)=>j<P.i||(j>P.i&&q.k!='burn'));P.tok=null;if(P.i>=P.list.length)submitMoves(P.ch);else render()}
   else if(a=='srow'){const P=S.sp,g=P.list[P.i];
-    if(g.k=='earth')spNext({sd:'p',k:'earth',at:g.at,to:+v});
+    if(g.k=='ov'||g.k=='bl'){const to=+v;if(P.T.p.filter(t=>t.row==to).length<MAXT&&(g.k=='ov'||(to/3|0)==(g.at/3|0)))spNext({sd:'p',k:g.k,at:g.at,to})}
+    else if(g.k=='th'){const r=+v;if((r/3|0)==(g.at/3|0))spNext({sd:'p',k:'th',at:g.at,row:r})}
     else if(g.k=='wn'){const to=+v;if(Math.abs(to-g.at)==1&&(to/3|0)==(g.at/3|0))spNext({sd:'p',k:'wn',at:g.at,to})}
     else{const own=g.k=='am',t=(own?P.T.p:P.T.o).find(x=>x.id==P.tok);
       if(t&&t.row!=+v&&!(g.k=='ag'&&t.e=='earth')&&!forbid(S.allrows,own?'p':'o',t.e,+v))spNext({sd:'p',k:g.k,at:g.at,id:t.id,to:+v})}}
@@ -1362,7 +1439,11 @@ $.onclick=e=>{
   else if(a=='arow'){const A=S.sp.air;if(A.sel!=null){const t=S.sp.T.p.find(x=>x.id==A.sel),from=A.mv[t.id]!=null?A.mv[t.id]:t.row,to=+v,n=S.sp.T.p.filter(x=>(A.mv[x.id]!=null?A.mv[x.id]:x.row)==to).length;if(to!=from&&n<MAXT){if(to==t.row)delete A.mv[t.id];else A.mv[t.id]=to;A.sel=null}}render()}
   else if(a=='areset'){const A=S.sp.air;A.mv={};A.sel=null;render()}
   else if(a=='adone'){const P=S.sp;Object.entries(P.air.mv).forEach(([id,to])=>P.ch.push({sd:'p',k:'am',at:P.T.p.find(t=>t.id==+id).row,id:+id,to}));P.air=null;P.i=0;if(P.pre){S.sp=null;sendPlace(P.ch)}else if(!P.list.length)submitMoves(P.ch);else render()}
-  else if(a=='bloompick'){const g=S.bq[0],to=+v;if(g&&S.T.p.filter(t=>t.row==to).length<MAXT){S.bq.shift();bloomApply('p',g.row,to);repaint();if(S.bq.length)render();else nextRound()}}
+  else if(a=='bloompick'){const g=S.bq[0],to=+v;if(g&&bdest('p',g).includes(to)){S.bq.shift();bloomApply('p',g.row,to,g.k);repaint();if(S.bq.length)render();else nextRound()}}
+  else if(a=='scset'){const p=v.split(':');S.sc.to[p[0]]=+p[1];render()}
+  else if(a=='scdone'){const Q=S.sc,q=Q.cur;Q.thd.push({sd:'p',k:'thd',row:q.m.row,to:{...Q.to}});
+    const rq=pendingScatter([...Q.base,...Q.thd]).filter(x=>x.v=='p');
+    if(rq.length){scStart(rq[0]);render()}else if(S.duel)sendThd();else finish(resolveTok(S.allrows,S.fxp,[...Q.base,...Q.thd],null,0,1))}
   else if(a=='fxgo'){if(S.sp.list.length){S.ph='sp';render()}else submitMoves(S.sp.ch)}
   else if(a=='sskip')spNext(null);
   
