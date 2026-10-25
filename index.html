@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Converge – v0.28</title>
+<title>Converge – v0.29</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&family=UnifrakturCook:wght@700&family=VT323&display=swap">
 <style>
@@ -659,7 +659,7 @@ function autoMatch(da,db){
     const pp=aiPlace(raw,tp,'p',[],r==2),po=aiPlace(raw,to,'o',pp,r==2);
     car.p=tp.filter((_,i)=>!pp.some(t=>t.ti==i));car.o=to.filter((_,i)=>!po.some(t=>t.ti==i));
     pp.forEach(t=>t.id=uq++);po.forEach(t=>t.id=uq++);
-    rows=resolveTok(raw,{p:pp,o:po});BASE=rows.T;if(r<2)growT(BASE,raw.length,raw);if(r<2){const qa=roundRes(tally(raw.slice(r*3,r*3+3))),qb=roundRes(tally(rows.slice(r*3,r*3+3)));if(qa!=qb&&qb=='w')car.p.push('neu');else if(qa!=qb&&qb=='l')car.o.push('neu')}
+    rows=resolveTok(raw,{p:pp,o:po});BASE=rows.T;if(r<2)growT(BASE,raw.length,raw);if(r<2){const qb=roundRes(tally(rows.slice(r*3,r*3+3)));if(qb=='w')car.p.push('neu');else if(qb=='l')car.o.push('neu')}
   }
   BASE=null;
   let ra=0,rb=0,mp=0;
@@ -850,7 +850,7 @@ const ILL=[
 ILL.push(`<svg class="ill" viewBox="0 0 300 120">${[['fire','fire'],['fire','water'],['fire','water','earth']].map((tk,i)=>{const cx=50+i*100,n=tk.length;return cd(cx-24,6,3,'fire')+tk.map((e,k)=>tkn(cx+(k-(n-1)/2)*(n==3?26:28),90,e,n==3?10:11)).join('')+TX(cx,114,['tokens only','Blend +1','Blend +2'][i],12,i?'win':'mut')}).join('')}</svg>`);
 const howto=()=>`<h2>How a trial works</h2>
 <p class="rl">Every round follows the same loop:</p>
-${[['Play cards','A trial has 3 rounds of 3 slots. In each slot, you and your foe pick a card in secret and reveal together. The higher number wins the slot. Below: round I, slot 1 is done and slot 2 is being played.'],['Place tokens','Each element card also makes one token of its element (grey neutral cards make none). Put tokens on any card you have played. Each token adds +1. Keep extras for later. If your tokens turn the result of round I or II in your favour, you earn a neutral token (+1, no element) for the next round.'],['Review the effects','Both sides\u2019 tokens appear at once and their powers trigger: burns, shields, moves, growth. Slots can flip, so nothing is final yet.'],['Repeat','After 3 rounds, whoever won more rounds wins the trial and the pot.']].map(([t,p],i)=>`<div class="stp4"><div class="sn">${i+1}</div><div class="sb"><b>${t}</b><p>${p}</p>${ILL[i]}</div></div>`).join('')}
+${[['Play cards','A trial has 3 rounds of 3 slots. In each slot, you and your foe pick a card in secret and reveal together. The higher number wins the slot. Below: round I, slot 1 is done and slot 2 is being played.'],['Place tokens','Each element card also makes one token of its element (grey neutral cards make none). Put tokens on any card you have played. Each token adds +1. Keep extras for later. Once tokens are counted, the winner of round I or II earns a neutral token (+1, no element) to place in the next round. A drawn round gives none, and neither does round III.'],['Review the effects','Both sides\u2019 tokens appear at once and their powers trigger: burns, shields, moves, growth. Slots can flip, so nothing is final yet.'],['Repeat','After 3 rounds, whoever won more rounds wins the trial and the pot.']].map(([t,p],i)=>`<div class="stp4"><div class="sn">${i+1}</div><div class="sb"><b>${t}</b><p>${p}</p>${ILL[i]}</div></div>`).join('')}
 <h2>Card types</h2>
 <div class="ctp"><div>${TI.atk} <b>Attack</b><br>wins ties</div><div>${TI.def} <b>Defense</b><br>a loss by 1 becomes a draw</div><div>${TI.pow} <b>Power</b><br>just a big number</div><div>${TI.mod} <b>Modifier</b><br>special effect</div></div>
 <h2>Blend</h2>
@@ -911,7 +911,7 @@ let S={ph:'home'};
 const TT={atk:'Attack: wins ties.',def:'Defense: turns a loss by exactly 1 into a draw.',pow:'Power: no special effect, just a high number.'};
 const MT={shift:c=>`Shift: adds +${ef(c)} to the ${c.dir<0?'previous slot':c.dir>0?'next slot':'previous or next slot (you choose when playing)'}.`,transmute:()=>"Transmute: this card's token can be any element.",swap:()=>'Swap: trades places with your previous card.',disrupt:c=>`Disrupt: lowers the opposing card by ${ef(c)}.`,spark:()=>'Spark: gives you a free wild token.',anchor:()=>'Anchor: your foe cannot burn or move tokens on this card.',kindle:()=>'Kindle: each token on this card gives +2.'};
 const cardTip=c=>`${c.e=='neu'?'Neutral':cap(c.e)}, power ${base(c)}. ${c.t=='mod'?MT[c.mv](c):TT[c.t]} ${c.e=='neu'?'Makes no token.':'Makes 1 '+c.e+' token.'}`;
-const TK={fire:'Fire token: +1. A new one burns an enemy token of your choice on the same slot (at most one burn per card per round). 3 on a card: Incendio burns any enemy token in the same round. 4: Inferno burns any enemy token on the board.',water:'Water token: +1. Blocks one enemy burn on its slot, once (it does not stop Gust). Three on a card give +1 to both neighbouring slots. 4 on a card: Tide, which also blocks Gust and turns the opposing card neutral (number only).',earth:'Earth token: +1. Two on a card grow one extra token each round, up to 4 tokens on the card. Gust cannot move it. 3 on a card: Bloom grows a token on a card of the same round. 4: Overgrowth grows a token on any card.',air:'Air token: +1. Once placed, it can move to another card once per round, starting the round after it is placed. Two on a card: Gust moves an enemy fire, water, air or neutral token (not earth) and costs no air token. Only Anchor, Prism or a Tide stop it. 4 on a card: Thunder scatters the tokens of an enemy card of the same round (only a Prism stops it).',wild:'Wild token: choose its element when you place it.',neu:'Neutral token: +1, no element and no effect. Earned when your tokens turn the outcome of round I or II in your favour. Can be burned.'};
+const TK={fire:'Fire token: +1. A new one burns an enemy token of your choice on the same slot (at most one burn per card per round). 3 on a card: Incendio burns any enemy token in the same round. 4: Inferno burns any enemy token on the board.',water:'Water token: +1. Blocks one enemy burn on its slot, once (it does not stop Gust). Three on a card give +1 to both neighbouring slots. 4 on a card: Tide, which also blocks Gust and turns the opposing card neutral (number only).',earth:'Earth token: +1. Two on a card grow one extra token each round, up to 4 tokens on the card. Gust cannot move it. 3 on a card: Bloom grows a token on a card of the same round. 4: Overgrowth grows a token on any card.',air:'Air token: +1. Once placed, it can move to another card once per round, starting the round after it is placed. Two on a card: Gust moves an enemy fire, water, air or neutral token (not earth) and costs no air token. Only Anchor, Prism or a Tide stop it. 4 on a card: Thunder scatters the tokens of an enemy card of the same round (only a Prism stops it).',wild:'Wild token: choose its element when you place it.',neu:'Neutral token: +1, no element and no effect. Earned by winning round I or II once tokens are counted. Can be burned.'};
 const tokTip=e=>(TK[e]||'')+' Tokens of 2 or 3 different elements on one card give +1 or +2 (Blend). All 4: Prism.';
 const NM=c=>c.t=='mod'?cap(c.mv):SN[c.t];
 const face=c=>`<i class="rn">${IC[c.e]}</i><i class="art">${AI[c.e]?art(c.e,'wm'):''}<b>${base(c)}</b></i><i class="bn">${tyI(c)}<em>${NM(c)}</em></i>`;
@@ -946,6 +946,13 @@ const rowH=(r,pk,sl,tks,ac,ts)=>(r.idx!=null&&((r.idx/3|0)<S.r||S.allc)&&!(S.fr&
 const RN={w:'won',l:'lost',d:'draw'};
 const wasH=r=>!r.was?'':`${r.was.x!=r.x||r.was.y!=r.y?`<div class="was">${r.was.x} vs ${r.was.y}</div>`:''}${r.was.r!=r.r?`<div class="flipb fb${r.r}">${RN[r.was.r]} ➜ ${RN[r.r]}</div>`:''}`;
 const wcl=r=>r.was?(r.was.r!=r.r?' flipd':' scd'):'';
+const awardH=()=>{const s=S,fo=s.duel?'Your opponent':'Your foe';if(s.r>=2)return '<p class="m">No neutral token is awarded after the final round.</p>';
+  const t=tally(s.view.slice(s.r*3,s.r*3+3)),sc=t.w==t.l?`slots ${t.w}–${t.l}, power ${t.pt}–${t.ot}`:`${t.w}–${t.l} in slots`,rn=rom(s.r+1),nx=rom(s.r+2);
+  if(s.award=='w')return `<div class="chgs"><b class="w">${IC.neu} You won Round ${rn} (${sc}).</b><div class="ev p">You earn an extra neutral token (+1) to place in Round ${nx}.</div></div>`;
+  if(s.award=='l')return `<div class="chgs"><b class="l">${IC.neu} ${fo} won Round ${rn} (${sc}).</b><div class="ev o">${fo} earns an extra neutral token (+1) for Round ${nx}. You get none.</div></div>`;
+  return `<div class="chgs"><b>Round ${rn} is a draw (${sc}).</b><div class="m">Nobody earns a neutral token.</div></div>`};
+const neuNote=()=>{const a=S.neuAw;if(!a||S.r!=a.r+1)return '';const rn=rom(a.r+1),fo=S.duel?'Your opponent':'Your foe';
+  return a.w=='w'?`<p class="w"><b>${IC.neu} You won Round ${rn}, so your tray includes an extra neutral token.</b></p>`:a.w=='l'?`<p class="l"><b>${IC.neu} ${fo} won Round ${rn}</b> and has an extra neutral token this round. You have none.</p>`:`<p class="m">Round ${rn} was a draw: no neutral token for either side.</p>`};
 const chgSum=()=>{const V=S.view,fl=V.map((r,i)=>[r,i]).filter(([r])=>r.was&&r.was.r!=r.r),sc=V.filter(r=>r.was&&r.was.r==r.r).length,pv=rs=>rs.map(r=>r.was?{r:r.was.r,x:r.was.x,y:r.was.y}:r);
   const rr=[0,1,2].filter(k=>V.length>=k*3+3).map(k=>[k,roundRes(tally(pv(V.slice(k*3,k*3+3)))),roundRes(tally(V.slice(k*3,k*3+3)))]).filter(([k,a,b])=>a!=b);
   return `<div class="chgs"><b>Changed by tokens</b>${rr.map(([k,a,b])=>`<div class="ev ${b=='w'?'p':b=='l'?'o':''}"><b>Round ${rom(k+1)}:</b> ${RN[a]} ➜ ${RN[b]}</div>`).join('')}${fl.length?fl.map(([r,i])=>`<div class="ev ${r.r=='w'?'p':r.r=='l'?'o':''}">Round ${rom((i/3|0)+1)}, slot ${i%3+1}: ${RN[r.was.r]} ➜ ${RN[r.r]} (${r.was.x}–${r.was.y} ➜ ${r.x}–${r.y})</div>`).join(''):'<div class="m">No clash changed its outcome.</div>'}${sc?`<div class="m">${sc} other clash${sc>1?'es':''} changed score only (dashed outline).</div>`:''}</div>`};
@@ -1005,7 +1012,7 @@ function finalize(mv){
   if(rq.length){S.sc={base:R0.mv,thd:[],cur:null,to:{}};scStart(rq[0]);S.sp=null;S.ph='scatter';render();return}
   finish(R0)}
 function finish(res){
-  const prev=S.view;res.forEach((r,i)=>{const p=prev[i];if(p&&(p.x!=r.x||p.y!=r.y||p.r!=r.r))r.was={x:p.x,y:p.y,r:p.r}});S.T=res.T;S.view=res;{const a=roundRes(tally(S.allrows.slice(S.r*3,S.r*3+3))),b=roundRes(tally(res.slice(S.r*3,S.r*3+3)));S.award=S.r<2&&a!=b&&b!='d'?b:null}
+  const prev=S.view;res.forEach((r,i)=>{const p=prev[i];if(p&&(p.x!=r.x||p.y!=r.y||p.r!=r.r))r.was={x:p.x,y:p.y,r:p.r}});S.T=res.T;S.view=res;{const b=roundRes(tally(res.slice(S.r*3,S.r*3+3)));S.award=S.r<2&&b!='d'?b:null}
   S.sp=null;S.sc=null;S.open={};S.ph='fxres';render();
   const txt=res.flatMap(r=>r.fn).join(' ');let d=250;
   [['burned','burn'],['blocks','ward'],['grew','grow'],['Bloom','grow'],['moved','air'],['scattered','air'],['doubled','syn']].forEach(([k,n])=>{if(txt.includes(k)){setTimeout(()=>sfx(n),d);d+=280}});
@@ -1020,7 +1027,7 @@ function newMatch(){
 }
 function beginMatch(){
   if(S.coins<1){S.ph='sell';render();return}
-  S.allrows=[];S.carry=[];S.ocarry=[];S.T={p:[],o:[]};S.view=[];S.tid=0;S.bet=Math.max(1,Math.min(S.bet,S.coins));S.c0=S.coins;S.coins-=S.bet;S.pot=2*S.bet;S.played=[];S.reserve=[];S.r=0;S.rw=0;S.rl=0;S.mp=0;
+  S.allrows=[];S.carry=[];S.ocarry=[];S.neuAw=null;S.T={p:[],o:[]};S.view=[];S.tid=0;S.bet=Math.max(1,Math.min(S.bet,S.coins));S.c0=S.coins;S.coins-=S.bet;S.pot=2*S.bet;S.played=[];S.reserve=[];S.r=0;S.rw=0;S.rl=0;S.mp=0;
   S.pile=[...S.deck].sort(()=>Math.random()-.5);S.hand=S.pile.splice(0,4);
   S.opile=[...S.opp].sort(()=>Math.random()-.5);S.ohand=S.opile.splice(0,4);S.oreserve=[];
   newRound();S.ph='play';render();
@@ -1146,7 +1153,7 @@ function sealSend(k,d){S.expect=k;if(NET.role=='host')sealPut(k,'h',d);else netS
 function sealPut(k,w,d){const s=SEAL[k]=SEAL[k]||{};if(s[w]!==undefined)return;s[w]=d;if(s.h!==undefined&&s.g!==undefined){netSend({t:'rev',k,h:s.h,g:s.g});applyRev(k,s.h,s.g)}}
 const cardOut=c=>({id:c.id,e:c.e,t:c.t,p:c.p,mv:c.mv,dir:c.dir});
 const cleanCard=o=>{const t=TY.includes(o.t)?o.t:'pow',e=(E.includes(o.e)||o.e=='neu')?o.e:'neu',c={id:o.id,e,t,p:Math.max(1,Math.min(5,o.p|0)),dir:o.dir<0?-1:1};if(t=='mod')c.mv=MV.includes(o.mv)?o.mv:'shift';return c};
-const cleanPl=(a,max)=>{const out=[],per={};(Array.isArray(a)?a:[]).forEach(o=>{if(!o||out.length>=max||!E.includes(o.e))return;const row=o.row|0;if(row<0||row>=S.allrows.length)return;if(per[row]==null)per[row]=S.T.o.filter(t=>t.row==row).length;if(per[row]>=MAXT)return;per[row]++;out.push({id:+o.id,e:o.e,row})});return out};
+const cleanPl=(a,max)=>{const out=[],per={};(Array.isArray(a)?a:[]).forEach(o=>{if(!o||out.length>=max||!(E.includes(o.e)||o.e=='neu'))return;const row=o.row|0;if(row<0||row>=S.allrows.length)return;if(per[row]==null)per[row]=S.T.o.filter(t=>t.row==row).length;if(per[row]>=MAXT)return;per[row]++;out.push({id:+o.id,e:o.e,row})});return out};
 const cleanMv=a=>(Array.isArray(a)?a:[]).slice(0,40).filter(m=>m&&['fire','inc','bl','ov','th','am','ag','burn','wn'].includes(m.k)).map(m=>({sd:'o',k:m.k,at:m.at|0,id:m.id,to:m.to,idx:m.idx|0,row:m.row|0}))
 const cleanThd=a=>(Array.isArray(a)?a:[]).slice(0,8).filter(m=>m&&m.to&&typeof m.to=='object').map(m=>({sd:'o',k:'thd',row:m.row|0,to:Object.fromEntries(Object.entries(m.to).slice(0,8).map(([k,v])=>[k,v|0]))}));;
 function applyRev(k,mine,theirs){
@@ -1185,7 +1192,7 @@ function customDeck0(dk){
 }
 function startDuel(){CANON=NET.role=='host'?'p':'o';S={ph:'play',duel:1,dk:NET.dk,foe:NET.odk};beginDuel()}
 function beginDuel(){
-  Object.assign(S,{deck:customDeck(S.dk),allrows:[],carry:[],ocn:0,T:{p:[],o:[]},view:[],tid:0,played:[],r:0,rw:0,rl:0,mp:0,open:{},rq:0,orq:0,expect:null,fresh:0,err:'',win:false,dr:false});
+  Object.assign(S,{deck:customDeck(S.dk),allrows:[],carry:[],neuAw:null,ocn:0,T:{p:[],o:[]},view:[],tid:0,played:[],r:0,rw:0,rl:0,mp:0,open:{},rq:0,orq:0,expect:null,fresh:0,err:'',win:false,dr:false});
   for(const k in SEAL)delete SEAL[k];
   S.pile=[...S.deck].sort(()=>Math.random()-.5);S.hand=S.pile.splice(0,4);
   newRound();S.ph='play';render();
@@ -1283,7 +1290,7 @@ function render(){S.fr=null;S.allc=0;
     const F=s.fx,free=freeTok(),sel=free.find(t=>t.id==F.sel);
     const chip=t=>`<button data-tip="${tokTip(t.e)}" class="tok${t.id==F.sel?' sel':''}" data-a="tsel" data-v="${t.id}">${tokI(t.e)}</button>`;
     const wild=sel&&sel.e=='wild'?`<div class="pick dirs" style="grid-template-columns:repeat(4,1fr)">${E.map(e=>`<button data-a="wel" data-v="${e}" class="${F.wel==e?'on':''}">${IC[e]}</button>`).join('')}</div><p class="m">Wild token: choose its element, then tap a card.</p>`:'';
-    $.innerHTML=`${head}<h1>Place Your Tokens</h1><p class="m">1. Tap a token below. 2. Tap a card to put it there. Tap a placed token to take it back. Each token is +1. Unplaced tokens carry over to the next round (they are lost after round III). Your foe places in secret too, and both reveal when you confirm. Any token can go on any card. One of each element on one card makes a Prism.</p>
+    $.innerHTML=`${head}<h1>Place Your Tokens</h1>${neuNote()}<p class="m">1. Tap a token below. 2. Tap a card to put it there. Tap a placed token to take it back. Each token is +1. Unplaced tokens carry over to the next round (they are lost after round III). Your foe places in secret too, and both reveal when you confirm. Any token can go on any card. One of each element on one card makes a Prism.</p>
     ${F.info?`<p class="l">${F.info}</p>`:''}<div class="tray">${free.length?free.map(chip).join(''):'<span class="m">All tokens placed.</span>'}</div>${wild}
     ${s.r<2?`<h2 class="sm">Your hand for round ${rom(s.r+2)}</h2><div class="hand" style="grid-template-columns:repeat(4,68px);justify-content:center;gap:8px;padding:2px 0 10px">${sortC([...s.hand]).map(mini).join('')}</div>`:''}
     ${grp((r,i)=>rowH(r,i,false,F.place.filter(p=>p.row==i)))}
@@ -1318,7 +1325,7 @@ function render(){S.fr=null;S.allc=0;
     <button class="btn" data-a="scdone">Confirm</button>${grp(r=>rowH(r))}`;return;
   }
   if(s.ph=='fxres'){
-    $.innerHTML=`${head}<h1>The Reveal</h1><p class="m">${s.fx.info} Nothing is final until the match ends. Tap a clash to see how its score was built. Gold outline: the clash's outcome changed. Dashed outline: only its score changed.</p>${chgSum()}${s.award=='w'?'<p class="w"><b>Your tokens turned this round.</b> You earn a neutral token (+1) for next round.</p>':s.award=='l'?'<p class="l"><b>Their tokens turned this round.</b> Your foe earns a neutral token for next round.</p>':''}${grp(r=>rowH(r))}<button class="btn" data-a="fxnext">${s.r<2?'Next round':'See the result'}</button>`;return;
+    $.innerHTML=`${head}<h1>The Reveal</h1><p class="m">${s.fx.info} Nothing is final until the match ends. Tap a clash to see how its score was built. Gold outline: the clash's outcome changed. Dashed outline: only its score changed.</p>${chgSum()}${awardH()}${grp(r=>rowH(r))}<button class="btn" data-a="fxnext">${s.r<2?'Next round':'See the result'}</button>`;return;
   }
   if(s.ph=='play'){
     let body;
@@ -1426,7 +1433,7 @@ $.onclick=e=>{
   else if(a=='sell')sell(+v);
   else if(a=='bust'){S.broke=true;S.ph='end';render()}
   else if(a=='tok'){commitRound();startFx()}
-  else if(a=='fxnext'){S.open={};if(S.r<2){if(S.award=='w')S.carry.push('neu');else if(S.award=='l'){S.duel?S.ocn++:S.ocarry.push('neu')}[...S.T.p,...S.T.o].forEach(t=>{t.nw=0;t.mvd=0});const gb=growT(S.T,S.allrows.length,S.allrows);S.bq=[];gb.forEach(g=>{if(g.s=='p'&&!S.duel){if(bdest('p',g).length)S.bq.push(g)}else bloomApply(g.s,g.row,bloomAuto(g.s,g.row,g.k),g.k)});repaint();if(gb.length)setTimeout(()=>sfx('grow'),200);if(S.bq.length){S.ph='bloom';render()}else nextRound()}else if(S.duel)endDuel();else endMatch()}
+  else if(a=='fxnext'){S.open={};if(S.r<2){S.neuAw={r:S.r,w:S.award||'d'};if(S.award=='w')S.carry.push('neu');else if(S.award=='l'){S.duel?S.ocn++:S.ocarry.push('neu')}[...S.T.p,...S.T.o].forEach(t=>{t.nw=0;t.mvd=0});const gb=growT(S.T,S.allrows.length,S.allrows);S.bq=[];gb.forEach(g=>{if(g.s=='p'&&!S.duel){if(bdest('p',g).length)S.bq.push(g)}else bloomApply(g.s,g.row,bloomAuto(g.s,g.row,g.k),g.k)});repaint();if(gb.length)setTimeout(()=>sfx('grow'),200);if(S.bq.length){S.ph='bloom';render()}else nextRound()}else if(S.duel)endDuel();else endMatch()}
   else if(a=='stok'){const P=S.sp,g=P.list[P.i];if(g.k=='fire'||g.k=='inc')spNext({sd:'p',k:g.k,at:g.at,id:+v});else if(g.k=='burn')spNext({sd:'p',k:'burn',at:g.at,idx:g.idx,id:+v});else{const t0=P.T.o.find(x=>x.id==+v);if(!(g.k=='ag'&&t0&&t0.e=='earth')){P.tok=+v;render()}}}
   else if(a=='sauto'){const P=S.sp;P.list=P.list.filter((q,j)=>j<P.i||(j>P.i&&q.k!='burn'));P.tok=null;if(P.i>=P.list.length)submitMoves(P.ch);else render()}
   else if(a=='srow'){const P=S.sp,g=P.list[P.i];
