@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Converge – v0.29</title>
+<title>Converge – v0.32</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&family=UnifrakturCook:wght@700&family=VT323&display=swap">
 <style>
@@ -232,6 +232,7 @@ button.kd:not(.sel):not(.gone):hover{transform:translateY(-4px)}
 #app .chgs{margin:8px 0;padding:8px 10px;border:2px solid var(--gold);border-radius:8px;background:var(--card)}
 #app .chgs .ev{margin:3px 0}
 
+#app .bloomsel .clash.pickable{outline:3px dashed var(--gold);outline-offset:2px;box-shadow:0 0 12px 2px var(--gold)}
 /* ===== v0.12: online duel ===== */
 #app input.jc{width:100%;font:700 26px Cinzel,Georgia,serif;letter-spacing:.35em;text-align:center;text-transform:uppercase;padding:10px 6px;border:3px solid var(--bd);border-radius:6px;background:var(--card);color:var(--ink);margin-top:12px}
 #app .rcode{font:700 42px Cinzel,Georgia,serif;letter-spacing:.3em;text-align:center;margin:12px 0;color:var(--ink);text-shadow:0 2px 0 var(--gold)}
@@ -516,7 +517,7 @@ function settle(rows0,T0,mv){
   mv.filter(m=>m.k=='inc'&&cn(m.sd,'fire',m.at)==cardThr(rows0,m.sd,m.at,'fire',3)&&!T[m.sd].some(t=>t.e=='fire'&&t.row==m.at&&t.cu)&&T[m.sd].some(t=>t.e=='fire'&&t.row==m.at&&t.f)).forEach(m=>{const e=NE[m.sd],t=T[e].find(x=>x.id==m.id);if(!t||(t.row/3|0)!=(m.at/3|0))return;
     const f=T[m.sd].find(x=>x.e=='fire'&&x.row==m.at);if(!f||cn(m.sd,'fire',m.at)!=cardThr(rows0,m.sd,m.at,'fire',3))return;f.cu=1;burn(m.sd,e,t.row,t)});
   mv.filter(m=>(m.k=='ov'||m.k=='bl')&&(m.k=='ov'?cn(m.sd,'earth',m.at)>=cardThr(rows0,m.sd,m.at,'earth',4)&&!T[m.sd].some(t=>t.e=='earth'&&t.row==m.at&&t.bu):cn(m.sd,'earth',m.at)==cardThr(rows0,m.sd,m.at,'earth',3)&&!T[m.sd].some(t=>t.e=='earth'&&t.row==m.at&&t.b3)&&(m.to/3|0)==(m.at/3|0))&&!forbid(rows0,m.sd,'earth',m.to)&&T[m.sd].filter(t=>t.row==m.to).length<MAXT).forEach(m=>{
-    T[m.sd].find(t=>t.e=='earth'&&t.row==m.at)[m.k=='ov'?'bu':'b3']=1;T[m.sd].push({e:'earth',row:m.to,id:gid(m.sd,m.at,m.k=='ov'?2:3),nw:1,x:1,kind:'grow'});ev[m.to].push(`${IC.earth} ${m.k=='ov'?'Overgrowth':'Bloom'} ${who(m.sd)}`)});
+    {const q=T[m.sd].find(t=>t.e=='earth'&&t.row==m.at);q[m.k=='ov'?'bu':'b3']=1;if(m.k=='bl')q.rg=1}T[m.sd].push({e:'earth',row:m.to,id:gid(m.sd,m.at,m.k=='ov'?2:3),nw:1,x:1,kind:'grow',rg:m.k=='bl'?1:0});ev[m.to].push(`${IC.earth} ${m.k=='ov'?'Overgrowth':'Bloom'} ${who(m.sd)}`)});
   mv.filter(m=>m.k=='wn').forEach(m=>{const w=T[m.sd].find(t=>t.e=='water'&&t.row==m.at);if(w&&m.at%3==1&&cn(m.sd,'water',m.at)==2&&(m.to==m.at-1||m.to==m.at+1))w.wn=m.to});
   [...T.p,...T.o].forEach(t=>{t.arm=t.e=='air'&&(t.f||t.arm)?1:0;t.f=0});
   const R=paint(rows0,T,ev,gone);R.T=T;return R;
@@ -644,7 +645,10 @@ function tradeOrder(N,k=4){
   }
   return o;
 }
-function growT(T,n,R){const out=[];['p','o'].forEach(s=>{for(let i=0;i<n;i++){const c=T[s].filter(t=>t.row==i),ne=c.filter(t=>t.e=='earth').length;if(ne>=cardThr(R,s,i,'earth',2)&&c.length<MAXT){T[s].push({e:'earth',row:i,id:gid(s,i,1)+c.length*.01,g:1,nw:1,kind:'grow'});if(ne+1>=cardThr(R,s,i,'earth',4)){if(!c.some(t=>t.e=='earth'&&t.bu))out.push({s,row:i,k:4})}else if(ne+1==cardThr(R,s,i,'earth',3)&&!c.some(t=>t.e=='earth'&&t.b3))out.push({s,row:i,k:3})}}});return out}
+function growT(T,n,R){/* Roots: +1 earth token per round on a card with 2+ earth. A card grows at most once per round (Roots, Bloom or Overgrowth, whichever came first) and Roots never chains into Bloom/Overgrowth. */
+  ['p','o'].forEach(s=>{for(let i=0;i<n;i++){const c=T[s].filter(t=>t.row==i),ne=c.filter(t=>t.e=='earth').length;
+    if(ne>=cardThr(R,s,i,'earth',2)&&c.length<MAXT&&!c.some(t=>t.rg))T[s].push({e:'earth',row:i,id:gid(s,i,1)+c.length*.01,g:1,nw:1,kind:'grow'})}});
+  ['p','o'].forEach(s=>T[s].forEach(t=>{delete t.rg}));return []}
 const repaint=()=>{S.view=paint(S.allrows,{p:S.T.p.map(t=>({...t})),o:S.T.o.map(t=>({...t}))})};
 const nextRound=()=>{S.r++;newRound();S.ph='play';render()};
 function bloomApply(s,from,to,k){k=k||4;if(to<0)return;const fl=k==3?'b3':'bu',w=S.T[s].find(t=>t.e=='earth'&&t.row==from&&!t[fl]);if(!w||S.T[s].filter(t=>t.row==to).length>=MAXT||(k==3&&(to/3|0)!=(from/3|0)))return;w[fl]=1;S.T[s].push({e:'earth',row:to,id:gid(s,from,k==3?3:2),nw:1,x:1,kind:'grow'})}
@@ -889,7 +893,7 @@ water:{tag:'Defense. Turns near-losses into draws and shields your cards.',
  syn:[sWE,sEW,PRI('water',null)]},
 earth:{tag:'Power. Big numbers and tokens that multiply and cannot be pushed.',
  deck:['7 Power cards (2 to 4): the biggest plain numbers','3 each of Attack, Defense and Modifier','Modifiers: Swap, Disrupt, Spark','Plus 4 neutral cards (no token, bigger numbers)'],
- tok:[['Roots','2 earth tokens',['earth',['earth','earth'],['g','earth']],'At the start of each round, the card grows 1 more earth token, up to 4 tokens.'],['Immovable','1 earth token',['earth',['earth'],['x','air']],'Gust cannot move earth tokens.'],['Bloom','3 earth tokens',['earth',['earth','earth','earth'],['g','earth']],'Once per card: grows an earth token on any card of the same round with room.'],['Overgrowth','4 earth tokens',['earth',R4('earth'),['g','earth']],'Once per card: grows an earth token on any card on the board with room. With 4 tokens, Overgrowth replaces Bloom.']],
+ tok:[['Roots','2 earth tokens',['earth',['earth','earth'],['g','earth']],'At the start of each round, the card grows 1 more earth token, up to 4 tokens. A card grows at most once per round: if Bloom already grew a token on it, Roots waits. Overgrowth is the exception and always grows, even on a card Roots also grows. Roots never triggers Bloom or Overgrowth.'],['Immovable','1 earth token',['earth',['earth'],['x','air']],'Gust cannot move earth tokens.'],['Bloom','3 earth tokens',['earth',['earth','earth','earth'],['g','earth']],'Once per card: grows an earth token on any card of the same round with room.'],['Overgrowth','4 earth tokens',['earth',R4('earth'),['g','earth']],'Once per card: grows an earth token on any card on the board with room. With 4 tokens, Overgrowth replaces Bloom.']],
  syn:[sEW,sWE,PRI('earth','Spark cards')]},
 air:{tag:'Modifiers. Shifts, swaps and tokens that slip where they hurt most.',
  deck:['7 Modifier cards with every effect: Shift, Transmute, Swap, Disrupt, Spark, Anchor, Kindle','3 each of Attack, Defense and Power','Plus 4 neutral cards (no token, bigger numbers)'],
@@ -911,7 +915,7 @@ let S={ph:'home'};
 const TT={atk:'Attack: wins ties.',def:'Defense: turns a loss by exactly 1 into a draw.',pow:'Power: no special effect, just a high number.'};
 const MT={shift:c=>`Shift: adds +${ef(c)} to the ${c.dir<0?'previous slot':c.dir>0?'next slot':'previous or next slot (you choose when playing)'}.`,transmute:()=>"Transmute: this card's token can be any element.",swap:()=>'Swap: trades places with your previous card.',disrupt:c=>`Disrupt: lowers the opposing card by ${ef(c)}.`,spark:()=>'Spark: gives you a free wild token.',anchor:()=>'Anchor: your foe cannot burn or move tokens on this card.',kindle:()=>'Kindle: each token on this card gives +2.'};
 const cardTip=c=>`${c.e=='neu'?'Neutral':cap(c.e)}, power ${base(c)}. ${c.t=='mod'?MT[c.mv](c):TT[c.t]} ${c.e=='neu'?'Makes no token.':'Makes 1 '+c.e+' token.'}`;
-const TK={fire:'Fire token: +1. A new one burns an enemy token of your choice on the same slot (at most one burn per card per round). 3 on a card: Incendio burns any enemy token in the same round. 4: Inferno burns any enemy token on the board.',water:'Water token: +1. Blocks one enemy burn on its slot, once (it does not stop Gust). Three on a card give +1 to both neighbouring slots. 4 on a card: Tide, which also blocks Gust and turns the opposing card neutral (number only).',earth:'Earth token: +1. Two on a card grow one extra token each round, up to 4 tokens on the card. Gust cannot move it. 3 on a card: Bloom grows a token on a card of the same round. 4: Overgrowth grows a token on any card.',air:'Air token: +1. Once placed, it can move to another card once per round, starting the round after it is placed. Two on a card: Gust moves an enemy fire, water, air or neutral token (not earth) and costs no air token. Only Anchor, Prism or a Tide stop it. 4 on a card: Thunder scatters the tokens of an enemy card of the same round (only a Prism stops it).',wild:'Wild token: choose its element when you place it.',neu:'Neutral token: +1, no element and no effect. Earned by winning round I or II once tokens are counted. Can be burned.'};
+const TK={fire:'Fire token: +1. A new one burns an enemy token of your choice on the same slot (at most one burn per card per round). 3 on a card: Incendio burns any enemy token in the same round. 4: Inferno burns any enemy token on the board.',water:'Water token: +1. Blocks one enemy burn on its slot, once (it does not stop Gust). Three on a card give +1 to both neighbouring slots. 4 on a card: Tide, which also blocks Gust and turns the opposing card neutral (number only).',earth:'Earth token: +1. Two on a card grow one extra token each round (at most one growth per card per round, except Overgrowth), up to 4 tokens on the card. Gust cannot move it. 3 on a card: Bloom grows a token on a card of the same round. 4: Overgrowth grows a token on any card.',air:'Air token: +1. Once placed, it can move to another card once per round, starting the round after it is placed. Two on a card: Gust moves an enemy fire, water, air or neutral token (not earth) and costs no air token. Only Anchor, Prism or a Tide stop it. 4 on a card: Thunder scatters the tokens of an enemy card of the same round (only a Prism stops it).',wild:'Wild token: choose its element when you place it.',neu:'Neutral token: +1, no element and no effect. Earned by winning round I or II once tokens are counted. Can be burned.'};
 const tokTip=e=>(TK[e]||'')+' Tokens of 2 or 3 different elements on one card give +1 or +2 (Blend). All 4: Prism.';
 const NM=c=>c.t=='mod'?cap(c.mv):SN[c.t];
 const face=c=>`<i class="rn">${IC[c.e]}</i><i class="art">${AI[c.e]?art(c.e,'wm'):''}<b>${base(c)}</b></i><i class="bn">${tyI(c)}<em>${NM(c)}</em></i>`;
@@ -1285,7 +1289,7 @@ function render(){S.fr=null;S.allc=0;
   if(s.ph=='fxauto'){const n=s.sp.list.length;
     $.innerHTML=`${head}<h1>Token Effects</h1><div class="chgs"><p class="m" style="margin-top:0">${s.fx.info}</p><b>Automatic effects</b>${s.aut.length?s.aut.map(x=>`<div class="ev">${x}</div>`).join(''):'<div class="m">None this round.</div>'}<p class="m">${n?`Next you choose ${n} action${n>1?'s':''} (burns, moves, growth, water bonus).`:'No actions to choose this round.'}</p><button class="btn" data-a="fxgo" style="margin-top:6px">${n?'Choose actions':'Continue'}</button></div>${grp(r=>rowH(r),s.autrows)}`;return}
   if(s.ph=='bloom'){const g=s.bq[0];
-    $.innerHTML=`${head}<h1>${IC.earth} ${g.k==3?'Bloom':'Overgrowth'}</h1><p class="m">Your earth card in round ${rom((g.row/3|0)+1)}, slot ${g.row%3+1} grew its ${g.k==3?'3rd':'4th'} earth token. Tap ${g.k==3?'a card of this round':'any card'} to grow one more earth token there (4 tokens max per card).${s.bq.length>1?' '+s.bq.length+' blooms to place.':''}</p>${grp((r,i)=>rowH(r,bdest('p',g).includes(i)?i:null,false,[],['bloompick','bloompick']))}`;return}
+    $.innerHTML=`${head}<h1>${IC.earth} ${g.k==3?'Bloom':'Overgrowth'}</h1><p class="m">Your earth card in round ${rom((g.row/3|0)+1)}, slot ${g.row%3+1} grew its ${g.k==3?'3rd':'4th'} earth token. Tap one of the outlined clashes below (${bdest('p',g).map(i=>`round ${rom((i/3|0)+1)}, slot ${i%3+1}`).join('; ')||'none free'}) to grow one more earth token there (4 tokens max per card), or let the game choose.${s.bq.length>1?' '+s.bq.length+' blooms to place.':''}</p><button class="btn" data-a="bloomauto">Let the game choose</button><div class="bloomsel">${grp((r,i)=>rowH(r,bdest('p',g).includes(i)?i:null,false,[],['bloompick','bloompick']))}</div>`;return}
   if(s.ph=='fx'){
     const F=s.fx,free=freeTok(),sel=free.find(t=>t.id==F.sel);
     const chip=t=>`<button data-tip="${tokTip(t.e)}" class="tok${t.id==F.sel?' sel':''}" data-a="tsel" data-v="${t.id}">${tokI(t.e)}</button>`;
@@ -1446,6 +1450,7 @@ $.onclick=e=>{
   else if(a=='arow'){const A=S.sp.air;if(A.sel!=null){const t=S.sp.T.p.find(x=>x.id==A.sel),from=A.mv[t.id]!=null?A.mv[t.id]:t.row,to=+v,n=S.sp.T.p.filter(x=>(A.mv[x.id]!=null?A.mv[x.id]:x.row)==to).length;if(to!=from&&n<MAXT){if(to==t.row)delete A.mv[t.id];else A.mv[t.id]=to;A.sel=null}}render()}
   else if(a=='areset'){const A=S.sp.air;A.mv={};A.sel=null;render()}
   else if(a=='adone'){const P=S.sp;Object.entries(P.air.mv).forEach(([id,to])=>P.ch.push({sd:'p',k:'am',at:P.T.p.find(t=>t.id==+id).row,id:+id,to}));P.air=null;P.i=0;if(P.pre){S.sp=null;sendPlace(P.ch)}else if(!P.list.length)submitMoves(P.ch);else render()}
+  else if(a=='bloomauto'){const g=S.bq[0];if(g){S.bq.shift();bloomApply('p',g.row,bloomAuto('p',g.row,g.k),g.k);repaint();if(S.bq.length)render();else nextRound()}else nextRound()}
   else if(a=='bloompick'){const g=S.bq[0],to=+v;if(g&&bdest('p',g).includes(to)){S.bq.shift();bloomApply('p',g.row,to,g.k);repaint();if(S.bq.length)render();else nextRound()}}
   else if(a=='scset'){const p=v.split(':');S.sc.to[p[0]]=+p[1];render()}
   else if(a=='scdone'){const Q=S.sc,q=Q.cur;Q.thd.push({sd:'p',k:'thd',row:q.m.row,to:{...Q.to}});
