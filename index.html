@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Converge – v0.32</title>
+<title>Converge – v0.34</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&family=UnifrakturCook:wght@700&family=VT323&display=swap">
 <style>
@@ -328,6 +328,29 @@ svg.ksv{display:block;width:100%;height:100%;filter:drop-shadow(2px 4px 4px rgba
 #app .tk2,#app .tok{border:0;background:none;box-shadow:none}
 #app .tk2 .ic.anime,#app .tok .ic.anime{width:100%;height:100%;filter:none}
 #app .tk2.pt{outline:2px dashed var(--gold);outline-offset:1px}
+
+/* ===== v0.33: automatic effects, shown where they happen ===== */
+#app .clash{position:relative}
+.nb{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:var(--gold);color:#fff;border:2px solid var(--ink);font:700 12px/1 Cinzel,serif;font-style:normal;flex:none;text-shadow:0 1px 1px rgba(0,0,0,.5)}
+.nb.to{background:var(--card);color:var(--ink);border-color:var(--gold);text-shadow:none}
+.nbs{position:absolute;top:-11px;left:10px;display:flex;gap:3px;z-index:6}
+.nb.sm{position:absolute;left:-8px;top:-10px;z-index:7;min-width:15px;height:15px;font-size:10px;padding:0 3px;border-width:1.5px}
+#app .aub{grid-column:1/-1;margin-top:4px;border-top:2px dotted var(--gold);padding-top:4px}
+#app .ah{font:700 11px Cinzel,serif;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin:6px 0 2px}
+#app .aub .ah{margin-top:0}
+#app .ev.au{display:flex;gap:6px;align-items:center}
+#app .aul{display:flex;gap:8px;align-items:center;width:100%;text-align:left;padding:5px 6px;margin:3px 0;background:rgba(90,61,34,.08);border:0;border-left:4px solid var(--bd);border-radius:3px;font-size:14px;line-height:1.3}
+#app .aul.p{border-color:var(--win)}#app .aul.o{border-color:var(--lose)}
+#app .aul .go{margin-left:auto;color:var(--mut)}
+@keyframes aflash{0%,100%{box-shadow:0 0 0 2px var(--gold)}50%{box-shadow:0 0 0 4px var(--gold),0 0 18px 6px var(--gold)}}
+#app .clash.aflash{animation:aflash .5s ease-in-out 3}
+
+/* ===== v0.34: Bloom / Overgrowth shows the board and the possible spots ===== */
+#app .clash[data-src]{box-shadow:0 0 0 3px var(--earth),0 0 12px 3px var(--earth)}
+.bsl{position:absolute;top:-12px;left:10px;z-index:6;display:flex;align-items:center;gap:4px;background:var(--earth);color:#fff;border:2px solid var(--gold);border-radius:10px;padding:1px 9px 1px 5px;font:700 11px/1.3 Cinzel,serif}
+.bsl .ic{width:14px;height:14px;color:#fff}
+#app .tk2.gh{border:2px dashed var(--gold);border-radius:50%;opacity:.75;animation:pulse 1.2s ease-in-out infinite}
+#app .tk2.gh.on{opacity:1;animation:none;box-shadow:0 0 0 3px var(--gold),0 0 12px var(--gold)}
 </style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <linearGradient id="g-f1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a34"/><stop offset="1" stop-color="#c91f17"/></linearGradient>
 <linearGradient id="g-f2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb52e"/><stop offset="1" stop-color="#fff0a0"/></linearGradient>
@@ -928,7 +951,35 @@ const card=(c,x='',at='')=>`<button data-tip="${cardTip(c)}" class="kd pc${x}" $
 const mini=c=>`<div class="kd mini pc" data-tip="${cardTip(c)}">${ksv(c,1)}</div>`;
 const sk=a=>{const x=[...a];while(x.length<4)x.push('<span class="skt"></span>');return `<div class="sks">${x.join('')}</div>`};
 const WILD=ART4.tokSvg('wild'),tokI=e=>e=='wild'?WILD:IC[e];
-const chips=(L,G)=>[...L.map(t=>`<span data-tip="${tokTip(t.e)}" class="tk2 ${t.e}${t.nw?' new':''}${t.nw&&t.kind?' '+t.kind:''}${t.mvd?' mvd':''}">${IC[t.e]}</span>`),...G.map(t=>`<span data-tip="${tokTip(t.e)}" class="tk2 ${t.e} gone">${IC[t.e]}</span>`)];
+const SLOTL=i=>`Round ${rom((i/3|0)+1)} · Slot ${i%3+1}`;
+function buildAuto(rows){
+  const T=rows.T,items=[],tok={},by={},
+   cl=x=>/Blend/.test(x)?'bld':/doubled/.test(x)?'dbl':/Tide/.test(x)?'tide':/Prism (you|them): tokens/.test(x)?'prs':/Prism \+2/.test(x)?'prt':/\+1 (you|them)$/.test(x)?'wat':'',
+   sdOf=x=>/(^|[^a-z])you\b/.test(x)?'p':'o',
+   gr=i=>[0,1,2].map(k=>(i/3|0)*3+k).filter(j=>j<rows.length),
+   sl=a=>a.map(j=>'slot '+(j%3+1)).join(', '),
+   add=(row,it)=>{it.row=row;it.n=items.length+1;items.push(it);(by[row]=by[row]||[]).push({it,role:'src'});(it.tg||[]).forEach(j=>(by[j]=by[j]||[]).push({it,role:'tgt'}));return it};
+  rows.forEach((r,i)=>{const nd={p:0,o:0};
+    (r.fn||[]).forEach(x=>{const k=cl(x);if(!k||k=='prt'||k=='wat')return;const sd=sdOf(x);
+      if(k=='dbl'){const t=T[sd].filter(t=>t.row==i&&t.nw&&t.kind=='syn')[nd[sd]++],it=add(i,{k,sd,h:x.replace('doubled','bonus token from synergy')});if(t)tok[t.id]=it.n}
+      else if(k=='prs'){const tg=gr(i).filter(j=>j!=i);add(i,{k,sd,tg,h:x+` · other cards of this round get +2 (${sl(tg)})`})}
+      else add(i,{k,sd,h:x})});
+    ['p','o'].forEach(sd=>{const tg=gr(i).filter(j=>Math.abs(j-i)==1&&(rows[j].fn||[]).some(x=>cl(x)=='wat'&&sdOf(x)==sd));
+      if(tg.length&&T[sd].filter(t=>t.e=='water'&&t.row==i).length>=3)add(i,{k:'wat',sd,tg,h:`${IC.water} Shoreline (${sd=='p'?'you':'them'}): +1 to ${sl(tg)}`})})});
+  return {items,tok,by,fr:new Set(Object.keys(by).map(Number))}}
+const AUX=i=>S.ph=='fxauto'&&S.aufx&&S.aufx.by[i];
+const tokB=t=>S.ph=='fxauto'&&S.aufx&&S.aufx.tok[t.id]!=null?`<i class="nb sm">${S.aufx.tok[t.id]}</i>`:'';
+const BSL=i=>S.ph=='sp'&&S.sp&&S.bgh&&S.sp.list[S.sp.i]&&S.sp.list[S.sp.i].at===i?`<span class="bsl">${IC.earth} ${S.sp.list[S.sp.i].k=='bl'?'Bloom':'Overgrowth'} starts here</span>`:'';
+const GH=i=>S.ph=='sp'&&S.bgh&&S.bgh.has(i)?[`<span class="tk2 earth gh${S.sp.bsel===i?' on':''}">${IC.earth}</span>`]:[];
+const AUB=i=>BSL(i)+AUB0(i);
+const AUB0=i=>{const b=i!=null&&AUX(i);return b?`<span class="nbs">${b.map(({it,role})=>`<i class="nb${role=='tgt'?' to':''}">${it.n}</i>`).join('')}</span>`:''};
+const auH=i=>`<div class="aub"><div class="ah">${SLOTL(i)}</div>${S.aufx.by[i].map(({it,role})=>{const who=it.sd=='p'?'you':'them',h=role=='src'?it.h:it.k=='prs'?`◈ +2 from the Prism (${who}) on slot ${it.row%3+1}`:`${IC.water} +1 from the Shoreline (${who}) on slot ${it.row%3+1}`;
+  return `<div class="ev au ${it.sd}"><i class="nb${role=='tgt'?' to':''}">${it.n}</i><span>${h}</span></div>`}).join('')}</div>`;
+const auSum=()=>{const L=S.aufx.items;if(!L.length)return '<div class="m">None this round.</div>';let h='',last=-1;
+  L.forEach(it=>{if(it.row!=last){h+=`<div class="ah">${SLOTL(it.row)}</div>`;last=it.row}
+    h+=`<button class="aul ${it.sd}" data-a="aloc" data-v="${[it.row,...(it.tg||[])].join(',')}"><i class="nb">${it.n}</i><span>${it.h}</span><span class="go">↓</span></button>`});
+  return h+'<p class="m">Tap a line to jump to its clash. Solid badge: where the effect starts. Hollow badge: where it lands.</p>'};
+const chips=(L,G)=>[...L.map(t=>`<span data-tip="${tokTip(t.e)}" class="tk2 ${t.e}${t.nw?' new':''}${t.nw&&t.kind?' '+t.kind:''}${t.mvd?' mvd':''}">${IC[t.e]}${tokB(t)}</span>`),...G.map(t=>`<span data-tip="${tokTip(t.e)}" class="tk2 ${t.e} gone">${IC[t.e]}</span>`)];
 const evH=r=>(r.fn||[]).map(x=>{const me=/(^|[^a-z])you\b/.test(x)?'p':/\bthem\b/.test(x)?'o':'',c=me&&/blocks/.test(x)?(me=='p'?'o':'p'):me;return `<div class="ev ${c}">${x}</div>`}).join('');
 const bdSide=(L,tot,who)=>{const sum=L.reduce((a,l)=>a+l.v,0),M=sum==tot?L:[...L,{t:'Other',v:tot-sum}];
   return `<div class="bc"><div class="bh">${who}<b>${tot}</b></div>${M.map((l,k)=>`<div class="bl"><span>${l.t}</span><b class="${l.v<0?'l':k?'w':''}">${k==0?'':l.v>0?'+':''}${l.v}</b></div>`).join('')}</div>`};
@@ -937,7 +988,7 @@ const rowFull=(r,pk,sl,tks,ac,ts)=>{ts=ts||'p';
   const nt=[r.n,...(r.jn||[])].filter(Boolean).join(' · '),tk=r.tk||{p:[],o:[],g:[]};
   const btn=t=>`<button data-tip="${tokTip(t.e)}" class="pt tk2 ${t.e}${t.mvd?' mvd':''}" ${ac&&S.sp&&S.sp.tok==t.id?'style="box-shadow:0 0 0 3px var(--gold)"':''} data-a="${ac?ac[1]:'trem'}" data-v="${t.id}">${IC[t.e]}</button>`;
   const L=sd=>ts==sd&&tks&&tks.length?(ac?(ac[2]?[...chips(tk[sd].filter(t=>!tks.some(x=>x.id==t.id)),[]),...tks.map(btn)]:tks.map(btn)):[...chips(tk[sd],tk.g.filter(g=>g.s==sd)),...tks.map(btn)]):chips(tk[sd],tk.g.filter(g=>g.s==sd));
-  return `<div class="clash${pk!=null?' pickable':''}${sl?' sel':''}${r.nw&&S.fresh?' drop':''}${r.chg&&S.fresh?' chgd':''}${wcl(r)}${pk==null&&r.idx!=null?' tap':''}" ${pk!=null?`data-a="${ac?ac[0]:'trow'}" data-v="${pk}"`:(r.idx!=null?`data-a="brk" data-v="${r.idx}"`:'')}><div class="sd">${sk(L('p'))}${mini(r.a)}</div><div class="mid ${r.r}">${r.chg?'↻ ':''}${r.x} vs ${r.y}${wasH(r)}<div class="m">${nt}</div></div><div class="sd">${mini(r.b)}${sk(L('o'))}</div>${r.idx!=null?(S.open&&S.open[r.idx]?bdH(r):(r.fn.length||r.tk.p.length+r.tk.o.length?`<div class="evs"><div class="hint">▾ tap for the math${r.fn.length?` · ${r.fn.length} effect${r.fn.length>1?'s':''}`:''}</div></div>`:'')):(r.fn&&r.fn.length?`<div class="evs">${evH(r)}</div>`:'')}</div>`};
+  return `<div class="clash${pk!=null?' pickable':''}${sl?' sel':''}${r.nw&&S.fresh?' drop':''}${r.chg&&S.fresh?' chgd':''}${wcl(r)}${pk==null&&r.idx!=null?' tap':''}" ${pk!=null?`data-a="${ac?ac[0]:'trow'}" data-v="${pk}"`:(r.idx!=null?`data-a="brk" data-v="${r.idx}"`:'')} ${r.idx!=null?`data-row="${r.idx}"`:''}${BSL(r.idx)?' data-src="1"':''}>${AUB(r.idx)}<div class="sd">${sk([...L('p'),...GH(r.idx)])}${mini(r.a)}</div><div class="mid ${r.r}">${r.chg?'↻ ':''}${r.x} vs ${r.y}${wasH(r)}<div class="m">${nt}</div></div><div class="sd">${mini(r.b)}${sk(L('o'))}</div>${r.idx!=null&&AUX(r.idx)?auH(r.idx)+(S.open&&S.open[r.idx]?bdH(r):''):r.idx!=null?(S.open&&S.open[r.idx]?bdH(r):(r.fn.length||r.tk.p.length+r.tk.o.length?`<div class="evs"><div class="hint">▾ tap for the math${r.fn.length?` · ${r.fn.length} effect${r.fn.length>1?'s':''}`:''}</div></div>`:'')):(r.fn&&r.fn.length?`<div class="evs">${evH(r)}</div>`:'')}</div>`};
 const badge=i=>S.view.length>=i+3?` <span class="${roundRes(tally(S.view.slice(i,i+3)))}">· ${tally(S.view.slice(i,i+3)).w}–${tally(S.view.slice(i,i+3)).l}</span>`:'';
 const pastH=rows=>rows.map((r,i)=>(i%3==0?`<h2 class="sm">Round ${rom(i/3+1)}${badge(i)}</h2>`:'')+rowH(r)).join('');
 const rowC=(r,pk,sl,tks,ac,ts)=>{ts=ts||'p';
@@ -1005,11 +1056,11 @@ function afterReveal(plO,otn){
   S.fxp={p:F.place,o:plO};
   F.info=`You placed ${F.place.length} of ${F.tray.length} token${F.tray.length==1?'':'s'}. They placed ${plO.length} of ${otn}.${S.carry.length?(S.r<2?` ${S.carry.length} of yours carry over.`:` ${S.carry.length} unplaced are lost.`):''}`;
   const T1=addFresh(S.allrows,S.T,S.fxp),list=specs(T1,'p',S.allrows).filter(g=>g.k!='am'),pre=S.pam||[];
-  const pre0=settle(S.allrows,T1,[]),aut=pre0.flatMap(r=>r.fn).filter(x=>/doubled|Prism|\+1/.test(x));S.aut=aut;S.autrows=pre0;
-  if(!list.length&&!aut.length){submitMoves(pre);return}
+  const pre0=settle(S.allrows,T1,[]),au=buildAuto(pre0);S.aufx=au;S.aut=au.items;S.autrows=pre0;
+  if(!list.length&&!au.items.length){submitMoves(pre);return}
   S.sp={list,i:0,ch:[...pre],tok:null,T:T1};S.ph='fxauto';render();
 }
-function spNext(m){const P=S.sp;if(m)P.ch.push(m);P.tok=null;P.i++;if(P.i>=P.list.length)submitMoves(P.ch);else render()}
+function spNext(m){const P=S.sp;if(m)P.ch.push(m);P.tok=null;P.bsel=null;P.i++;if(P.i>=P.list.length)submitMoves(P.ch);else render()}
 function finalize(mv){
   if(S.duel){finish(resolveTok(S.allrows,S.fxp,mv,null,0,1));return}
   const R0=resolveTok(S.allrows,S.fxp,mv),rq=pendingScatter(R0.mv).filter(q=>q.v=='p');
@@ -1225,7 +1276,7 @@ function duelClick(a,v){
 }
 function initFromUrl(){try{const j=new URLSearchParams(location.search).get('join');if(j)S={ph:'lobby',lb:{dk:[4,4,4,4],rev:true,code:j.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5),status:'',err:''}}}catch(e){}}
 
-function render(){S.fr=null;S.allc=0;
+function render(){S.fr=null;S.bgh=null;S.allc=0;
   const s=S;
   if(s.ph=='cut'){const q=s.cq[0];$.innerHTML=`<div id="cut" class="${ANIM?'anim':''}"><div class="sc in">${STORY.svgW(q.art,STORY.frame(q.dk||[0,0,0,0],!!q.neu),q.t,STORY.capH(q))}</div><button class="btn" data-a="cutnext">Continue</button></div>`;return}
   if(s.ph=='home'){
@@ -1286,8 +1337,8 @@ function render(){S.fr=null;S.allc=0;
     ${s.pawn.length?`<h2>Pawned cards</h2><p class="m">Buy back for 2 coins each.</p><div class="hand">${s.pawn.map(c=>card(c,' tag',`data-a="buyback" data-v="${c.id}" data-t="2 coins"`)).join('')}</div>`:''}
     <button class="btn alt" data-a="leave">Leave the shop</button>`;return;
   }
-  if(s.ph=='fxauto'){const n=s.sp.list.length;
-    $.innerHTML=`${head}<h1>Token Effects</h1><div class="chgs"><p class="m" style="margin-top:0">${s.fx.info}</p><b>Automatic effects</b>${s.aut.length?s.aut.map(x=>`<div class="ev">${x}</div>`).join(''):'<div class="m">None this round.</div>'}<p class="m">${n?`Next you choose ${n} action${n>1?'s':''} (burns, moves, growth, water bonus).`:'No actions to choose this round.'}</p><button class="btn" data-a="fxgo" style="margin-top:6px">${n?'Choose actions':'Continue'}</button></div>${grp(r=>rowH(r),s.autrows)}`;return}
+  if(s.ph=='fxauto'){const n=s.sp.list.length;s.fr=s.aufx.fr;
+    $.innerHTML=`${head}<h1>Token Effects</h1><div class="chgs"><p class="m" style="margin-top:0">${s.fx.info}</p><b>Automatic effects · ${s.aufx.items.length}</b>${auSum()}<p class="m">${n?`Next you choose ${n} action${n>1?'s':''} (burns, moves, growth, water bonus).`:'No actions to choose this round.'}</p><button class="btn" data-a="fxgo" style="margin-top:6px">${n?'Choose actions':'Continue'}</button></div>${grp(r=>rowH(r),s.autrows)}`;return}
   if(s.ph=='bloom'){const g=s.bq[0];
     $.innerHTML=`${head}<h1>${IC.earth} ${g.k==3?'Bloom':'Overgrowth'}</h1><p class="m">Your earth card in round ${rom((g.row/3|0)+1)}, slot ${g.row%3+1} grew its ${g.k==3?'3rd':'4th'} earth token. Tap one of the outlined clashes below (${bdest('p',g).map(i=>`round ${rom((i/3|0)+1)}, slot ${i%3+1}`).join('; ')||'none free'}) to grow one more earth token there (4 tokens max per card), or let the game choose.${s.bq.length>1?' '+s.bq.length+' blooms to place.':''}</p><button class="btn" data-a="bloomauto">Let the game choose</button><div class="bloomsel">${grp((r,i)=>rowH(r,bdest('p',g).includes(i)?i:null,false,[],['bloompick','bloompick']))}</div>`;return}
   if(s.ph=='fx'){
@@ -1318,9 +1369,11 @@ function render(){S.fr=null;S.allc=0;
     const msg=k=='fire'?'tap any enemy token to burn it':k=='burn'?`fire token ${g.idx+1}: tap the enemy token on this slot that it burns`:k=='wn'?'two water tokens: tap the neighbouring slot that gets +1':k=='ov'?'tap any card that grows a token':k=='bl'?'tap a card of this round that grows a token':k=='inc'?'tap an enemy token of this round to burn it':k=='th'?'tap an enemy card of this round: its tokens scatter to its other cards and your foe chooses where':P.tok==null?(k=='am'?'tap one of your tokens on this card to move':'tap the enemy token to move'):'now tap the card it moves to';
     const tks=i=>k=='bl'||k=='ov'||k=='th'||k=='wn'?[]:k=='inc'?((i/3|0)==(g.at/3|0)?T.o.filter(t=>t.row==i):[]):k=='am'?(i==g.at?T.p.filter(t=>t.row==i):[]):k=='burn'?(i==g.at?T.o.filter(t=>t.row==i&&!P.ch.some(c=>c.k=='burn'&&c.at==i&&c.id==t.id)):[]):k=='ag'?T.o.filter(t=>t.row==i&&t.e!='earth'):T.o.filter(t=>t.row==i);
     const clk=i=>(k=='ov'&&T.p.filter(t=>t.row==i).length<MAXT)||(k=='bl'&&(i/3|0)==(g.at/3|0)&&T.p.filter(t=>t.row==i).length<MAXT)||(k=='th'&&(i/3|0)==(g.at/3|0)&&T.o.some(t=>t.row==i)&&!prism(T,'o',i))||P.tok!=null||(k=='wn'&&Math.abs(i-g.at)==1&&(i/3|0)==(g.at/3|0));
-    $.innerHTML=`${head}<h1>${IC[ic]} ${nm}</h1><p class="m">Slot ${g.at%3+1} of round ${rom((g.at/3|0)+1)}: ${msg}.</p>
-    ${grp((r,i)=>rowH(r,clk(i)?i:null,false,tks(i),['srow','stok'],k=='am'?'p':'o'))}
-    <button class="btn alt" data-a="sskip">${k=='burn'||k=='wn'?'Skip (the game chooses)':'Skip'}</button>${k=='burn'?'<button class="btn alt" data-a="sauto">Let the game choose all remaining burns</button>':''}`;return;
+    const bb=k=='bl'||k=='ov',V=bb?settle(S.allrows,P.T,P.ch):s.autrows,dst=bb?V.map((_,i)=>i).filter(clk):[],ll=j=>`round ${rom((j/3|0)+1)}, slot ${j%3+1}`;
+    if(bb){s.bgh=new Set(dst);s.fr=new Set([g.at,...dst])}
+    $.innerHTML=`${head}<h1>${IC[ic]} ${nm}</h1><p class="m">${bb?`Your earth card in ${ll(g.at)} (marked below) reached ${k=='bl'?3:4} earth tokens. ${nm} plants one more earth token on ${k=='bl'?'a card of the same round':'any card on the board'} that has room. Tap a gold-outlined clash (a dashed earth token shows where it would land), then confirm. Your tokens and your foe's are shown as they stand now.`:`Slot ${g.at%3+1} of round ${rom((g.at/3|0)+1)}: ${msg}.`}</p>
+    <div class="${bb?'bloomsel':''}">${grp((r,i)=>rowH(r,clk(i)?i:null,bb&&P.bsel===i,tks(i),['srow','stok'],k=='am'?'p':'o'),V)}</div>${bb?`<button class="btn" data-a="bconf" ${P.bsel==null?'disabled':''}>${P.bsel==null?'Choose a clash':'Plant the token in '+ll(P.bsel)}</button>`:''}
+    <button class="btn alt" data-a="sskip">${k=='burn'||k=='wn'?'Skip (the game chooses)':bb?'Skip (no token grows)':'Skip'}</button>${k=='burn'?'<button class="btn alt" data-a="sauto">Let the game choose all remaining burns</button>':''}`;return;
   }
   if(s.ph=='scatter'){const Q=s.sc,q=Q.cur,loc=j=>`round ${rom((j/3|0)+1)}, slot ${j%3+1}`,cnt=q.dests.map((d,j)=>q.occ[j]+q.toks.filter(t=>Q.to[t.id]==d).length);
     $.innerHTML=`${head}<h1>${IC.air} Thunder</h1><p class="m">Your foe's Thunder strikes your card in ${loc(q.m.row)}. Its ${q.toks.length} token${q.toks.length>1?'s':''} scatter to the other cards of this round, and you choose where each one lands. A card holds at most 4 tokens, and tokens that do not fit are lost.</p>
@@ -1403,7 +1456,7 @@ function musicSync(){
     MU.dr=[55,82.4,110].map((f,i)=>{const o=c.createOscillator(),l=c.createBiquadFilter(),g=c.createGain();o.type='sawtooth';o.frequency.value=f;o.detune.value=i*5;l.type='lowpass';l.frequency.value=180;g.gain.value=.05;o.connect(l).connect(g).connect(MU.bus);o.start();return o});
     MU.tm=c.currentTime+.2;MU.st=0;MU.iv=setInterval(musTick,120)}
   else if(!want&&MU.on){MU.on=0;MU.fo=1;const q=MU.g.gain,t=c.currentTime;q.cancelScheduledValues(t);q.setValueAtTime(q.value,t);q.linearRampToValueAtTime(0,t+2);setTimeout(()=>{if(MU.on)return;MU.fo=0;clearInterval(MU.iv);MU.dr.forEach(o=>{try{o.stop()}catch(e){}})},2100)}}
-const SM={start:'coin',pick:'tick',dir:'tick',tsel:'tick',wel:'tick',trow:'place',trem:'tick',tconfirm:'reveal',go:'play',begin:'coin',bet:'tick',sell:'coin',dotrade:'coin',buyback:'coin',tp:'place',buysel:'tick',givesel:'tick',stok:'place',srow:'place',tok:'tick',fxnext:'tick',trade:'tick',nm:'tick',shop0:'tick',brk:'tick',leave:'tick',sskip:'tick',astok:'tick',arow:'place',aconf:'place',areset:'tick',adone:'tick',cutnext:'tick',scset:'tick',scdone:'reveal'};
+const SM={start:'coin',pick:'tick',dir:'tick',tsel:'tick',wel:'tick',trow:'place',trem:'tick',tconfirm:'reveal',go:'play',begin:'coin',bet:'tick',sell:'coin',dotrade:'coin',buyback:'coin',tp:'place',buysel:'tick',givesel:'tick',stok:'place',srow:'place',tok:'tick',fxnext:'tick',trade:'tick',nm:'tick',shop0:'tick',brk:'tick',leave:'tick',sskip:'tick',astok:'tick',arow:'place',aconf:'place',areset:'tick',adone:'tick',cutnext:'tick',scset:'tick',scdone:'reveal',aloc:'tick',bconf:'place'};
 document.getElementById('mute').onclick=function(){MUTE=!MUTE;this.textContent='Sound: '+(MUTE?'off':'on');if(!MUTE)sfx('tick');musicSync()};
 const tip=document.getElementById('tip');let tt=null;
 const showTip=(el,x,y)=>{tip.textContent=el.dataset.tip;tip.style.display='block';const w=tip.offsetWidth,h=tip.offsetHeight;tip.style.left=Math.max(6,Math.min(innerWidth-w-6,x-w/2))+'px';tip.style.top=(y-h-16<6?y+22:y-h-16)+'px'};
@@ -1441,7 +1494,7 @@ $.onclick=e=>{
   else if(a=='stok'){const P=S.sp,g=P.list[P.i];if(g.k=='fire'||g.k=='inc')spNext({sd:'p',k:g.k,at:g.at,id:+v});else if(g.k=='burn')spNext({sd:'p',k:'burn',at:g.at,idx:g.idx,id:+v});else{const t0=P.T.o.find(x=>x.id==+v);if(!(g.k=='ag'&&t0&&t0.e=='earth')){P.tok=+v;render()}}}
   else if(a=='sauto'){const P=S.sp;P.list=P.list.filter((q,j)=>j<P.i||(j>P.i&&q.k!='burn'));P.tok=null;if(P.i>=P.list.length)submitMoves(P.ch);else render()}
   else if(a=='srow'){const P=S.sp,g=P.list[P.i];
-    if(g.k=='ov'||g.k=='bl'){const to=+v;if(P.T.p.filter(t=>t.row==to).length<MAXT&&(g.k=='ov'||(to/3|0)==(g.at/3|0)))spNext({sd:'p',k:g.k,at:g.at,to})}
+    if(g.k=='ov'||g.k=='bl'){const to=+v;if(P.T.p.filter(t=>t.row==to).length<MAXT&&(g.k=='ov'||(to/3|0)==(g.at/3|0))){P.bsel=P.bsel===to?null:to;render()}}
     else if(g.k=='th'){const r=+v;if((r/3|0)==(g.at/3|0))spNext({sd:'p',k:'th',at:g.at,row:r})}
     else if(g.k=='wn'){const to=+v;if(Math.abs(to-g.at)==1&&(to/3|0)==(g.at/3|0))spNext({sd:'p',k:'wn',at:g.at,to})}
     else{const own=g.k=='am',t=(own?P.T.p:P.T.o).find(x=>x.id==P.tok);
@@ -1459,6 +1512,8 @@ $.onclick=e=>{
   else if(a=='fxgo'){if(S.sp.list.length){S.ph='sp';render()}else submitMoves(S.sp.ch)}
   else if(a=='sskip')spNext(null);
   
+  else if(a=='bconf'){const P=S.sp,g=P.list[P.i];if(P.bsel!=null)spNext({sd:'p',k:g.k,at:g.at,to:P.bsel})}
+  else if(a=='aloc'){const els=v.split(',').map(j=>document.querySelector('.clash[data-row="'+j+'"]')).filter(Boolean);if(els[0])els[0].scrollIntoView({behavior:'smooth',block:'center'});els.forEach(el=>{el.classList.remove('aflash');void el.offsetWidth;el.classList.add('aflash');setTimeout(()=>el.classList.remove('aflash'),1800)})}
   else if(a=='brk'){S.open=S.open||{};S.open[+v]=!S.open[+v];render()}
   else if(a=='bet'){S.bet=+v;S.note='';render()}
   else if(a=='trade')buildTrade();
