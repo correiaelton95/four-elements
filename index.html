@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Converge – v0.34</title>
+<title>Converge – v0.35</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&family=UnifrakturCook:wght@700&family=VT323&display=swap">
 <style>
@@ -351,6 +351,57 @@ svg.ksv{display:block;width:100%;height:100%;filter:drop-shadow(2px 4px 4px rgba
 .bsl .ic{width:14px;height:14px;color:#fff}
 #app .tk2.gh{border:2px dashed var(--gold);border-radius:50%;opacity:.75;animation:pulse 1.2s ease-in-out infinite}
 #app .tk2.gh.on{opacity:1;animation:none;box-shadow:0 0 0 3px var(--gold),0 0 12px var(--gold)}
+
+/* ===== v0.35: compact played cards, per-ability animations ===== */
+#app .clash:not(.cmp){grid-template-columns:1fr auto 1fr;padding:9px 8px 7px;margin:9px 0;gap:4px 6px}
+#app .clash:not(.cmp) .sd{flex-direction:column;align-items:flex-start;gap:5px;min-width:0}
+#app .clash:not(.cmp) .sd+.mid+.sd{align-items:flex-end}
+#app .sks{flex-direction:row;gap:3px;padding:3px 5px;border-radius:14px}
+#app .sks .tk2{width:22px;height:22px}#app .skt{width:20px;height:20px}
+#app .cc.lg{font-size:21px;gap:5px;padding:3px 11px 3px 7px;border-radius:14px}
+#app .cc.lg .ic.anime{width:24px;height:24px}#app .cc.lg .ic.ty{width:15px;height:15px}
+#app h2{margin:12px 0 4px}
+@keyframes igniteIn{0%{transform:scale(.2);filter:brightness(3)}50%{transform:scale(1.45);filter:brightness(1.8) drop-shadow(0 0 8px #ff7a2e)}100%{transform:none;filter:none}}
+@keyframes dropIn{0%{transform:translateY(-20px) scale(.7,1.4);opacity:0}60%{transform:translateY(2px) scale(1.3,.7);opacity:1}100%{transform:none}}
+@keyframes thudIn{0%{transform:translateY(-24px);opacity:0}55%{transform:scale(1.3,.7);opacity:1}75%{transform:translateY(-3px)}100%{transform:none}}
+@keyframes swirlIn{0%{transform:translateX(-20px) rotate(-360deg) scale(.3);opacity:0}100%{transform:none;opacity:1}}
+#app.fxa .tk2.new.fire{animation:igniteIn .8s ease-out}
+#app.fxa .tk2.new.water{animation:dropIn .8s ease-out}
+#app.fxa .tk2.new.earth{animation:thudIn .8s ease-out}
+#app.fxa .tk2.new.air{animation:swirlIn .8s ease-out}
+@keyframes sprout{0%{transform:scale(0) rotate(-70deg) translateY(10px);opacity:0}70%{transform:scale(1.35) rotate(8deg);opacity:1}100%{transform:none}}
+@keyframes greenglow{0%,100%{filter:none}50%{filter:drop-shadow(0 0 9px #b5ff6a)}}
+#app.fxa .tk2.new.grow{animation:sprout .9s cubic-bezier(.2,1.5,.4,1),greenglow 1.4s ease-in-out 1}
+@keyframes dup{0%{transform:translateX(-16px) scale(.4);opacity:0}100%{transform:none;opacity:1}}
+@keyframes spinstar{to{transform:rotate(360deg) scale(1.2)}}
+#app.fxa .tk2.new.syn{animation:dup .8s ease-out}
+#app.fxa .tk2.syn::after,#app.fxa .tk2.grow::after{animation:spinstar 1.2s linear 2}
+@keyframes whirl{0%{transform:rotate(-540deg) scale(.2);opacity:0}70%{transform:rotate(20deg) scale(1.25);opacity:1}100%{transform:none}}
+#app.fxa .tk2.mvd{animation:whirl .9s ease-out}
+@keyframes burnout{0%{transform:scale(1);filter:none}30%{transform:scale(1.4);filter:brightness(1.7) sepia(1) saturate(6)}100%{transform:scale(.9);filter:grayscale(1)}}
+@keyframes ember{0%{opacity:1;transform:scale(.6) translateY(0)}100%{opacity:0;transform:scale(2.1) translateY(-10px)}}
+#app.fxa .tk2.gone{animation:burnout 1s ease-out}
+#app.fxa .tk2.gone::after{content:'';position:absolute;inset:-5px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(255,190,70,.95),rgba(224,80,40,.6) 45%,transparent 70%);animation:ember 1s ease-out forwards}
+@keyframes wardring{0%{transform:scale(.6);opacity:1}100%{transform:scale(2);opacity:0}}
+#app.fxa .tk2.ward::before{content:'';position:absolute;inset:-3px;border-radius:50%;pointer-events:none;border:2px solid #8fd0ff;box-shadow:0 0 8px #8fd0ff,inset 0 0 6px #8fd0ff;animation:wardring 1.1s ease-out 2}
+#app.fxa .clash[class*=" fx-"]::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:5;opacity:0;display:grid;place-items:center;font-size:36px}
+@keyframes zapf{0%{opacity:0}10%{opacity:1}22%{opacity:.1}34%{opacity:.9}100%{opacity:0}}
+@keyframes risef{0%{opacity:0;transform:translateY(30%)}30%{opacity:1}100%{opacity:0;transform:translateY(-15%)}}
+@keyframes sweepf{0%{opacity:0;background-position:0 0}30%{opacity:1}100%{opacity:0;background-position:100% 0}}
+@keyframes ripf{0%{opacity:.9;transform:scale(.3)}100%{opacity:0;transform:scale(1.3)}}
+#app.fxa .clash.fx-zap::after{content:'⚡';background:rgba(255,240,150,.6);animation:zapf 1s ease-out}
+#app.fxa .clash.fx-burn::after{background:linear-gradient(0deg,rgba(255,120,30,.6),transparent 75%);animation:risef 1s ease-out}
+#app.fxa .clash.fx-prism::after{background:linear-gradient(90deg,rgba(224,103,79,.5),rgba(111,154,214,.5),rgba(143,176,90,.5),rgba(169,140,208,.5),rgba(224,103,79,.5)) 0 0/300% 100%;animation:sweepf 1.4s ease-out}
+#app.fxa .clash.fx-tide::after{background:radial-gradient(circle,rgba(111,154,214,.65),transparent 65%);animation:ripf 1.1s ease-out}
+#app.fxa .clash.fx-grow::after{background:linear-gradient(0deg,rgba(143,176,90,.6),transparent 75%);animation:risef 1.1s ease-out}
+#app.fxa .clash.fx-blend::after{background:radial-gradient(circle,rgba(210,166,71,.6),transparent 65%);animation:ripf 1s ease-out}
+@media (prefers-reduced-motion:reduce){#app.fxa *,#app.fxa *::before,#app.fxa *::after{animation:none!important}}
+/* ===== v0.36 ===== */
+.ic.coin,#app .ic.coin{shape-rendering:geometricPrecision}
+#app .hand:has(.tag),#app .pool:has(.tag){padding-bottom:42px}
+#cut .cap2{margin-top:10px;padding:10px 14px;background:var(--card);border:2px solid var(--bd);border-radius:8px;color:var(--ink);font:italic clamp(18px,5vw,21px)/1.35 'IM Fell English',Georgia,serif;text-align:center}
+#cut .cap2 span{display:block}#cut .cap2 span+span{margin-top:6px}#cut .cap2 span:empty{display:none}
+#cst{position:fixed;top:calc(40px + env(safe-area-inset-top,0px));right:8px;z-index:40;background:var(--card);color:var(--ink);border:3px solid var(--bd);border-radius:0;padding:3px 8px;font:13px 'Pixelify Sans',monospace}
 </style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <linearGradient id="g-f1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a34"/><stop offset="1" stop-color="#c91f17"/></linearGradient>
 <linearGradient id="g-f2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb52e"/><stop offset="1" stop-color="#fff0a0"/></linearGradient>
@@ -371,7 +422,7 @@ const tri=(up,bar)=>{const W=[2,2,4,4,6,6,8,8,10,10,12,14],g=W.map((w,r)=>{const
 const orb=G((x,y)=>{const d=Math.hypot(x-6.5,y-6.5);return d>6.6?'':d>5.2?'d':(x+y<9&&d<4.2)?'h':'m'});
 const RS=(n,d,f)=>`<svg class="ic ${n} rune${f?' fl':''}" viewBox="0 0 24 24" aria-hidden="true">${d.map(p=>`<path d="${p}"/>`).join('')}</svg>`;
 const IC={fire:RS('fire tri',['M12 3L21 20H3z']),water:RS('water tri',['M12 21L3 4h18z']),air:RS('air tri',['M12 3L21 20H3z','M7 14h10']),earth:RS('earth tri',['M12 21L3 4h18z','M7 10h10']),neu:RS('neu tri',['M12 3a9 9 0 1 0 .01 0z'])};
-IC.coin=PX('coin',G((x,y)=>{const d=Math.hypot(x-6.5,y-6.5);return d>6.6?'':d>5.2?'d':((x==6||x==7)&&y>=4&&y<=9)?'d':(x+y<9&&d<4.2)?'h':'m'}));
+IC.coin=`<svg class="ic anime coin" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="29" fill="#e3b73e" stroke="#1d130b" stroke-width="3"/><circle cx="32" cy="32" r="22.5" fill="#f2d070" stroke="#9c7424" stroke-width="2.5"/><path d="M32 13Q34 30 51 32Q34 34 32 51Q30 34 13 32Q30 30 32 13Z" fill="#c9962e" stroke="#1d130b" stroke-width="2" stroke-linejoin="round"/><path d="M16 22A19 19 0 0 1 28 14" fill="none" stroke="#fff6cf" stroke-width="3" stroke-linecap="round" opacity=".8"/><circle cx="32" cy="32" r="3.5" fill="#fff0b0" stroke="#1d130b" stroke-width="1.5"/></svg>`;
 const LN=(a,b,c,d,t)=>{const n=Math.max(Math.abs(c-a),Math.abs(d-b));for(let i=0;i<=n;i++)t.add(Math.round(a+(c-a)*i/n)+','+Math.round(b+(d-b)*i/n))};
 const swordS=new Set();LN(12,1,5,8,swordS);LN(13,2,6,9,swordS);LN(3,6,7,10,swordS);LN(4,9,2,11,swordS);['1,12','2,12','1,13','2,13','3,5','8,11'].forEach(k=>swordS.add(k));
 const sword=G((x,y)=>swordS.has(x+','+y)?'m':'');
@@ -946,7 +997,20 @@ const TYN={atk:'ATTACK',def:'DEFENSE',pow:'POWER',mod:'MODIFIER'};
 const klab=c=>c.t=='mod'?cap(c.mv).toUpperCase()+(c.mv=='shift'?(c.dir<0?' ←':c.dir>0?' →':' ↔'):''):TYN[c.t];
 const SEALRE=/<circle cx="33" cy="51" r="20"[^>]*\/><circle cx="33" cy="51" r="16.5"[^>]*\/>/,NUMRE=/<text x="33"[^>]*class="snm">[^<]*<\/text>/,TAILS='<rect x="3" y="3" width="194" height="274" rx="7" fill="url(#vg)"';
 const bigSeal=(s,c)=>{const d=ART4.D[c.e];return s.replace(SEALRE,'').replace(NUMRE,'').replace(TAILS,`<g filter="url(#fine)"><circle cx="38" cy="57" r="29" fill="${d.p}" stroke="#1d130b" stroke-width="2.6"/><circle cx="38" cy="57" r="24" fill="none" stroke="${d.c}" stroke-width="2"/></g><text x="38" y="74" text-anchor="middle" style="font:700 50px Cinzel,serif;fill:#1d130b">${base(c)}</text>`+TAILS)};
-const ksv=(c,lite)=>{const l=klab(c);let s=bigSeal(ART4.card(c.e,base(c),TYN[c.t],l),c);if(l.length>8)s=s.replace('class="sbn"','class="sbn" style="font-size:11px;letter-spacing:.04em"');if(lite)s=s.replace(/<rect[^>]*url\(#grain\)[^>]*\/>/,'').replace(/ filter="url\(#(rough|fine)\)"/g,'');return s};
+const GLYRE=/<circle cx="169" cy="48" r="15"[^>]*\/><circle cx="169" cy="48" r="11.500"[^>]*\/>/,GLTRE=/<text x="169"[^>]*class="sgl">[^<]*<\/text>/,LABRE=/<text x="100" y="246"[^>]*class="sbn">[^<]*<\/text>/;
+let KS='ribbon';const KSN={head:'Header',ribbon:'Ribbon',classic:'Classic'};
+const tyG=(c,x,y,z,col)=>`<svg x="${x}" y="${y}" width="${z}" height="${z}" viewBox="0 0 24 24" fill="${c.t=='pow'||c.t=='mod'?col:'none'}" stroke="${col}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${TI[c.t].replace(/^<svg[^>]*>/,'').replace(/<\/svg>$/,'')}</svg>`;
+const ktx=(x,y,t,fs,w,col)=>`<text x="${x}" y="${y}" text-anchor="middle" textLength="${Math.min(w,t.length*fs*.8)}" lengthAdjust="spacingAndGlyphs" style="font:700 ${fs}px Cinzel,serif;fill:${col}">${t}</text>`;
+const ksv=(c,lite)=>{const l=klab(c),d=ART4.D[c.e],I='#1d130b',CR='#f3e6c6',nm=c.t=='mod'?l:d.n.toUpperCase();let s;
+ if(KS=='classic')s=bigSeal(ART4.card(c.e,base(c),TYN[c.t],l),c).replace(LABRE,ktx(100,251,l,22,150,I));
+ else{s=ART4.card(c.e,base(c),TYN[c.t],l).replace(SEALRE,'').replace(NUMRE,'').replace(GLYRE,'').replace(GLTRE,'').replace(LABRE,'');
+  const seal=(x,y,r,fs)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${d.p}" stroke="${I}" stroke-width="2.6"/><circle cx="${x}" cy="${y}" r="${r-4.5}" fill="none" stroke="${d.c}" stroke-width="2"/><text x="${x}" y="${y+fs*.35}" text-anchor="middle" style="font:700 ${fs}px Cinzel,serif;fill:${I}">${base(c)}</text>`;
+  const th=`<defs><pattern id="th-${c.e}" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V6" stroke="${d.c}" stroke-width="1.3"/><path d="M0 3H6" stroke="${d.c}" stroke-width=".8" opacity=".6"/></pattern></defs>`;
+  const bar=(y,h,op)=>`<rect x="12" y="${y}" width="176" height="${h}" rx="5" fill="${d.p}" fill-opacity="${op}"/><rect x="12" y="${y}" width="176" height="${h}" rx="5" fill="url(#th-${c.e})" opacity=".3"/><rect x="12" y="${y}" width="176" height="${h}" rx="5" fill="none" stroke="${d.c}" stroke-width="2.4"/><rect x="16" y="${y+4}" width="168" height="${h-8}" rx="3" fill="none" stroke="${d.c}" stroke-width="1" stroke-dasharray="4 3" opacity=".7"/>`;
+  const sl=(x,y,r,fs,inner)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${d.c}" stroke="${I}" stroke-width="2.4"/><circle cx="${x}" cy="${y}" r="${r-4}" fill="none" stroke="${CR}" stroke-width="1.5" opacity=".8"/>${inner||`<text x="${x}" y="${y+fs*.35}" text-anchor="middle" style="font:700 ${fs}px Cinzel,serif;fill:${CR}">${base(c)}</text>`}`;
+  const hl=t=>t.replace('style="','style="paint-order:stroke;stroke:'+d.p+';stroke-width:4;stroke-linejoin:round;');
+  const o=th+bar(12,46,.92)+sl(38,35,19,32)+sl(162,35,19,0,tyG(c,146,19,32,CR))+bar(220,42,.96)+hl(ktx(100,248,c.t=='mod'?l:TYN[c.t],28,160,I));
+  s=s.replace(TAILS,o+TAILS)}if(lite)s=s.replace(/<rect[^>]*url\(#grain\)[^>]*\/>/,'').replace(/ filter="url\(#(rough|fine)\)"/g,'');return s};
 const card=(c,x='',at='')=>`<button data-tip="${cardTip(c)}" class="kd pc${x}" ${at}>${ksv(c)}</button>`;
 const mini=c=>`<div class="kd mini pc" data-tip="${cardTip(c)}">${ksv(c,1)}</div>`;
 const sk=a=>{const x=[...a];while(x.length<4)x.push('<span class="skt"></span>');return `<div class="sks">${x.join('')}</div>`};
@@ -979,16 +1043,18 @@ const auSum=()=>{const L=S.aufx.items;if(!L.length)return '<div class="m">None t
   L.forEach(it=>{if(it.row!=last){h+=`<div class="ah">${SLOTL(it.row)}</div>`;last=it.row}
     h+=`<button class="aul ${it.sd}" data-a="aloc" data-v="${[it.row,...(it.tg||[])].join(',')}"><i class="nb">${it.n}</i><span>${it.h}</span><span class="go">↓</span></button>`});
   return h+'<p class="m">Tap a line to jump to its clash. Solid badge: where the effect starts. Hollow badge: where it lands.</p>'};
-const chips=(L,G)=>[...L.map(t=>`<span data-tip="${tokTip(t.e)}" class="tk2 ${t.e}${t.nw?' new':''}${t.nw&&t.kind?' '+t.kind:''}${t.mvd?' mvd':''}">${IC[t.e]}${tokB(t)}</span>`),...G.map(t=>`<span data-tip="${tokTip(t.e)}" class="tk2 ${t.e} gone">${IC[t.e]}</span>`)];
+const chips=(L,G)=>[...L.map(t=>`<span data-tip="${tokTip(t.e)}" class="tk2 ${t.e}${t.nw?' new':''}${t.nw&&t.kind?' '+t.kind:''}${t.mvd?' mvd':''}${(t.u||t.tu)&&(t.row/3|0)==S.r?' ward':''}">${IC[t.e]}${tokB(t)}</span>`),...G.map(t=>`<span data-tip="${tokTip(t.e)}" class="tk2 ${t.e} gone">${IC[t.e]}</span>`)];
 const evH=r=>(r.fn||[]).map(x=>{const me=/(^|[^a-z])you\b/.test(x)?'p':/\bthem\b/.test(x)?'o':'',c=me&&/blocks/.test(x)?(me=='p'?'o':'p'):me;return `<div class="ev ${c}">${x}</div>`}).join('');
 const bdSide=(L,tot,who)=>{const sum=L.reduce((a,l)=>a+l.v,0),M=sum==tot?L:[...L,{t:'Other',v:tot-sum}];
   return `<div class="bc"><div class="bh">${who}<b>${tot}</b></div>${M.map((l,k)=>`<div class="bl"><span>${l.t}</span><b class="${l.v<0?'l':k?'w':''}">${k==0?'':l.v>0?'+':''}${l.v}</b></div>`).join('')}</div>`};
 const bdH=r=>`<div class="bd"><div class="bcs">${bdSide(r.bd.p,r.x,'You')}${bdSide(r.bd.o,r.y,'Them')}</div><div class="bres ${r.r}">${{w:'You win this clash',l:'You lose this clash',d:'Draw'}[r.r]}${(r.jn||[]).length?' · '+r.jn.join(' · '):''}</div>${r.fn&&r.fn.length?`<div class="bev">${evH(r)}</div>`:''}</div>`;
+const pill=(c,x='')=>`<span class="cc ${c.e}${x}" data-tip="${cardTip(c)}">${IC[c.e]}<b>${base(c)}</b>${tyI(c)}</span>`;
+const fxc=r=>{if(!r.fn||!r.fn.length)return '';const t=r.fn.join(' ');const m=[[/Thunder \(/,'zap'],[/burned/,'burn'],[/Prism (you|them): tokens/,'prism'],[/Tide|<\/svg> \+1 (you|them)/,'tide'],[/Overgrowth|Bloom/,'grow'],[/Blend/,'blend']].find(([re])=>re.test(t));return m?' fx-'+m[1]:''};
 const rowFull=(r,pk,sl,tks,ac,ts)=>{ts=ts||'p';
   const nt=[r.n,...(r.jn||[])].filter(Boolean).join(' · '),tk=r.tk||{p:[],o:[],g:[]};
   const btn=t=>`<button data-tip="${tokTip(t.e)}" class="pt tk2 ${t.e}${t.mvd?' mvd':''}" ${ac&&S.sp&&S.sp.tok==t.id?'style="box-shadow:0 0 0 3px var(--gold)"':''} data-a="${ac?ac[1]:'trem'}" data-v="${t.id}">${IC[t.e]}</button>`;
   const L=sd=>ts==sd&&tks&&tks.length?(ac?(ac[2]?[...chips(tk[sd].filter(t=>!tks.some(x=>x.id==t.id)),[]),...tks.map(btn)]:tks.map(btn)):[...chips(tk[sd],tk.g.filter(g=>g.s==sd)),...tks.map(btn)]):chips(tk[sd],tk.g.filter(g=>g.s==sd));
-  return `<div class="clash${pk!=null?' pickable':''}${sl?' sel':''}${r.nw&&S.fresh?' drop':''}${r.chg&&S.fresh?' chgd':''}${wcl(r)}${pk==null&&r.idx!=null?' tap':''}" ${pk!=null?`data-a="${ac?ac[0]:'trow'}" data-v="${pk}"`:(r.idx!=null?`data-a="brk" data-v="${r.idx}"`:'')} ${r.idx!=null?`data-row="${r.idx}"`:''}${BSL(r.idx)?' data-src="1"':''}>${AUB(r.idx)}<div class="sd">${sk([...L('p'),...GH(r.idx)])}${mini(r.a)}</div><div class="mid ${r.r}">${r.chg?'↻ ':''}${r.x} vs ${r.y}${wasH(r)}<div class="m">${nt}</div></div><div class="sd">${mini(r.b)}${sk(L('o'))}</div>${r.idx!=null&&AUX(r.idx)?auH(r.idx)+(S.open&&S.open[r.idx]?bdH(r):''):r.idx!=null?(S.open&&S.open[r.idx]?bdH(r):(r.fn.length||r.tk.p.length+r.tk.o.length?`<div class="evs"><div class="hint">▾ tap for the math${r.fn.length?` · ${r.fn.length} effect${r.fn.length>1?'s':''}`:''}</div></div>`:'')):(r.fn&&r.fn.length?`<div class="evs">${evH(r)}</div>`:'')}</div>`};
+  return `<div class="clash${pk!=null?' pickable':''}${sl?' sel':''}${r.nw&&S.fresh?' drop':''}${r.chg&&S.fresh?' chgd':''}${wcl(r)}${fxc(r)}${pk==null&&r.idx!=null?' tap':''}" ${pk!=null?`data-a="${ac?ac[0]:'trow'}" data-v="${pk}"`:(r.idx!=null?`data-a="brk" data-v="${r.idx}"`:'')} ${r.idx!=null?`data-row="${r.idx}"`:''}${BSL(r.idx)?' data-src="1"':''}>${AUB(r.idx)}<div class="sd">${pill(r.a,' lg')}${sk([...L('p'),...GH(r.idx)])}</div><div class="mid ${r.r}">${r.chg?'↻ ':''}${r.x} vs ${r.y}${wasH(r)}<div class="m">${nt}</div></div><div class="sd">${pill(r.b,' lg')}${sk(L('o'))}</div>${r.idx!=null&&AUX(r.idx)?auH(r.idx)+(S.open&&S.open[r.idx]?bdH(r):''):r.idx!=null?(S.open&&S.open[r.idx]?bdH(r):(r.fn.length||r.tk.p.length+r.tk.o.length?`<div class="evs"><div class="hint">▾ tap for the math${r.fn.length?` · ${r.fn.length} effect${r.fn.length>1?'s':''}`:''}</div></div>`:'')):(r.fn&&r.fn.length?`<div class="evs">${evH(r)}</div>`:'')}</div>`};
 const badge=i=>S.view.length>=i+3?` <span class="${roundRes(tally(S.view.slice(i,i+3)))}">· ${tally(S.view.slice(i,i+3)).w}–${tally(S.view.slice(i,i+3)).l}</span>`:'';
 const pastH=rows=>rows.map((r,i)=>(i%3==0?`<h2 class="sm">Round ${rom(i/3+1)}${badge(i)}</h2>`:'')+rowH(r)).join('');
 const rowC=(r,pk,sl,tks,ac,ts)=>{ts=ts||'p';
@@ -996,7 +1062,7 @@ const rowC=(r,pk,sl,tks,ac,ts)=>{ts=ts||'p';
   const btn=t=>`<button data-tip="${tokTip(t.e)}" class="pt tk2 ${t.e}${t.mvd?' mvd':''}" ${ac&&S.sp&&S.sp.tok==t.id?'style="box-shadow:0 0 0 3px var(--gold)"':''} data-a="${ac?ac[1]:'trem'}" data-v="${t.id}">${IC[t.e]}</button>`;
   const L=sd=>ts==sd&&tks&&tks.length?(ac?(ac[2]?[...chips(tk[sd].filter(t=>!tks.some(x=>x.id==t.id)),[]),...tks.map(btn)]:tks.map(btn)):[...chips(tk[sd],tk.g.filter(g=>g.s==sd)),...tks.map(btn)]):chips(tk[sd],tk.g.filter(g=>g.s==sd));
   const pill=c=>`<span class="cc ${c.e}" data-tip="${cardTip(c)}">${IC[c.e]}<b>${base(c)}</b>${tyI(c)}</span>`;
-  return `<div class="clash cmp c${r.r}${wcl(r)}${pk!=null?' pickable':''}${sl?' sel':''}" ${pk!=null?`data-a="${ac?ac[0]:'trow'}" data-v="${pk}"`:`data-a="brk" data-v="${r.idx}"`}><div class="cs">${L('p').join('')}${pill(r.a)}</div><div class="mid ${r.r}">${r.chg?'↻ ':''}${r.x} vs ${r.y}${wasH(r)}</div><div class="cs r">${pill(r.b)}${L('o').join('')}</div>${S.open&&S.open[r.idx]?bdH(r):''}</div>`};
+  return `<div class="clash cmp c${r.r}${wcl(r)}${fxc(r)}${pk!=null?' pickable':''}${sl?' sel':''}" ${pk!=null?`data-a="${ac?ac[0]:'trow'}" data-v="${pk}"`:`data-a="brk" data-v="${r.idx}"`}><div class="cs">${L('p').join('')}${pill(r.a)}</div><div class="mid ${r.r}">${r.chg?'↻ ':''}${r.x} vs ${r.y}${wasH(r)}</div><div class="cs r">${pill(r.b)}${L('o').join('')}</div>${S.open&&S.open[r.idx]?bdH(r):''}</div>`};
 const rowH=(r,pk,sl,tks,ac,ts)=>(r.idx!=null&&((r.idx/3|0)<S.r||S.allc)&&!(S.fr&&S.fr.has(r.idx)))?rowC(r,pk,sl,tks,ac,ts):rowFull(r,pk,sl,tks,ac,ts);
 const RN={w:'won',l:'lost',d:'draw'};
 const wasH=r=>!r.was?'':`${r.was.x!=r.x||r.was.y!=r.y?`<div class="was">${r.was.x} vs ${r.was.y}</div>`:''}${r.was.r!=r.r?`<div class="flipb fb${r.r}">${RN[r.was.r]} ➜ ${RN[r.r]}</div>`:''}`;
@@ -1055,10 +1121,10 @@ function afterReveal(plO,otn){
   const F=S.fx;S.ocn=S.r<2?otn-plO.length:0;
   S.fxp={p:F.place,o:plO};
   F.info=`You placed ${F.place.length} of ${F.tray.length} token${F.tray.length==1?'':'s'}. They placed ${plO.length} of ${otn}.${S.carry.length?(S.r<2?` ${S.carry.length} of yours carry over.`:` ${S.carry.length} unplaced are lost.`):''}`;
-  const T1=addFresh(S.allrows,S.T,S.fxp),list=specs(T1,'p',S.allrows).filter(g=>g.k!='am'),pre=S.pam||[];
+  const T1=addFresh(S.allrows,S.T,S.fxp),all=specs(T1,'p',S.allrows).filter(g=>g.k!='am'),list=all.filter(g=>cand(g,'p',T1,S.allrows).length),pre=S.pam||[];S.dropd=all.filter(g=>!list.includes(g));
   const pre0=settle(S.allrows,T1,[]),au=buildAuto(pre0);S.aufx=au;S.aut=au.items;S.autrows=pre0;
-  if(!list.length&&!au.items.length){submitMoves(pre);return}
-  S.sp={list,i:0,ch:[...pre],tok:null,T:T1};S.ph='fxauto';render();
+  if(!list.length&&!au.items.length&&!S.dropd.length){submitMoves(pre);return}
+  S.sp={list,i:0,ch:[...pre],tok:null,T:T1};S.ph='fxauto';S.fxa=1;render();
 }
 function spNext(m){const P=S.sp;if(m)P.ch.push(m);P.tok=null;P.bsel=null;P.i++;if(P.i>=P.list.length)submitMoves(P.ch);else render()}
 function finalize(mv){
@@ -1068,7 +1134,7 @@ function finalize(mv){
   finish(R0)}
 function finish(res){
   const prev=S.view;res.forEach((r,i)=>{const p=prev[i];if(p&&(p.x!=r.x||p.y!=r.y||p.r!=r.r))r.was={x:p.x,y:p.y,r:p.r}});S.T=res.T;S.view=res;{const b=roundRes(tally(res.slice(S.r*3,S.r*3+3)));S.award=S.r<2&&b!='d'?b:null}
-  S.sp=null;S.sc=null;S.open={};S.ph='fxres';render();
+  S.sp=null;S.sc=null;S.open={};S.ph='fxres';S.fxa=1;render();
   const txt=res.flatMap(r=>r.fn).join(' ');let d=250;
   [['burned','burn'],['blocks','ward'],['grew','grow'],['Bloom','grow'],['moved','air'],['scattered','air'],['doubled','syn']].forEach(([k,n])=>{if(txt.includes(k)){setTimeout(()=>sfx(n),d);d+=280}});
 }
@@ -1276,9 +1342,11 @@ function duelClick(a,v){
 }
 function initFromUrl(){try{const j=new URLSearchParams(location.search).get('join');if(j)S={ph:'lobby',lb:{dk:[4,4,4,4],rev:true,code:j.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5),status:'',err:''}}}catch(e){}}
 
+const capD=s=>{const p=(s.tx.match(/[^.!?]+[.!?]+/g)||[s.tx]).map(x=>x.trim());return `<div class="cap2"><span class="s1">${p[0]}</span><span class="s2" style="animation-delay:${s.d2||1.8}s">${p.slice(1).join(' ')}</span></div>`};
+const NMS={fire:'Inferno',inc:'Incendio',bl:'Bloom',ov:'Overgrowth',th:'Thunder',ag:'Gust',burn:'Burn'};
 function render(){S.fr=null;S.bgh=null;S.allc=0;
   const s=S;
-  if(s.ph=='cut'){const q=s.cq[0];$.innerHTML=`<div id="cut" class="${ANIM?'anim':''}"><div class="sc in">${STORY.svgW(q.art,STORY.frame(q.dk||[0,0,0,0],!!q.neu),q.t,STORY.capH(q))}</div><button class="btn" data-a="cutnext">Continue</button></div>`;return}
+  if(s.ph=='cut'){const q=s.cq[0];$.innerHTML=`<div id="cut" class="${ANIM?'anim':''}"><div class="sc in">${STORY.svgW(q.art,STORY.frame(q.dk||[0,0,0,0],!!q.neu),q.t,'')}${capD(q)}</div><button class="btn" data-a="cutnext">Continue</button></div>`;return}
   if(s.ph=='home'){
     $.innerHTML=`<h1 class="title">Converge</h1><p class="rl">A card game of fire, water, earth and air. Play the full run against the three elements, or duel a friend live.</p>
     <div class="pick one"><button data-a="solo"><span class="hrow">${E.map(e=>art(e,'sm')).join('')}</span><br>Solo run<small>Four trials, a shop and card trading</small></button>
@@ -1338,7 +1406,7 @@ function render(){S.fr=null;S.bgh=null;S.allc=0;
     <button class="btn alt" data-a="leave">Leave the shop</button>`;return;
   }
   if(s.ph=='fxauto'){const n=s.sp.list.length;s.fr=s.aufx.fr;
-    $.innerHTML=`${head}<h1>Token Effects</h1><div class="chgs"><p class="m" style="margin-top:0">${s.fx.info}</p><b>Automatic effects · ${s.aufx.items.length}</b>${auSum()}<p class="m">${n?`Next you choose ${n} action${n>1?'s':''} (burns, moves, growth, water bonus).`:'No actions to choose this round.'}</p><button class="btn" data-a="fxgo" style="margin-top:6px">${n?'Choose actions':'Continue'}</button></div>${grp(r=>rowH(r),s.autrows)}`;return}
+    $.innerHTML=`${head}<h1>Token Effects</h1><div class="chgs"><p class="m" style="margin-top:0">${s.fx.info}</p><b>Automatic effects · ${s.aufx.items.length}</b>${auSum()}<p class="m">${(s.dropd||[]).length?`<b>No possible target for ${[...new Set(s.dropd.map(g=>NMS[g.k]))].join(', ')}.</b> ${n?'':'No actions to choose this round.'} `:''}${n?`Next you choose ${n} action${n>1?'s':''} (burns, moves, growth, water bonus).`:(s.dropd||[]).length?'':'No actions to choose this round.'}</p><button class="btn" data-a="fxgo" style="margin-top:6px">${n?'Choose actions':'Continue'}</button></div>${grp(r=>rowH(r),s.autrows)}`;return}
   if(s.ph=='bloom'){const g=s.bq[0];
     $.innerHTML=`${head}<h1>${IC.earth} ${g.k==3?'Bloom':'Overgrowth'}</h1><p class="m">Your earth card in round ${rom((g.row/3|0)+1)}, slot ${g.row%3+1} grew its ${g.k==3?'3rd':'4th'} earth token. Tap one of the outlined clashes below (${bdest('p',g).map(i=>`round ${rom((i/3|0)+1)}, slot ${i%3+1}`).join('; ')||'none free'}) to grow one more earth token there (4 tokens max per card), or let the game choose.${s.bq.length>1?' '+s.bq.length+' blooms to place.':''}</p><button class="btn" data-a="bloomauto">Let the game choose</button><div class="bloomsel">${grp((r,i)=>rowH(r,bdest('p',g).includes(i)?i:null,false,[],['bloompick','bloompick']))}</div>`;return}
   if(s.ph=='fx'){
@@ -1366,13 +1434,13 @@ function render(){S.fr=null;S.bgh=null;S.allc=0;
   if(s.ph=='sp'){
     const P=s.sp,g=P.list[P.i],k=g.k,T=P.T,nm={fire:'Inferno',inc:'Incendio',bl:'Bloom',ov:'Overgrowth',th:'Thunder',am:'Air',ag:'Gust',burn:'Burn',wn:'Water bonus'}[k],ic=k=='fire'||k=='burn'||k=='inc'?'fire':k=='bl'||k=='ov'?'earth':k=='wn'?'water':'air';
     if(k=='am'&&P.tok==null){const a=T.p.filter(t=>t.e=='air'&&t.row==g.at);if(a.length==1)P.tok=a[0].id}
-    const msg=k=='fire'?'tap any enemy token to burn it':k=='burn'?`fire token ${g.idx+1}: tap the enemy token on this slot that it burns`:k=='wn'?'two water tokens: tap the neighbouring slot that gets +1':k=='ov'?'tap any card that grows a token':k=='bl'?'tap a card of this round that grows a token':k=='inc'?'tap an enemy token of this round to burn it':k=='th'?'tap an enemy card of this round: its tokens scatter to its other cards and your foe chooses where':P.tok==null?(k=='am'?'tap one of your tokens on this card to move':'tap the enemy token to move'):'now tap the card it moves to';
+    const msg=k=='fire'?`Inferno (${T.p.filter(t=>t.e=='fire'&&t.row==g.at).length} fire tokens on this card, synergy bonuses included): tap any enemy token on the board to burn it`:k=='burn'?`fire token ${g.idx+1}: tap the enemy token on this slot that it burns`:k=='wn'?'two water tokens: tap the neighbouring slot that gets +1':k=='ov'?'tap any card that grows a token':k=='bl'?'tap a card of this round that grows a token':k=='inc'?'Incendio (3 fire tokens): only enemy tokens in this round can be burned. Tap one of the outlined clashes':k=='th'?'tap an enemy card of this round: its tokens scatter to its other cards and your foe chooses where':P.tok==null?(k=='am'?'tap one of your tokens on this card to move':'tap the enemy token to move'):'now tap the card it moves to';
     const tks=i=>k=='bl'||k=='ov'||k=='th'||k=='wn'?[]:k=='inc'?((i/3|0)==(g.at/3|0)?T.o.filter(t=>t.row==i):[]):k=='am'?(i==g.at?T.p.filter(t=>t.row==i):[]):k=='burn'?(i==g.at?T.o.filter(t=>t.row==i&&!P.ch.some(c=>c.k=='burn'&&c.at==i&&c.id==t.id)):[]):k=='ag'?T.o.filter(t=>t.row==i&&t.e!='earth'):T.o.filter(t=>t.row==i);
-    const clk=i=>(k=='ov'&&T.p.filter(t=>t.row==i).length<MAXT)||(k=='bl'&&(i/3|0)==(g.at/3|0)&&T.p.filter(t=>t.row==i).length<MAXT)||(k=='th'&&(i/3|0)==(g.at/3|0)&&T.o.some(t=>t.row==i)&&!prism(T,'o',i))||P.tok!=null||(k=='wn'&&Math.abs(i-g.at)==1&&(i/3|0)==(g.at/3|0));
+    const clk=i=>(k=='ov'&&T.p.filter(t=>t.row==i).length<MAXT)||(k=='bl'&&(i/3|0)==(g.at/3|0)&&T.p.filter(t=>t.row==i).length<MAXT)||(k=='th'&&(i/3|0)==(g.at/3|0)&&T.o.some(t=>t.row==i)&&!prism(T,'o',i))||P.tok!=null||(k=='wn'&&Math.abs(i-g.at)==1&&(i/3|0)==(g.at/3|0))||(k=='inc'&&(i/3|0)==(g.at/3|0)&&T.o.some(t=>t.row==i))||(k=='fire'&&T.o.some(t=>t.row==i))||(k=='burn'&&i==g.at);
     const bb=k=='bl'||k=='ov',V=bb?settle(S.allrows,P.T,P.ch):s.autrows,dst=bb?V.map((_,i)=>i).filter(clk):[],ll=j=>`round ${rom((j/3|0)+1)}, slot ${j%3+1}`;
     if(bb){s.bgh=new Set(dst);s.fr=new Set([g.at,...dst])}
     $.innerHTML=`${head}<h1>${IC[ic]} ${nm}</h1><p class="m">${bb?`Your earth card in ${ll(g.at)} (marked below) reached ${k=='bl'?3:4} earth tokens. ${nm} plants one more earth token on ${k=='bl'?'a card of the same round':'any card on the board'} that has room. Tap a gold-outlined clash (a dashed earth token shows where it would land), then confirm. Your tokens and your foe's are shown as they stand now.`:`Slot ${g.at%3+1} of round ${rom((g.at/3|0)+1)}: ${msg}.`}</p>
-    <div class="${bb?'bloomsel':''}">${grp((r,i)=>rowH(r,clk(i)?i:null,bb&&P.bsel===i,tks(i),['srow','stok'],k=='am'?'p':'o'),V)}</div>${bb?`<button class="btn" data-a="bconf" ${P.bsel==null?'disabled':''}>${P.bsel==null?'Choose a clash':'Plant the token in '+ll(P.bsel)}</button>`:''}
+    <div class="${bb||k=='inc'||k=='fire'||k=='burn'?'bloomsel':''}">${grp((r,i)=>rowH(r,clk(i)?i:null,bb&&P.bsel===i,tks(i),['srow','stok'],k=='am'?'p':'o'),V)}</div>${bb?`<button class="btn" data-a="bconf" ${P.bsel==null?'disabled':''}>${P.bsel==null?'Choose a clash':'Plant the token in '+ll(P.bsel)}</button>`:''}
     <button class="btn alt" data-a="sskip">${k=='burn'||k=='wn'?'Skip (the game chooses)':bb?'Skip (no token grows)':'Skip'}</button>${k=='burn'?'<button class="btn alt" data-a="sauto">Let the game choose all remaining burns</button>':''}`;return;
   }
   if(s.ph=='scatter'){const Q=s.sc,q=Q.cur,loc=j=>`round ${rom((j/3|0)+1)}, slot ${j%3+1}`,cnt=q.dests.map((d,j)=>q.occ[j]+q.toks.filter(t=>Q.to[t.id]==d).length);
@@ -1465,7 +1533,7 @@ document.addEventListener('touchstart',e=>{const el=e.target.closest('[data-tip]
 document.addEventListener('touchend',()=>clearTimeout(tt));
 $.onclick=e=>{
   const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,v=b.dataset.v;
-  if(a!='go')S.fresh=0;sfx(SM[a]);tip.style.display='none';
+  if(a!='go')S.fresh=0;S.fxa=0;sfx(SM[a]);tip.style.display='none';
   if(duelClick(a,v)){}
   else if(a=='start')start(v);
   else if(a=='elsel'){S.sel=S.sel==v?null:v;render();const p=document.querySelector('.epanel');if(p)p.scrollIntoView({behavior:'smooth',block:'nearest'})}
@@ -1525,7 +1593,7 @@ $.onclick=e=>{
 };
 $.oninput=e=>{if(S.lb&&e.target&&e.target.id=='jcode')S.lb.code=(e.target.value||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5)};
 try{window.addEventListener('beforeunload',()=>netClose())}catch(e){}
-const _rd=render;render=function(){_rd();musicSync()};
+const _rd=render;render=function(){_rd();$.classList.toggle('fxa',!!S.fxa);musicSync()};
 document.addEventListener('pointerdown',()=>musicSync());
 initFromUrl();render();
 </script></body></html>
