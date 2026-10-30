@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Converge – v0.35</title>
+<title>Converge – v0.38 (balance test)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&family=UnifrakturCook:wght@700&family=VT323&display=swap">
 <style>
@@ -443,7 +443,7 @@ const an=d=>{const c=d.find(c=>c.e=='air'&&c.t=='mod'&&c.p==4);if(c)c.p--;return
 const cv=d=>{d.forEach(c=>{if(c.e!='neu'&&c.t==SIG[c.e])c.p++});return d};
 const mono0=e=>{let j=E.indexOf(e);
   return [...TY.flatMap(t=>(t==SIG[e]?(t=='pow'?[1,1,2,2,3,3,3]:[1,2,2,3,3,4,4]):[1,2,3]).map(v=>{const c=mk(e,t,pv(t,v));if(t=='mod')c.mv=e=='water'?['kindle','anchor','shift'][v-1]:MV[j++%7];return c})),...neus()]};
-const mono=e=>{const d=an(wn(mono0(e)));if(e=='water')d.filter(c=>c.t=='def').sort((a,b)=>a.p-b.p).slice(0,3).forEach(c=>c.p++);if(e=='fire')d.filter(c=>c.t=='atk').sort((a,b)=>b.p-a.p)[0].p--;return d};
+const mono=e=>{const d=an(wn(mono0(e)));if(e=='water')d.filter(c=>c.t=='def').sort((a,b)=>a.p-b.p).slice(0,3).forEach(c=>c.p++);if(e=='earth')d.filter(c=>c.e=='earth'&&c.t=='pow').sort((a,b)=>b.p-a.p)[0].p++;return d};
 const mixed0=()=>[...TY.flatMap((t,ti)=>[0,1,2,3].map(vi=>{const c=mk(E[(ti+vi)%4],t,pv(t,vi+1));if(t=='mod')c.mv=MV[vi];return c})),...neus()];
 const mixed=()=>cv(wn(mixed0()));
 const sortC=a=>a.sort((x,y)=>E.indexOf(x.e)-E.indexOf(y.e)||TY.indexOf(x.t)-TY.indexOf(y.t)||x.p-y.p);
@@ -580,11 +580,17 @@ function settle(rows0,T0,mv){
   });
   const bn={};['p','o'].forEach(s=>bn[s]=rows0.map((_,i)=>Math.min(1,T[s].filter(t=>t.e=='fire'&&t.row==i&&t.f).length)));
   const inf=mv.filter(m=>m.k=='fire'&&cn(m.sd,'fire',m.at)>=cardThr(rows0,m.sd,m.at,'fire',4)&&!T[m.sd].some(t=>t.e=='fire'&&t.row==m.at&&t.iu));
+  const ward=(e,i,v)=>{
+    const ws=T[e].filter(t=>t.e=='water'&&t.row==i);
+    if(ws.length>=2){const w=ws.find(t=>!t.u);if(w){w.u=1;return true}}
+    else if(ws.length==1&&ws[0]===v&&!ws[0].u){ws[0].u=1;return true}
+    return shield(e,i,1)};
   const burn=(s,e,i,t0)=>{
     if(anc(e,i)){ev[i].push('⚓ blocks '+IC.fire);return}
-    if(shield(e,i)){ev[i].push(`${IC.water} blocks ${IC.fire} of ${who(s)}`);return}
     const v=t0||BURN.map(el=>T[e].find(t=>t.row==i&&t.e==el)).find(Boolean);
-    if(v&&T[e].includes(v)){T[e].splice(T[e].indexOf(v),1);gone.push({s:e,e:v.e,row:i});ev[i].push(`${IC.fire} ${who(s)} burned ${IC[v.e]}`)}};
+    if(!v||!T[e].includes(v))return;
+    if(ward(e,i,v)){ev[i].push(`${IC.water} blocks ${IC.fire} of ${who(s)}`);return}
+    {T[e].splice(T[e].indexOf(v),1);gone.push({s:e,e:v.e,row:i});ev[i].push(`${IC.fire} ${who(s)} burned ${IC[v.e]}`)}};
   rows0.forEach((_,i)=>['p','o'].forEach(s=>{for(let k=0;k<bn[s][i];k++){const bm=mv.find(m=>m.k=='burn'&&m.sd==s&&m.at==i&&m.idx==k),bt=bm&&T[NE[s]].find(x=>x.id==bm.id&&x.row==i);burn(s,NE[s],i,bt)}}));
   inf.forEach(m=>{const e=NE[m.sd],t=T[e].find(x=>x.id==m.id);if(!t)return;
     const f=T[m.sd].find(x=>x.e=='fire'&&x.row==m.at);if(!f||cn(m.sd,'fire',m.at)<cardThr(rows0,m.sd,m.at,'fire',4))return;f.iu=1;burn(m.sd,e,t.row,t)});
@@ -963,10 +969,10 @@ fire:{tag:'Attack. Wins ties and burns enemy tokens.',
  syn:[sFA,sAF,PRI('fire','Transmute cards')]},
 water:{tag:'Defense. Turns near-losses into draws and shields your cards.',
  deck:['7 Defense cards (1 to 4): a loss by exactly 1 becomes a draw','3 each of Attack, Power and Modifier','Modifiers: Kindle, Anchor, Shift','Plus 4 neutral cards (no token, bigger numbers)'],
- tok:[['Ward','1 water token',['water',['water'],['sh','fire']],'Blocks one enemy burn aimed at its slot, once. It does not stop Gust.'],['Shoreline','3 water tokens',['water',['water','water','water'],['nb','+1','water']],'Gives +1 to the slots before and after it in the same round.'],['Tide','4 water tokens',['water',R4('water'),['sh','air']],'Once per card: blocks one enemy burn or Gust move aimed at a token on this same card. Neighbouring cards are not covered. Tide is the only token ability that stops Gust. While the card holds 4 water tokens, the opposing card behaves like a neutral card: it keeps its number but loses its effect, type, Kindle bonus and Anchor.']],
+ tok:[['Ward','1 water token',['water',['water'],['sh','fire']],'Alone on a card, a Ward only protects itself: a burn can still hit the card\u2019s other tokens. With 2 or more water tokens on the card, each one blocks a whole burn aimed at that card, once. It does not stop Gust.'],['Shoreline','3 water tokens',['water',['water','water','water'],['nb','+1','water']],'Gives +1 to the slots before and after it in the same round.'],['Tide','4 water tokens',['water',R4('water'),['sh','air']],'Once per card: blocks one enemy burn or Gust move aimed at a token on this same card. Neighbouring cards are not covered. Tide is the only token ability that stops Gust. While the card holds 4 water tokens, the opposing card behaves like a neutral card: it keeps its number but loses its effect, type, Kindle bonus and Anchor.']],
  syn:[sWE,sEW,PRI('water',null)]},
 earth:{tag:'Power. Big numbers and tokens that multiply and cannot be pushed.',
- deck:['7 Power cards (2 to 4): the biggest plain numbers','3 each of Attack, Defense and Modifier','Modifiers: Swap, Disrupt, Spark','Plus 4 neutral cards (no token, bigger numbers)'],
+ deck:['7 Power cards (2 to 5): the biggest plain numbers','3 each of Attack, Defense and Modifier','Modifiers: Swap, Disrupt, Spark','Plus 4 neutral cards (no token, bigger numbers)'],
  tok:[['Roots','2 earth tokens',['earth',['earth','earth'],['g','earth']],'At the start of each round, the card grows 1 more earth token, up to 4 tokens. A card grows at most once per round: if Bloom already grew a token on it, Roots waits. Overgrowth is the exception and always grows, even on a card Roots also grows. Roots never triggers Bloom or Overgrowth.'],['Immovable','1 earth token',['earth',['earth'],['x','air']],'Gust cannot move earth tokens.'],['Bloom','3 earth tokens',['earth',['earth','earth','earth'],['g','earth']],'Once per card: grows an earth token on any card of the same round with room.'],['Overgrowth','4 earth tokens',['earth',R4('earth'),['g','earth']],'Once per card: grows an earth token on any card on the board with room. With 4 tokens, Overgrowth replaces Bloom.']],
  syn:[sEW,sWE,PRI('earth','Spark cards')]},
 air:{tag:'Modifiers. Shifts, swaps and tokens that slip where they hurt most.',
@@ -989,7 +995,7 @@ let S={ph:'home'};
 const TT={atk:'Attack: wins ties.',def:'Defense: turns a loss by exactly 1 into a draw.',pow:'Power: no special effect, just a high number.'};
 const MT={shift:c=>`Shift: adds +${ef(c)} to the ${c.dir<0?'previous slot':c.dir>0?'next slot':'previous or next slot (you choose when playing)'}.`,transmute:()=>"Transmute: this card's token can be any element.",swap:()=>'Swap: trades places with your previous card.',disrupt:c=>`Disrupt: lowers the opposing card by ${ef(c)}.`,spark:()=>'Spark: gives you a free wild token.',anchor:()=>'Anchor: your foe cannot burn or move tokens on this card.',kindle:()=>'Kindle: each token on this card gives +2.'};
 const cardTip=c=>`${c.e=='neu'?'Neutral':cap(c.e)}, power ${base(c)}. ${c.t=='mod'?MT[c.mv](c):TT[c.t]} ${c.e=='neu'?'Makes no token.':'Makes 1 '+c.e+' token.'}`;
-const TK={fire:'Fire token: +1. A new one burns an enemy token of your choice on the same slot (at most one burn per card per round). 3 on a card: Incendio burns any enemy token in the same round. 4: Inferno burns any enemy token on the board.',water:'Water token: +1. Blocks one enemy burn on its slot, once (it does not stop Gust). Three on a card give +1 to both neighbouring slots. 4 on a card: Tide, which also blocks Gust and turns the opposing card neutral (number only).',earth:'Earth token: +1. Two on a card grow one extra token each round (at most one growth per card per round, except Overgrowth), up to 4 tokens on the card. Gust cannot move it. 3 on a card: Bloom grows a token on a card of the same round. 4: Overgrowth grows a token on any card.',air:'Air token: +1. Once placed, it can move to another card once per round, starting the round after it is placed. Two on a card: Gust moves an enemy fire, water, air or neutral token (not earth) and costs no air token. Only Anchor, Prism or a Tide stop it. 4 on a card: Thunder scatters the tokens of an enemy card of the same round (only a Prism stops it).',wild:'Wild token: choose its element when you place it.',neu:'Neutral token: +1, no element and no effect. Earned by winning round I or II once tokens are counted. Can be burned.'};
+const TK={fire:'Fire token: +1. A new one burns an enemy token of your choice on the same slot (at most one burn per card per round). 3 on a card: Incendio burns any enemy token in the same round. 4: Inferno burns any enemy token on the board.',water:'Water token: +1. Alone on a card it protects only itself from burns; with 2 or more water tokens on the card, each blocks one whole burn aimed at that card, once (it does not stop Gust). Three on a card give +1 to both neighbouring slots. 4 on a card: Tide, which also blocks Gust and turns the opposing card neutral (number only).',earth:'Earth token: +1. Two on a card grow one extra token each round (at most one growth per card per round, except Overgrowth), up to 4 tokens on the card. Gust cannot move it. 3 on a card: Bloom grows a token on a card of the same round. 4: Overgrowth grows a token on any card.',air:'Air token: +1. Once placed, it can move to another card once per round, starting the round after it is placed. Two on a card: Gust moves an enemy fire, water, air or neutral token (not earth) and costs no air token. Only Anchor, Prism or a Tide stop it. 4 on a card: Thunder scatters the tokens of an enemy card of the same round (only a Prism stops it).',wild:'Wild token: choose its element when you place it.',neu:'Neutral token: +1, no element and no effect. Earned by winning round I or II once tokens are counted. Can be burned.'};
 const tokTip=e=>(TK[e]||'')+' Tokens of 2 or 3 different elements on one card give +1 or +2 (Blend). All 4: Prism.';
 const NM=c=>c.t=='mod'?cap(c.mv):SN[c.t];
 const face=c=>`<i class="rn">${IC[c.e]}</i><i class="art">${AI[c.e]?art(c.e,'wm'):''}<b>${base(c)}</b></i><i class="bn">${tyI(c)}<em>${NM(c)}</em></i>`;
