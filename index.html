@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Converge – v0.38 (balance test)</title>
+<title>Converge – v0.40 (balance test)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&family=UnifrakturCook:wght@700&family=VT323&display=swap">
 <style>
@@ -586,7 +586,7 @@ function settle(rows0,T0,mv){
     else if(ws.length==1&&ws[0]===v&&!ws[0].u){ws[0].u=1;return true}
     return shield(e,i,1)};
   const burn=(s,e,i,t0)=>{
-    if(anc(e,i)){ev[i].push('⚓ blocks '+IC.fire);return}
+    if(prism(T,e,i)){ev[i].push('◈ Prism blocks '+IC.fire);return}
     const v=t0||BURN.map(el=>T[e].find(t=>t.row==i&&t.e==el)).find(Boolean);
     if(!v||!T[e].includes(v))return;
     if(ward(e,i,v)){ev[i].push(`${IC.water} blocks ${IC.fire} of ${who(s)}`);return}
@@ -993,7 +993,7 @@ const fname=f=>f=='mix'?'✠ Convergence':IC[f]+' '+cap(f);
 const $=document.getElementById('app');
 let S={ph:'home'};
 const TT={atk:'Attack: wins ties.',def:'Defense: turns a loss by exactly 1 into a draw.',pow:'Power: no special effect, just a high number.'};
-const MT={shift:c=>`Shift: adds +${ef(c)} to the ${c.dir<0?'previous slot':c.dir>0?'next slot':'previous or next slot (you choose when playing)'}.`,transmute:()=>"Transmute: this card's token can be any element.",swap:()=>'Swap: trades places with your previous card.',disrupt:c=>`Disrupt: lowers the opposing card by ${ef(c)}.`,spark:()=>'Spark: gives you a free wild token.',anchor:()=>'Anchor: your foe cannot burn or move tokens on this card.',kindle:()=>'Kindle: each token on this card gives +2.'};
+const MT={shift:c=>`Shift: adds +${ef(c)} to the ${c.dir<0?'previous slot':c.dir>0?'next slot':'previous or next slot (you choose when playing)'}.`,transmute:()=>"Transmute: this card's token can be any element.",swap:()=>'Swap: trades places with your previous card.',disrupt:c=>`Disrupt: lowers the opposing card by ${ef(c)}.`,spark:()=>'Spark: gives you a free wild token.',anchor:()=>'Anchor: your foe cannot move tokens on this card (burns still work).',kindle:()=>'Kindle: each token on this card gives +2.'};
 const cardTip=c=>`${c.e=='neu'?'Neutral':cap(c.e)}, power ${base(c)}. ${c.t=='mod'?MT[c.mv](c):TT[c.t]} ${c.e=='neu'?'Makes no token.':'Makes 1 '+c.e+' token.'}`;
 const TK={fire:'Fire token: +1. A new one burns an enemy token of your choice on the same slot (at most one burn per card per round). 3 on a card: Incendio burns any enemy token in the same round. 4: Inferno burns any enemy token on the board.',water:'Water token: +1. Alone on a card it protects only itself from burns; with 2 or more water tokens on the card, each blocks one whole burn aimed at that card, once (it does not stop Gust). Three on a card give +1 to both neighbouring slots. 4 on a card: Tide, which also blocks Gust and turns the opposing card neutral (number only).',earth:'Earth token: +1. Two on a card grow one extra token each round (at most one growth per card per round, except Overgrowth), up to 4 tokens on the card. Gust cannot move it. 3 on a card: Bloom grows a token on a card of the same round. 4: Overgrowth grows a token on any card.',air:'Air token: +1. Once placed, it can move to another card once per round, starting the round after it is placed. Two on a card: Gust moves an enemy fire, water, air or neutral token (not earth) and costs no air token. Only Anchor, Prism or a Tide stop it. 4 on a card: Thunder scatters the tokens of an enemy card of the same round (only a Prism stops it).',wild:'Wild token: choose its element when you place it.',neu:'Neutral token: +1, no element and no effect. Earned by winning round I or II once tokens are counted. Can be burned.'};
 const tokTip=e=>(TK[e]||'')+' Tokens of 2 or 3 different elements on one card give +1 or +2 (Blend). All 4: Prism.';
@@ -1083,7 +1083,7 @@ const neuNote=()=>{const a=S.neuAw;if(!a||S.r!=a.r+1)return '';const rn=rom(a.r+
 const chgSum=()=>{const V=S.view,fl=V.map((r,i)=>[r,i]).filter(([r])=>r.was&&r.was.r!=r.r),sc=V.filter(r=>r.was&&r.was.r==r.r).length,pv=rs=>rs.map(r=>r.was?{r:r.was.r,x:r.was.x,y:r.was.y}:r);
   const rr=[0,1,2].filter(k=>V.length>=k*3+3).map(k=>[k,roundRes(tally(pv(V.slice(k*3,k*3+3)))),roundRes(tally(V.slice(k*3,k*3+3)))]).filter(([k,a,b])=>a!=b);
   return `<div class="chgs"><b>Changed by tokens</b>${rr.map(([k,a,b])=>`<div class="ev ${b=='w'?'p':b=='l'?'o':''}"><b>Round ${rom(k+1)}:</b> ${RN[a]} ➜ ${RN[b]}</div>`).join('')}${fl.length?fl.map(([r,i])=>`<div class="ev ${r.r=='w'?'p':r.r=='l'?'o':''}">Round ${rom((i/3|0)+1)}, slot ${i%3+1}: ${RN[r.was.r]} ➜ ${RN[r.r]} (${r.was.x}–${r.was.y} ➜ ${r.x}–${r.y})</div>`).join(''):'<div class="m">No clash changed its outcome.</div>'}${sc?`<div class="m">${sc} other clash${sc>1?'es':''} changed score only (dashed outline).</div>`:''}</div>`};
-const LEG=`<p class="m"><b>Modifier cards (✧).</b> The big number is the card's own power; the effect uses the card's printed value, which is 1 higher (never below 1). The symbol shows its effect:<br>➜ Shift: adds its number to the next slot (or the previous one, your choice).<br>◐ Transmute: its token can be any element.<br>⇄ Swap: trades places with your previous card.<br>✖ Disrupt: lowers the opposing card by its number.<br>✺ Spark: gives you a free wild token.<br>⚓︎ Anchor: your foe cannot burn or move tokens on this card.<br>✹ Kindle: each token on this card gives +2.<br>Earlier slots can change as you play. ↻ marks a clash that did.</p>`;
+const LEG=`<p class="m"><b>Modifier cards (✧).</b> The big number is the card's own power; the effect uses the card's printed value, which is 1 higher (never below 1). The symbol shows its effect:<br>➜ Shift: adds its number to the next slot (or the previous one, your choice).<br>◐ Transmute: its token can be any element.<br>⇄ Swap: trades places with your previous card.<br>✖ Disrupt: lowers the opposing card by its number.<br>✺ Spark: gives you a free wild token.<br>⚓︎ Anchor: your foe cannot move tokens on this card (burns still work).<br>✹ Kindle: each token on this card gives +2.<br>Earlier slots can change as you play. ↻ marks a clash that did.</p>`;
 
 const deckDk=()=>E.map(e=>S.deck.filter(c=>c.e==e).length);
 function sceneAt(i){const s=STORY.SC(S.el,i);if(!s.neu){const d=deckDk();s.dk=d;s.neu=d.every(n=>!n)}return s}
