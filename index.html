@@ -653,13 +653,13 @@ function aiPlace(rows,toks,sd,opp=[],fin){const thr=fin?.01:1.2;
       if(on.length+2<=MAXT)E.forEach(e=>{const ks=toks.map((t,j)=>t==e?j:-1).filter(j=>j>=0);if(ks.length>=2)tryS(ks.slice(0,2).map(k=>({e,row:i,ti:k,id:-1-k})))})});
     return best};
   const bs0=bun();if(bs0){pl.push(...bs0);now=ev(pl)}
-  toks.forEach((_,ti)=>{const b=tryAll(ti,pl);if(b&&b.v>now+thr){pl.push(b.m);now=b.v}});
+  toks.forEach((_,ti)=>{if(pl.some(x=>x.ti==ti))return;const b=tryAll(ti,pl);if(b&&b.v>now+thr){pl.push(b.m);now=b.v}});
   for(let pass=0;pass<2;pass++){let ch=false;
     for(let k=0;k<pl.length;k++){const t=pl[k],rest=pl.filter((_,j)=>j!=k),b=tryAll(t.ti,rest);
       if(b&&b.v>now+1e-6&&(b.m.row!=t.row||b.m.e!=t.e)){pl[k]=b.m;now=b.v;ch=true}}
     toks.forEach((_,ti)=>{if(pl.some(x=>x.ti==ti))return;const b=tryAll(ti,pl);if(b&&b.v>now+thr){pl.push(b.m);now=b.v;ch=true}});
     if(!ch)break}
-  return pl;
+  return pl.filter((t,i)=>pl.findIndex(x=>x.ti==t.ti)==i);
 }
 /* opponent intelligence: 0 novice, 1 cunning, 2 shrewd, 3 master (final trial) */
 const SKILL=['a novice who plays by whim','cunning, and plays the odds','shrewd, and reads your cards and tokens','a master who knows your deck and plans ahead'];
@@ -1162,7 +1162,7 @@ const giveable=()=>S.deck;
 function doTrade(){
   const buy=S.stock.find(c=>c.id==S.sbuy),give=giveable().find(c=>c.id==S.sgive);
   if(!buy||!give||S.coins<worth(buy))return;
-  S.coins-=worth(buy);S.stock=S.stock.filter(c=>c!==buy);S.stock.push(give);sortC(S.stock);fixStock(give);
+  S.coins-=worth(buy);S.stock=S.stock.filter(c=>c!==buy);S.stock.push(give);sortC(S.stock);
   S.deck=S.deck.filter(c=>c!==give).concat(buy);
   S.sbuy=null;S.sgive=null;render();
 }
@@ -1398,7 +1398,7 @@ function render(){S.fr=null;S.bgh=null;S.allc=0;
   if(s.ph=='shop'){
     const buy=s.stock.find(c=>c.id==s.sbuy),give=giveable().find(c=>c.id==s.sgive),ok=buy&&give&&s.coins>=worth(buy);
     $.innerHTML=`${head}<h1>The Merchant</h1><div class="orn">❦</div>
-    <p class="m">To buy, pick a ware, then pick one of your own cards to give, then press Trade. You pay the ware's price in coins as well. The merchant always keeps 4 wares, and at least one is strong (power 4 or 5).</p>
+    <p class="m">To buy, pick a ware, then pick one of your own cards to give, then press Trade. You pay the ware's price in coins as well. The merchant keeps 4 wares. The stock is renewed after each battle (at least one ware is strong, power 4 or 5), and cards you trade in stay on the shelf until then.</p>
     <h2>Wares</h2><div class="hand">${s.stock.map(c=>card(c,' tag'+(c.id==s.sbuy?' sel':''),`data-a="buysel" data-v="${c.id}" data-t="${worth(c)} coin${worth(c)>1?'s':''}"`)).join('')}</div>
     <h2>Give a card</h2><div class="hand">${sortC([...giveable()]).map(c=>card(c,c.id==s.sgive?' sel':'',`data-a="givesel" data-v="${c.id}"`)).join('')}</div>
     <button class="btn" data-a="dotrade" ${ok?'':'disabled'}>${buy?(s.coins<worth(buy)?'Not enough coins':`Trade (${worth(buy)} coin${worth(buy)>1?'s':''})`):'Choose a card to buy'}</button>
